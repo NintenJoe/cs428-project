@@ -6,7 +6,7 @@
 #	game library.
 #
 #	@TODO
-#	- 
+#	- Add spherical interpolation through the implementation of a 'slerp' function.
 
 import os
 import logging
@@ -17,6 +17,7 @@ from os.path import dirname as get_path
 from os.path import basename as get_base
 from os.path import join as join_paths
 from os.path import isfile as is_file
+
 
 ### Global Variables ###
 
@@ -37,22 +38,22 @@ ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
 #	@param color_key The color that will be turned omitted in the final image. 
 #		This parameter is useful when parts of the rectangular image aren't needed.
 #	@return The image, which can be drawn to the screen.
-def load_image(file_name, color_key=None):
-	file_path = join_paths(ASSET_PATH, "graphics", file_name)
+def load_image( file_name, color_key=None ):
+	file_path = join_paths( ASSET_PATH, "graphics", file_name )
 
-	if not is_file(file_path):
-		logging.warning("Image file '%s' does not exist." % file_name)
-		file_path = join_paths(ASSET_PATH, "graphics", "default.bmp")
+	if not is_file( file_path ):
+		logging.warning( "Image file '%s' does not exist." % file_name )
+		file_path = join_paths( ASSET_PATH, "graphics", "default.bmp" )
 
 	try:
-		image = PG.image.load(file_path).convert()
+		image = PG.image.load( file_path ).convert()
 	except PG.error, message:
-		logging.error("Could not load image file at '%s'... failed with error '%s'." %
-			(file_path, message))
+		logging.error( "Could not load image file at '%s'... failed with error '%s'." %
+			(file_path, message) )
 		raise SystemExit
 
 	if color_key != None:
-		image.set_colorkey(color_key, RLEACCEL)
+		image.set_colorkey( color_key, RLEACCEL )
 
 	return image
 
@@ -60,18 +61,18 @@ def load_image(file_name, color_key=None):
 #	
 #	@param file_name The name of the audio file to be loaded.
 #	@return The audio, which can be played by the "pygame" library's audio player.
-def load_sound(file_name):
-	file_path = join_paths(ASSET_PATH, "audio", file_name)
+def load_sound( file_name ):
+	file_path = join_paths( ASSET_PATH, "audio", file_name )
 
-	if not is_file(file_path):
-		logging.warning("Audio file '%s' does not exist." % file_name)
-		file_path = join_paths(ASSET_PATH, "audio", "default.wav")
+	if not is_file( file_path ):
+		logging.warning( "Audio file '%s' does not exist." % file_name )
+		file_path = join_paths( ASSET_PATH, "audio", "default.wav" )
 
 	try:
-		sound = PG.mixer.Sound(file_path)
+		sound = PG.mixer.Sound( file_path )
 	except PG.error, message:
-		logging.error("Could not load sound file at '%s'... failed with error '%s'." %
-			(file_path, message))
+		logging.error( "Could not load sound file at '%s'... failed with error '%s'." %
+			(file_path, message) )
 		raise SystemExit
 
 	return sound
@@ -89,10 +90,8 @@ def load_sound(file_name):
 #		will be restricted.
 #	@return A new value that lives within the range defined by the minimum and 
 #		maximum parameter values.
-def clamp(value, lower_bound, upper_bound):
-	# Sanity check to ensure that the lower bound is input as the lower of the 
-	# two values to the function.
-	assert lower_bound <= upper_bound, "Lower bound must be less than the upper bound in the clamp function."
+def clamp( value, lower_bound, upper_bound ):
+	assert lower_bound <= upper_bound, "Clamp lower bound must be < upper bound!"
 
 	if value < lower_bound:
 		return lower_bound
@@ -109,5 +108,7 @@ def clamp(value, lower_bound, upper_bound):
 #	@param delta The current position for the interpolation (represented as a 
 #	    floating-point value between 0 and 1).
 #	@return A value that is in between the two given values based on the current time.
-def lerp(initial, final, delta):
+def lerp( initial, final, delta ):
+	assert 0.0 <= delta and delta <= 1.0, "Interpolation delta factor out of range [0, 1]!"
+
 	return initial * (1 - delta) + final * delta

@@ -15,9 +15,9 @@ main : $(MAIN_SCRIPT) $(wildcard $(SRC_DIR)/*.py) $(wildcard $(LIB_DIR)/*.py)
 	$(INTERPRETER) $(INTERPRETER_FLAGS) $(MAIN_SCRIPT)
 
 tests : $(wildcard $(SRC_DIR)/*.py) $(wildcard $(TEST_DIR)/*.py)
-	$(INTERPRETER) $(TEST_FLAGS) discover -s $(TEST_DIR) -p '*Test.py'
+	$(INTERPRETER) $(TEST_FLAGS) discover -s $(TEST_DIR) -p '*Tests.py'
 
-%Test : $(TEST_DIR)/%Test.py $(SRC_DIR)/%.py
+%Tests : $(TEST_DIR)/%Tests.py $(SRC_DIR)/%.py
 	$(INTERPRETER) $(TEST_FLAGS) discover -s $(TEST_DIR) -p '$@.py'
 
 clean :
