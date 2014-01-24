@@ -23,7 +23,7 @@ from os.path import isfile as is_file
 
 ##	The base path of the project expressed in terms of its absolute path
 #	information.
-PROJECT_PATH = get_path( os.getcwd() )
+PROJECT_PATH = get_path( get_path(__file__) )
 
 ##	The path to the assets folder for the game, which contains all assets 
 #	associated with the game.
