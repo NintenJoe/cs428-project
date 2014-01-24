@@ -1,0 +1,98 @@
+##	@file
+#	Contains a listing of general functions used in the game library.  The 
+#	functions included here are general use and don't belong to any particular module.
+
+# Library Inclusions #
+
+import pygame as PG
+from pygame.locals import *
+
+from os.path import dirname as get_path
+from os.path import basename as get_base
+from os.path import join as join_paths
+from os.path import isfile as is_file
+
+import logging
+
+from libglobals import *
+
+##	Loads the image specified by the file name in the first parameter.
+#	
+#	@param file_name The name of the image file to be loaded.
+#	@param color_key The color that will be turned omitted in the final image. 
+#		This parameter is useful when parts of the rectangular image aren't needed.
+#	@return The image, which can be drawn to the screen.
+def load_image(file_name, color_key=None):
+	file_path = join_paths(ASSET_PATH, "graphics", file_name)
+
+	if not is_file(file_path):
+		logging.warning("Image file '%s' does not exist." % file_name)
+		file_path = join_paths(ASSET_PATH, "graphics", "default.bmp")
+
+	try:
+		image = PG.image.load(file_path).convert()
+	except PG.error, message:
+		logging.error("Could not load image file at '%s'... failed with error '%s'." %
+			(file_path, message))
+		raise SystemExit
+
+	if color_key != None:
+		image.set_colorkey(color_key, RLEACCEL)
+
+	return image
+
+##	Loads the sound specified by the file name in the method parameters.
+#	
+#	@param file_name The name of the audio file to be loaded.
+#	@return The audio, which can be played by the "pygame" library's audio player.
+def load_sound(file_name):
+	file_path = join_paths(ASSET_PATH, "audio", file_name)
+
+	if not is_file(file_path):
+		logging.warning("Audio file '%s' does not exist." % file_name)
+		file_path = join_paths(ASSET_PATH, "audio", "default.wav")
+
+	try:
+		sound = PG.mixer.Sound(file_path)
+	except PG.error, message:
+		logging.error("Could not load sound file at '%s'... failed with error '%s'." %
+			(file_path, message))
+		raise SystemExit
+
+	return sound
+
+##	Restricts the given value to the range defined by the 2nd and 3rd method 
+#	parameters.  That is, the first parameter value will be restricted to the 2nd
+#	parameter value if the former is smaller and restricted to the 3rd parameter
+#	if it is larger.
+#
+#	@param value The value to be clamped to the range defined by the second and 
+#		third parameter values.
+#	@param lower_bound The lower bound for the range to which the first parameter 
+#		will be restricted.
+#	@param upper_bound The upper bound for the range to which the first parameter 
+#		will be restricted.
+#	@return A new value that lives within the range defined by the minimum and 
+#		maximum parameter values.
+def clamp(value, lower_bound, upper_bound):
+	# Sanity check to ensure that the lower bound is input as the lower of the 
+	# two values to the function.
+	assert lower_bound <= upper_bound, "Lower bound must be less than the upper bound in the clamp function."
+
+	if value < lower_bound:
+		return lower_bound
+	elif value > upper_bound:
+		return upper_bound
+	else:
+		return value
+
+##	Linearly interpolates between the values given in the first two parameters 
+#	based on the value given in the final parameter.
+#	
+#	@param initial The starting value for the interpolation.
+#	@param final The ending value for the interpolation.
+#	@param delta The current position for the interpolation (represented as a 
+#	    floating-point value between 0 and 1).
+#	@return A value that is in between the two given values based on the current time.
+def lerp(initial, final, delta):
+	return initial * (1 - delta) + final * delta
