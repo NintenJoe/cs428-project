@@ -1,19 +1,24 @@
-##	@file
-#	Module file for the "Camera" type, which is used to facilitate game positioning
-#	within the game world.
+##	@file Camera.py
+#	@author Joseph Ciurej
+#	@date Fall 2012 (Updated Winter 2014)
+#
+#	Module file for the "Camera" Type
+#
+#	@TODO
+#	High Priority:
+#	- Clean up the comments within this file, especially the in-line comments.
+#	- Reformat the comments so that they follow the new style guidelines (triple
+#	  punctuation on class areas, etc.).
+#	- Enforce an 80-character limit on the code contained within this file.
+#	Low Priority:
+#	- Fix the problems associated with fixed to free camera transitioning.
 
-# Pygame Imports #
 from pygame.locals import *
-
-# Game Library Imports #
 from Globals import lerp
 
 ##	Blueprint class for a camera that exists within a two-dimensional world.  
 #	The camera has the ability to target a particular entity within the game world 
 #	and follow that objects movements.
-#
-#	@todo There are some weird things with fixed/free camera transitioning that
-#	involve design decisions within this class that should be addressed.
 class Camera():
 	# Constructors #
 
@@ -84,9 +89,9 @@ class Camera():
 				# the camera position based on linear interpolation between 
 				# the targets.
 				if delta < 1:
-					self.position[0] = lerp(self.prev_focal_position[0], 
+					self.position[0] = lerp(self.prev_focal_position[0],
 						self.focus.rect.centerx, delta)
-					self.position[1] = lerp(self.prev_focal_position[1], 
+					self.position[1] = lerp(self.prev_focal_position[1],
 						self.focus.rect.centery, delta)
 				# Otherwise, if the delta indicates that the transition is over, 
 				# set the camera's position to the position of the current target

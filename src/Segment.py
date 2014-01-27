@@ -1,15 +1,21 @@
-##	@file
-#	Module file for the "Segment" type, which serves as the backdrop to the game
-#	world.
+##	@file Segment.py
+#	@author Joseph Ciurej
+#	@date Fall 2012 (Updated Winter 2014)
+#
+#	Module file for the "Segment" Type
+#
+#	@TODO
+#	High Priority:
+#	- Clean up the comments within this file, especially the in-line comments.
+#	- Reformat the comments so that they follow the new style guidelines (triple
+#	  punctuation on class areas, etc.).
+#	- Enforce an 80-character limit on the code contained within this file.
+#	Low Priority:
+#	- Fix the problems associated with fixed to free camera transitioning.
 
-# Pygame Imports #
-import pygame as PG
-
-# IO Imports #
 import struct
+import pygame as PG
 from os.path import join as join_paths
-
-# Game Library Imports #
 from Globals import *
 
 ##	A representation of a portion of the game world, which is composed of a 
@@ -81,9 +87,9 @@ class Segment():
 		tile_tex = self.tile_list[ self.tile_matrix[0][0] ]
 		tile_dims = tile_tex.get_rect()
 
-		seg_image = PG.Surface( 
-			(tile_dims.width * self.width, tile_dims.height * self.height), 
-			tile_tex.get_flags(), tile_tex.get_bitsize(), tile_tex.get_masks() 
+		seg_image = PG.Surface(
+			(tile_dims.width * self.width, tile_dims.height * self.height),
+			tile_tex.get_flags(), tile_tex.get_bitsize(), tile_tex.get_masks()
 		)
 
 		for x in range( 0, self.width ):
@@ -105,7 +111,7 @@ class Segment():
 
 		for x in range( 0, self.width ):
 			collision_column = []
-			
+
 			for y in range( 0, self.height ):
 				collision_column.append( self._tile_tangible(x, y) )
 
@@ -122,7 +128,7 @@ class Segment():
 	#	@param entry_point The coordinate within the current segment at which the 
 	#		player should be placed (defaults to the origin coordinate).
 	def _load_segment(self, segment_id, entry_point):
-		segment_file = open(join_paths(ASSET_PATH, "data", "segdata", 
+		segment_file = open(join_paths(ASSET_PATH, "data", "segdata",
 			"%i.seg" % segment_id), "r")
 
 		segment_ref_count = struct.unpack('H', segment_file.read(2))[0]
@@ -137,7 +143,7 @@ class Segment():
 
 			# Hash the reference based on the coordinates to allow for quick 
 			# access when checking for collisions with the segment changing tiles.
-			self.segment_references[(ref_x_pos, ref_y_pos)] = (ref_segment_id, 
+			self.segment_references[(ref_x_pos, ref_y_pos)] = (ref_segment_id,
 				(ref_entry_point_x, ref_entry_point_y))
 
 		self.width = struct.unpack('H', segment_file.read(2))[0]
@@ -148,13 +154,13 @@ class Segment():
 
 			for y in range(0, self.height):
 				tile_id = struct.unpack('H', segment_file.read(2))[0]
-				
+
 				# If the current tile ID is not contained on this segment's list
 				# of tiles, add an entry to the list of new tiels to prevent
 				# redundant tile loading.
 				if not self.tile_list.has_key(tile_id):
 					self.tile_list[tile_id] = True
-		
+
 				tile_column.append(tile_id)
 
 			self.tile_matrix.append(tile_column)
