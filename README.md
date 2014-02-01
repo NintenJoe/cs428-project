@@ -18,6 +18,10 @@ the University of Illinois Urbana-Champaign.
 ### Authors ###
 - Joshua Halstead (halstea2)
 - Joseph Ciurej (ciurej2)
+- Andrew Exo (exo1)
+- Nick Jeffrey (njeffre2)
+- Eric Christianson (christ39)
+- Edwin Chan (chan100)
 
 [py]: http://www.python.org/download/releases/2.7.6/ 
 [pygame]: http://www.pygame.org/install.html
