@@ -21,7 +21,7 @@ the University of Illinois Urbana-Champaign.
 - Andrew Exo (exo1, andrewexo)
 - Nick Jeffrey (njeffre2, Mortech)
 - Eric Christianson (christ39, T1g)
-- Edwin Chan (chan100, edcha110)
+- Edwin Chan (chan100, edchan110)
 
 [py]: http://www.python.org/download/releases/2.7.6/ 
 [pygame]: http://www.pygame.org/install.html
