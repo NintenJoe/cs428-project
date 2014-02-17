@@ -56,15 +56,15 @@ class Camera():
 		return self.position
 
 	##	Offsets the position of the camera by the given amount.  This offset will
-	#	last so long as the camera is free of a target.
+	#	last until it is set back to 0, 0
 	#	
 	#	@todo Units of the shift?
 	#	
 	#	@param x_shift The horizontal shift to be applied to the camera.
 	#	@param y_shift The vertical shift to be applied to the camera.
 	def set_offset(self, x_shift, y_shift):
-		self.position[0] += x_shift
-		self.position[1] += y_shift
+		self.offset[0] = x_shift
+		self.offset[1] = y_shift
 
 	##	Establishes a new target for the camera to follow with a new offset.  
 	#	The camera will  adjust so that the target given will be located in the 
@@ -115,5 +115,5 @@ class Camera():
 				self.position[0] = self.focus.rect.centerx
 				self.position[1] = self.focus.rect.centery
 
-		self.position[0] = int( self.position[0] )
-		self.position[1] = int( self.position[1] )
+		self.position[0] = int( self.position[0] + self.offset[0] )
+		self.position[1] = int( self.position[1] + self.offset[1] )
