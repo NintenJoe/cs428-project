@@ -66,6 +66,16 @@ class Camera():
 		self.offset[0] = x_shift
 		self.offset[1] = y_shift
 
+	##  Sets the new segment when moving the camera from one segment
+	#	to another. Since this happens on the border of segments, 
+	#	there needs to be some transition logic as well.
+	#	
+	#	@todo transition logic
+	#
+	#	@param new_segment The segment which the camera is moving into
+	def set_segment(self, new_segment):
+		self.segment = new_segment
+
 	##	Establishes a new target for the camera to follow with a new offset.  
 	#	The camera will  adjust so that the target given will be located in the 
 	#	center of its viewpoint (with a given offset).  Setting the target to
