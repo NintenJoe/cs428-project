@@ -1,1 +1,1 @@
-pygame
+--allow-external pygame
