@@ -34,7 +34,7 @@ class Camera():
 	#		(often the in-game avatar for the player).
 	#	@param shift_time The amount of time the camera takes to switch between targets.
 	#	@param border The current segment to which the camera is attached
-	def __init__(self, target=None, shift_time=1000, border):
+	def __init__(self, target=None, shift_time=1000, border=None):
 		self.prev_focal_position = None
 		self.focus = target
 		self.offset = [0,0]
