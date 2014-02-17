@@ -64,7 +64,7 @@ def main():
 
 	shift_time = 3000
 	accumulated_shift = 0
-	camera = Camera( tgt1, shift_time )
+	camera = Camera( tgt1, shift_time, segment )
 
 	# Primary Game Loop #
 	while GAME_RUNNING:
