@@ -63,16 +63,14 @@ def main():
     #tgt_list = [ tgt1, tgt2 ]
 
     move_tgt = Entity()
-    move_tgt.rect = PG.Rect(-320, -240, 2, 2)
+    move_x = -320
+    move_y = -240
+    move_tgt.rect = PG.Rect(move_x, move_y, 2, 2)
 
     shift_time = 3000
     accumulated_shift = 0
     camera = Camera( move_tgt, shift_time, segment)
 
-    move_tgt = Entity()
-    move_x = -320
-    move_y = -240
-    move_tgt.rect = PG.Rect(move_x, move_y, 2, 2)
 
     # Primary Game Loop #
     while GAME_RUNNING:
