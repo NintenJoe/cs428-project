@@ -33,12 +33,12 @@ class Camera():
 	#	@param target The game world object that will be followed by the camera 
 	#		(often the in-game avatar for the player).
 	#	@param shift_time The amount of time the camera takes to switch between targets.
-	#	@param border The current segment to which the camera is attached
-	def __init__(self, target=None, shift_time=1000, border=None):
+	#	@param new_border The current border to which the camera is attached
+	def __init__(self, target=None, shift_time=1000, new_border=None):
 		self.prev_focal_position = None
 		self.focus = target
 		self.offset = [0,0]
-		self.segment = border
+		self.border = new_border
 
 		self.shift_time = float(shift_time)
 		self.shift_start_time = -1
@@ -66,15 +66,15 @@ class Camera():
 		self.offset[0] = x_shift
 		self.offset[1] = y_shift
 
-	##  Sets the new segment when moving the camera from one segment
+	##  Sets the new border when moving the camera from one segment
 	#	to another. Since this happens on the border of segments, 
 	#	there needs to be some transition logic as well.
 	#	
 	#	@todo transition logic
 	#
-	#	@param new_segment The segment which the camera is moving into
-	def set_segment(self, new_segment):
-		self.segment = new_segment
+	#	@param new_border The border which the camera is moving into
+	def set_border(self, new_border):
+		self.borer = new_border
 
 	##	Establishes a new target for the camera to follow with a new offset.  
 	#	The camera will  adjust so that the target given will be located in the 

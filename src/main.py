@@ -67,9 +67,12 @@ def main():
     move_y = -240
     move_tgt.rect = PG.Rect(move_x, move_y, 2, 2)
 
+    border = Entity()
+    border.rect = PG.Rect(0, 0, 640, 640)
+
     shift_time = 3000
     accumulated_shift = 0
-    camera = Camera( move_tgt, shift_time, segment)
+    camera = Camera( move_tgt, shift_time, border)
 
 
     # Primary Game Loop #
