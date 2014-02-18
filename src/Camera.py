@@ -122,8 +122,8 @@ class Camera():
 			# If the camera is attached to one target, simply follow that target
 			# with the camera.
 			else:
-				self.position[0] = self.focus.rect.centerx
-				self.position[1] = self.focus.rect.centery
+				self.position[0] = self.focus.rect.clamp(self.border).centerx
+				self.position[1] = self.focus.rect.clamp(self.border).centery
 
 		self.position[0] = int( self.position[0] + self.offset[0] )
 		self.position[1] = int( self.position[1] + self.offset[1] )
