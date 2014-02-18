@@ -16,12 +16,16 @@ Project originally developed as a course project for CS428 (Software Engineering
 the University of Illinois Urbana-Champaign.
 
 ### Authors ###
-- Joshua Halstead (halstea2, jhalstead85)
-- Joseph Ciurej (ciurej2, NintenJoe)
-- Andrew Exo (exo1, andrewexo)
-- Nick Jeffrey (njeffre2, Mortech)
-- Eric Christianson (christ39, T1g)
-- Edwin Chan (chan100, edchan110)
+
+| Author Name | Author Network ID | Author GitHub ID |
+| ----------- | ----------------- | ---------------- |
+| Joshua Halstead | halstea2 | jhalstead85 |
+| Joseph Ciurej | ciurej2 | NintenJoe |
+| Andrew Exo | exo1 | andrewexo |
+| Nick Jeffrey | njeffre2 | Mortech |
+| Eric Christianson | christ39 | T1g |
+| Edwin Chan | chan100 | edchan110 |
+
 
 [py]: http://www.python.org/download/releases/2.7.6/ 
 [pygame]: http://www.pygame.org/install.html

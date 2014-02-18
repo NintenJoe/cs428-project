@@ -1,4 +1,4 @@
-##	@file FunctionTests.py
+##	@file GlobalsTests.py
 #	@author Joseph Ciurej
 #	@date Winter 2014
 #
