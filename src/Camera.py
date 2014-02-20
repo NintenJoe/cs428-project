@@ -10,9 +10,7 @@
 #	- Reformat the comments so that they follow the new style guidelines (triple
 #	  punctuation on class areas, etc.).
 #	- Enforce an 80-character limit on the code contained within this file.
-#	- Stop camera before it runs off the world's borders
 #	- Implement smooth camera transitions
-#	- Implement offset
 #	- Implement zooming
 #	Low Priority:
 #	- Fix the problems associated with fixed to free camera transitioning.
@@ -31,7 +29,8 @@ class Camera():
 	#	shifting time for target changes can be specified.
 	#	
 	#	@param target The game world object that will be followed by the camera 
-	#		(often the in-game avatar for the player).
+	#		(often the in-game avatar for the player). The width of this rectangle
+	#		NEEDS TO BE THE WIDTH OF THE GAME SCREEN FOR CLAMPING TO WORK PROPERLY
 	#	@param shift_time The amount of time the camera takes to switch between targets.
 	#	@param new_border The current border to which the camera is attached
 	def __init__(self, target=None, shift_time=1000, new_border=None):
@@ -56,9 +55,7 @@ class Camera():
 		return self.position
 
 	##	Offsets the position of the camera by the given amount.  This offset will
-	#	last until it is set back to 0, 0
-	#	
-	#	@todo Units of the shift?
+	#	last until it is set back to (0, 0)
 	#	
 	#	@param x_shift The horizontal shift to be applied to the camera.
 	#	@param y_shift The vertical shift to be applied to the camera.

@@ -63,12 +63,12 @@ def main():
     #tgt_list = [ tgt1, tgt2 ]
 
     move_tgt = Entity()
-    move_x = 320
-    move_y = 240
-    move_tgt.rect = PG.Rect(move_x, move_y, 2, 2)
+    move_x = 0
+    move_y = 0
+    move_tgt.rect = PG.Rect(move_x, move_y, 640, 480)
 
     border = Entity()
-    border.rect = PG.Rect(0, 0, 640, 480)
+    border.rect = PG.Rect(-400, -600, 6400, 4800)
 
     shift_time = 3000
     accumulated_shift = 0
@@ -98,9 +98,9 @@ def main():
             move_x = move_x - 1
         else:
             move_x = move_x + 1
-        move_tgt.rect.centerx = move_x
+        move_tgt.rect.left = move_x
 
-        if move_x < 0:
+        if move_x < -640:
             go_left = False
         if move_x > 640:
             go_left = True
