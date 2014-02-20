@@ -73,7 +73,7 @@ def main():
     shift_time = 3000
     accumulated_shift = 0
     camera = Camera( move_tgt, shift_time, border)
-
+    go_left = True
 
     # Primary Game Loop #
     while GAME_RUNNING:
@@ -94,9 +94,15 @@ def main():
             #tgt_i = (tgt_i + 1) % len(tgt_list)
             #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
-
-        move_x = move_x + 1
+        if go_left:
+            move_x = move_x + 1
+        else: move_x = move_x - 1
         move_tgt.rect.centerx = move_x
+
+        if move_x > -200:
+            go_left = False
+        if move_x < -360:
+            go_left = True
 
         camera.update( GAME_TIME )
 

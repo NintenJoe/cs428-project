@@ -18,7 +18,7 @@
 #	- Fix the problems associated with fixed to free camera transitioning.
 
 from pygame.locals import *
-from Globals import lerp
+from Globals import lerp, SLACK
 
 ##	Blueprint class for a camera that exists within a two-dimensional world.  
 #	The camera has the ability to target a particular entity within the game world 
@@ -91,8 +91,24 @@ class Camera():
 		self.prev_focal_position = ( self.position[0], self.position[1] )
 		self.focus = new_target
 
+	##	Smooth camera movement
+	#	Ignores movement within some 'slack' value
+	#
+	#	@param curr Current (x or y) coordinate position
+	#	@param focal Where the focus (x or y) coordinate position is
+	def follow(self, curr, focal):
+		new_acc = focal - curr
+		if abs(new_acc) < SLACK:
+			new_acc = 0
+		else:
+			if new_acc < 0:
+				new_acc = new_acc + SLACK
+			if new_acc > 0:
+				new_acc = new_acc - SLACK
+		return curr + new_acc
+
 	##	Updates the positioning of the camera given the current game time.
-	#	
+	#
 	#	@param game_time The time at which the new target is set relative to the
 	#		starting time of the game (measured in milliseconds).
 	def update(self, game_time):
@@ -122,8 +138,8 @@ class Camera():
 			# If the camera is attached to one target, simply follow that target
 			# with the camera.
 			else:
-				self.position[0] = self.focus.rect.clamp(self.border).centerx
-				self.position[1] = self.focus.rect.clamp(self.border).centery
+				self.position[0] = self.follow(self.position[0], self.focus.rect.clamp(self.border).centerx)
+				self.position[1] = self.follow(self.position[1], self.focus.rect.clamp(self.border).centery)
 
 		self.position[0] = int( self.position[0] + self.offset[0] )
 		self.position[1] = int( self.position[1] + self.offset[1] )
