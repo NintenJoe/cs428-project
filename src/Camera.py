@@ -71,7 +71,7 @@ class Camera():
 	#
 	#	@param new_border The border which the camera is moving into
 	def set_border(self, new_border):
-		self.borer = new_border
+		self.border = new_border
 
 	##	Establishes a new target for the camera to follow with a new offset.  
 	#	The camera will  adjust so that the target given will be located in the 
