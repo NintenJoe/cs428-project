@@ -63,12 +63,12 @@ def main():
     #tgt_list = [ tgt1, tgt2 ]
 
     move_tgt = Entity()
-    move_x = -320
-    move_y = -240
+    move_x = 320
+    move_y = 240
     move_tgt.rect = PG.Rect(move_x, move_y, 2, 2)
 
     border = Entity()
-    border.rect = PG.Rect(-320, -240, 100, 100)
+    border.rect = PG.Rect(0, 0, 640, 480)
 
     shift_time = 3000
     accumulated_shift = 0
@@ -95,13 +95,14 @@ def main():
             #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
         if go_left:
+            move_x = move_x - 1
+        else:
             move_x = move_x + 1
-        else: move_x = move_x - 1
         move_tgt.rect.centerx = move_x
 
-        if move_x > -200:
+        if move_x < 0:
             go_left = False
-        if move_x < -360:
+        if move_x > 640:
             go_left = True
 
         camera.update( GAME_TIME )
@@ -111,7 +112,8 @@ def main():
         GAME_SCREEN.fill( (0, 0, 0) )
 
         camera_pos = camera.get_position()
-        GAME_SCREEN.blit( seg_img, ( camera_pos[0] + SCREEN_SIZE[0] / 2, camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
+        #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
+        GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) ) 
         #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
 
         PG.display.flip()
