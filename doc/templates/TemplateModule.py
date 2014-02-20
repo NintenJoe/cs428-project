@@ -1,31 +1,31 @@
-##	@file <+$FILENAME$+>
-#	@author Joseph Ciurej
-#	@date <+$DATE$+>
+##  @file <+$FILENAME$+>
+#   @author Joseph Ciurej
+#   @date <+$DATE$+>
 #
-#	Source File for the "<+$BASENAME$+>" Type
+#   Source File for the "<+$BASENAME$+>" Type
 #
-#	@TODO
-#	- Write the implementation in this file!
+#   @TODO
+#   - Write the implementation in this file!
 
-##	TODO
+##  TODO
 class <+$BASENAME$+>():
-	### Constructors ###
+    ### Constructors ###
 
-	##	
-	#	
-	def __init__( self,  ):
-		pass
+    ##  
+    #   
+    def __init__( self,  ):
+        pass
 
-	### Methods ###
+    ### Methods ###
 
-	##	
-	#	
-	def method( self,  ):
-		pass
+    ##  
+    #   
+    def method( self,  ):
+        pass
 
-	### Helper Functions ###
+    ### Helper Functions ###
 
-	##	
-	#	
-	def _method( self,  ):
-		pass
+    ##  
+    #   
+    def _method( self,  ):
+        pass
