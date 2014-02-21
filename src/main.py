@@ -53,9 +53,9 @@ def main():
     PG.display.set_caption( GAME_NAME )
     PG.mouse.set_visible( True )
 
-	world = World()
-	level_one = world.levels['1']
-	seg_img = level_one.get_image('2')
+    world = World()
+    level_one = world.levels['1']
+    seg_img = level_one.get_image('2')
 
     #tgt1 = Entity()
     #tgt2 = Entity()
