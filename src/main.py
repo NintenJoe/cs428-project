@@ -90,7 +90,6 @@ def main():
         GAME_TIME = PG.time.get_ticks()
 
         if accumulated_shift > shift_time:
-            
             #tgt_i = (tgt_i + 1) % len(tgt_list)
             #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
