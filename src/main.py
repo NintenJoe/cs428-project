@@ -18,6 +18,7 @@ import pygame as PG
 from pygame.locals import *
 from Segment import Segment
 from Camera import Camera
+from Animation import Animation
 
 # Global Variables #
 GAME_NAME = "Zol"               # Name for the prototype game
@@ -75,6 +76,10 @@ def main():
     camera = Camera( move_tgt, shift_time, border)
     go_left = True
 
+    player_img = Animation('man.bmp',1,33, False)
+    player = player_img.get_image_at((0,0,16,40))
+    test = player_img.get_image_at((17,0,16,40))
+
     # Primary Game Loop #
     while GAME_RUNNING:
         # Retrieve/Handle User Inputs #
@@ -111,6 +116,11 @@ def main():
         # TODO: Write the draw logic for the game here.
         GAME_SCREEN.fill( (0, 0, 0) )
 
+
+        # Testing of sprite sheet individual sprite gathering #
+        GAME_SCREEN.blit(player, (0,0))
+        GAME_SCREEN.blit(test, (50,100))
+       
         camera_pos = camera.get_position()
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
         GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) ) 
