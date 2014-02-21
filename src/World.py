@@ -7,6 +7,13 @@
 #   @TODO
 #   - Implement load method
 
+import os.path
+import glob
+import string
+import pygame as PG
+from Level import Level
+from Segment import Segment
+
 ##  This class is a high level container for all of the levels in the game.
 #   For now its only job is to load and construct the levels.
 class World():
@@ -16,10 +23,7 @@ class World():
     #   
     def __init__(self):
         # This holds all of the levels and has the following form:
-        # { "Level Name" => Level }
-        #
-        # Level names will be the file name of the segment with an entry point
-        # for that level.
+        # { "Level #"" => Level }
         self.levels = {}
         self.load()
 
@@ -31,11 +35,33 @@ class World():
     #
     #   Segment files are stored in ../assets/data/segdata as .gif files
     def load(self):
-        pass
+        # get list of segment files
+        seg_file_pattern = os.path.join('assets','data','segdata','*.gif')
+        seg_files = glob.glob(seg_file_pattern)
 
-    ### Helper Functions ###
+        # load segments into pygame surfaces
+        # creates Segments
+        # groups segments into levels
+        lvl_groups = {}
+        for seg_file in seg_files:
+            seg_id = string.split(os.path.basename(seg_file),'.')[1]
+            surface = PG.image.load(seg_file)
+            segment = Segment(seg_id,surface)
 
-    ##  
-    #   
-    def _method( self,  ):
-        pass
+            filename = os.path.basename(seg_file)
+            lvl_id = filename[:string.find(filename,'.')]
+            if (lvl_id not in lvl_groups):
+                lvl_groups[lvl_id] = [segment]
+            else:
+                lvl_groups[lvl_id].append(segment)
+
+        # create Levels
+        for lvl_id in lvl_groups.keys():
+            segments = lvl_groups[lvl_id]
+            level = Level(lvl_id)
+            for segment in segments:
+                level.add_segment(segment)
+            level.connect()
+            level.load_tiles()
+            level.generate_images()
+            self.levels[lvl_id] = level

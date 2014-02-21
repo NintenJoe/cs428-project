@@ -16,7 +16,7 @@
 
 import pygame as PG
 from pygame.locals import *
-from Segment import Segment
+from World import World
 from Camera import Camera
 
 # Global Variables #
@@ -52,8 +52,9 @@ def main():
 	PG.display.set_caption( GAME_NAME )
 	PG.mouse.set_visible( True )
 
-	segment = Segment( 0 )
-	seg_img = segment.get_image()
+	world = World()
+	level_one = world.levels['1']
+	seg_img = level_one.get_image('2')
 
 	tgt1 = Entity()
 	tgt2 = Entity()
