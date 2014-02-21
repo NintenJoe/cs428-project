@@ -43,17 +43,20 @@ class EventTest( unittest.TestCase ):
         self.assertEqual( default_event.get_parameters(), {},
             "Incorrect parameters on default initialization." )
 
+
     def test_value_contructor( self ):
         self.assertEqual( self._event.get_type(), EventTest.EVENT_TYPE,
             "Incorrect type on explicit value initialization." )
         self.assertEqual( self._event.get_parameters(), EventTest.EVENT_PARAMS,
             "Incorrect parameters on explicit value initialization." )
 
+
     def test_repr_empty( self ):
         event_repr = repr( Event() )
 
         self.assertEqual( event_repr, EventType.NOTIFY,
             "Incorrect representation string for an empty event." )
+
 
     def test_repr_nonempty( self ):
         event_repr = repr( self._event )
@@ -70,11 +73,13 @@ class EventTest( unittest.TestCase ):
             "The second entry in the parameter dictionary shows up improperly " +
             "in event representation." )
 
+
     def test_str_empty( self ):
         event_str = str( Event() )
 
         self.assertEqual( event_str, "[" + EventType.NOTIFY + "]( )",
             "Incorrect string form for an empty event." )
+
 
     def test_str_nonempty( self ):
         event_str = str( self._event )

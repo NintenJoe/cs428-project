@@ -41,9 +41,9 @@ class StateMachine():
     #    machine states and an edge A -> B indicates that A transitions to B.
     #   @param start_state The identifier for the initial state for the instance
     #    state machine.
-    def __init__( self, state_graph, start_state=state_graph.nodes()[0] ):
+    def __init__( self, state_graph, start_state=None ):
         self._machine = state_graph
-        self._state = start_state
+        self._state = start_state if start_state != None else state_graph.nodes()[0]
 
         self._idle_time = 0.0
 
@@ -73,10 +73,15 @@ class StateMachine():
             if edge_data[ "event" ] == event.get_type():
                 self._change_state( dst_state )
 
-    ##  @returns The string identifier for the current state of the instance
+    ##  @return The string identifier for the current state of the instance
     #   state machine.
     def get_current_state( self ):
         return self._state
+
+    ##  @return The amount of time that the instance machine has been idle on its
+    #   current state.
+    def get_idle_time( self ):
+        return self._idle_time
 
     ### Helper Methods ###
 
