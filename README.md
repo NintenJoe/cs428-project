@@ -4,6 +4,10 @@
 - [Python v2.7.6][py]
 - [PyGame v1.9.1][pygame]
 
+## Software Resources ##
+- [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
+- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png)](https://coveralls.io/r/NintenJoe/zol)
+
 ## Installation Instructions ##
 In order to run the current running version of the game, run the command `make main`
 while in the top level project directory.
@@ -29,3 +33,5 @@ the University of Illinois Urbana-Champaign.
 
 [py]: http://www.python.org/download/releases/2.7.6/ 
 [pygame]: http://www.pygame.org/install.html
+[travis]: https://travis-ci.org/NintenJoe/zol
+[coveralls]: https://coveralls.io/r/NintenJoe/zol
