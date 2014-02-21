@@ -38,15 +38,15 @@ class EventTest( unittest.TestCase ):
     def test_default_constructor( self ):
         default_event = Event()
 
-        self.assertEqual( default_event.getType(), EventType.NOTIFY,
+        self.assertEqual( default_event.get_type(), EventType.NOTIFY,
             "Incorrect type on default initialization." )
-        self.assertEqual( default_event.getParameters(), {},
+        self.assertEqual( default_event.get_parameters(), {},
             "Incorrect parameters on default initialization." )
 
     def test_value_contructor( self ):
-        self.assertEqual( self._event.getType(), EventTest.EVENT_TYPE,
+        self.assertEqual( self._event.get_type(), EventTest.EVENT_TYPE,
             "Incorrect type on explicit value initialization." )
-        self.assertEqual( self._event.getParameters(), EventTest.EVENT_PARAMS,
+        self.assertEqual( self._event.get_parameters(), EventTest.EVENT_PARAMS,
             "Incorrect parameters on explicit value initialization." )
 
     def test_repr_empty( self ):

@@ -73,10 +73,10 @@ class Event():
     ### Methods ###
 
     ##  @return The type of the instance event as an 'EventType' instance.
-    def getType( self ):
+    def get_type( self ):
         return self._type
 
     ##  @return The parameters for the event as a dictionary.  The contents
     #    of this dictionary depends on the event type.
-    def getParameters( self ):
+    def get_parameters( self ):
         return self._params

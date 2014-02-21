@@ -8,6 +8,10 @@
 #   - Write the implementation in this file!
 
 import unittest
+import networkx as NX
+import src
+from src.StateMachine import *
+from src.Event import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "StateMachine" type.
