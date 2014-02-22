@@ -15,11 +15,7 @@ install:
 
 script:
   - make tests
-  - coverage run --timid --debug=trace,config,sys -m unittest discover -s ./test -p '*Travis.py'
+  - make coverage 
 
 after_success:
   - coveralls
-  - pwd
-  - ls -la
-  - cat .coveragerc
-  - cat .travis.yml
