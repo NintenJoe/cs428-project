@@ -2,7 +2,7 @@
 
 [run]
 branch = True
-source = src
+source = ./src
 
 [report]
 show_missing = True
