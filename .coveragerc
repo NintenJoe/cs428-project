@@ -1,5 +1,7 @@
 [run]
 branch = True
+source = ./src
+timir = True
 
 [html]
 title = Zol's Coverage Report

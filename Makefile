@@ -3,7 +3,7 @@ INTERPRETER_FLAGS =
 TEST_FLAGS = -m unittest
 
 COVERAGER = coverage
-COVERAGER_FLAGS = run --timid --source=$(SRC_DIR) -m unittest discover -s $(TEST_DIR) -p '*Tests.py'
+COVERAGER_FLAGS = run -m unittest discover -s $(TEST_DIR) -p '*Tests.py'
 
 SRC_DIR = ./src
 LIB_DIR = ./lib
