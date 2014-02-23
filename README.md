@@ -6,7 +6,7 @@
 
 ## Software Resources ##
 - [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
-- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png)](https://coveralls.io/r/NintenJoe/zol)
+- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=master)](https://coveralls.io/r/NintenJoe/zol?branch=master)
 
 ## Installation Instructions ##
 In order to run the current running version of the game, run the command `make main`
