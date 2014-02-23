@@ -35,3 +35,4 @@ the University of Illinois Urbana-Champaign.
 [pygame]: http://www.pygame.org/install.html
 [travis]: https://travis-ci.org/NintenJoe/zol
 [coveralls]: https://coveralls.io/r/NintenJoe/zol
+[cs428-wiki]: https://wiki.engr.illinois.edu/display/cs428sp14/Zol+(Video+Game)
