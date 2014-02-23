@@ -13,4 +13,9 @@ install:
   - pip install -r .requirements.txt
   - pip install hg+http://bitbucket.org/pygame/pygame
 
-script: make tests
+script:
+  - make tests
+  - make coverage 
+
+after_success:
+  - coveralls

@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = ./src
+timid = True
+
+[html]
+title = Zol's Coverage Report
