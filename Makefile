@@ -10,7 +10,7 @@ LIB_DIR = ./lib
 TEST_DIR = ./test
 MAIN_SCRIPT = $(SRC_DIR)/main.py
 
-.PHONY : clean coverage
+.PHONY : clean main tests coverage
 
 all : tests
 
