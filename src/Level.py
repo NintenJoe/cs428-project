@@ -25,7 +25,7 @@ class Level():
         self.root = None
         # has the form { id => Segment }
         self.segments = {}
-        # has the form { Color => image }
+        # has the form { Color => Surface }
         self.tiles = {}
         # has the form { id => Surface }
         self.images = {}
