@@ -47,8 +47,9 @@ class Level():
                 for tti in segment_i.transition_tiles:
                     for ttj in segment_j.transition_tiles:
                         if (tti[1] == ttj[1]):
-                            segment_i.add_transition(tti[0],segment_j,ttj[0])
-                            segment_j.add_transition(ttj[0],segment_i,tti[0])
+                            if (segment_i != segment_j or tti[0] != ttj[0]):
+                                segment_i.add_transition(tti[0],segment_j,ttj[0])
+                                segment_j.add_transition(ttj[0],segment_i,tti[0])
 
     def load_tiles(self):
         # read level tiles file
