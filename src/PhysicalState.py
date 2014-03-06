@@ -5,7 +5,10 @@
 #   Source File for the "PhysicalState" Type
 #
 #   @TODO
-#   - Write the implementation in this file!
+#   - Tuples are used for the velocity vector, which requires an uneccesary
+#     duplicaton on updates.
+#       > If the current method isn't fast enough, remove the tuple dependence
+#         and replace it with a list or something similar.
 
 import pygame as PG
 

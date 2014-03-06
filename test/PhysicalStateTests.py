@@ -5,7 +5,8 @@
 #   Test File for the "PhysicalState" Type
 #
 #   @TODO
-#   - Write the implementation in this file!
+#   - Since the 'PhysicalState' is a fairly volatile module, this testing file
+#     may need to be changed fairly often.
 
 import unittest
 import src
