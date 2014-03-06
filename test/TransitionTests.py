@@ -42,6 +42,7 @@ class TransitionTest( unittest.TestCase ):
         self.assertEqual( self._transition.get_destination(), TransitionTest.DST_NAME,
             "Incorrect destination node identifier on default construction." )
 
+
     def test_invocation_by_valid_events( self ):
         valid_event = TransitionTest.TRANS_EVENT
 
@@ -52,6 +53,7 @@ class TransitionTest( unittest.TestCase ):
 
         self.assertEqual( self._transition.invoked_by( diffparam_event ), True,
             "Transition not invoked by a valid invocation (different event params)." )
+
 
     def test_invocation_by_invalid_events( self ):
         difftype_event = Event( EventType.COLLISION )
