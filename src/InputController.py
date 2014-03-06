@@ -3,7 +3,11 @@ import os.path
 import string
 
 
-##
+## This class processes key events and translates them into custom events.
+#
+#     This allows user actions such as player movement, pausing the game, etc.
+#     to be abstracted to custom events. Changing which key activates which event
+#     is done by changing the controls file in assets/prefs/
 class InputController():
 
     # Custom Events
