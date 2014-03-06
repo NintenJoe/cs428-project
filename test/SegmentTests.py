@@ -82,7 +82,12 @@ class SegmentTests(unittest.TestCase):
         self.assertTrue(seg1._tile_tangible(7,21), ("Tile should be tangible, but is not."))
         self.assertFalse(seg1._tile_tangible(7,14), ("Tile shouldn't be tangible, but is."))
 
-    # checks for equality by comparing every pixel
+    ## Checks for equality by comparing pixels
+    #
+    #   @param surface1 The first surface to be compared
+    #   @param surface2 The second surface to be compared
+    #   @return True if the two surfaces have matching pixels
+    #           False if the two surfaces differ at any pixel
     def imagesEqual(self, surface1, surface2):
         if (surface1.get_rect() != surface2.get_rect()):
             return False

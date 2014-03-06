@@ -32,15 +32,16 @@ class Level():
 
     ### Methods ###
 
-    ##  Adds the segment to the level by adding it to the
-    #   segment dictionary.
+    ##  Adds the segment to the level by adding it to the segment dictionary.
+    #
+    #   @param segment The segment object to be added to the level
     def add_segment(self, segment):
         self.segments[segment.id] = segment
         # set root if segment has entry point
         if (segment.entry_point != None):
             self.root = segment
 
-    ##  Creates transitions between segments
+    ##  Creates transitions between segments in the level
     def connect(self):
         for segment_i in self.segments.values():
             for segment_j in self.segments.values():
@@ -51,6 +52,7 @@ class Level():
                                 segment_i.add_transition(tti[0],segment_j,ttj[0])
                                 segment_j.add_transition(ttj[0],segment_i,tti[0])
 
+    ## Loads tile images associated with colors from the segment files
     def load_tiles(self):
         # read level tiles file
         tiles_filename = os.path.join('assets','data','segdata', self.id + '.tiles')
@@ -65,10 +67,15 @@ class Level():
 
         tiles_file.close()
 
+    ## Generates the background image for each segment in the level
     def generate_images(self):
         for segment in self.segments.values():
             image = segment.get_image(self.tiles)
             self.images[segment.id] = image
 
+    ## Returns the background image for a specific segment
+    #
+    #   @param seg_id The id of the segment whose image you want
+    #   @return A pygame surface with the image of the segment
     def get_image(self, seg_id):
         return self.images[seg_id]

@@ -21,23 +21,6 @@ from Globals import *
 ##  A representation of a portion of the game world, which is composed of a 
 #   matrix of tiles.  A segment instance handles all the assets associated with
 #   the background and provides collision information for the game world.
-#
-#   @note The file structure for segment instances is as follows:
-#       Location: /data/segdata
-#       Extension: .seg
-#       Format: Data Item                           |       Number of Bytes
-#           Number of Outgoing Segment References   |       2
-#           List of Outgoing Segment References
-#               X-Coordinate of Reference           |       2
-#               Y-Coordinate of Reference           |       2
-#               ID of Outgoing Segment Reference    |       2
-#               X-Coordinate of Outgoing Entry Point|       2
-#               Y-Coordinate of Outgoing Entry Point|       2
-#           Width of Current Segment                |       2
-#           Height of Current Segment               |       2
-#           List of Columns of Tiles (Column-Major Storage of Tiles!)
-#               List of Tiles
-#                   Tile Identifier                 |       2
 class Segment():
 
     # Constructors #
