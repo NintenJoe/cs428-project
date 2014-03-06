@@ -9,6 +9,7 @@ import pygame
 class Entity:
     def __init__(self, bounding_volume):
         self.bounding_volume = bounding_volume
+        self.rect = None
 
     def __repr__(self):
         return repr( self.bounding_volume )
