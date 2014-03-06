@@ -17,7 +17,7 @@
 
 import pygame as PG
 from pygame.locals import *
-from Globals import lerp, SLACK
+from Globals import lerp, ease, SLACK
 
 ##  Blueprint class for a camera that exists within a two-dimensional world.  
 #   The camera has the ability to target a particular entity within the game world 
@@ -122,9 +122,9 @@ class Camera():
                 # the camera position based on linear interpolation between 
                 # the targets.
                 if delta < 1:
-                    self.fpos[0] = lerp(self.prev_focal_position[0],
+                    self.fpos[0] = ease(self.prev_focal_position[0],
                         self.focus.rect.centerx, delta)
-                    self.fpos[1] = lerp(self.prev_focal_position[1],
+                    self.fpos[1] = ease(self.prev_focal_position[1],
                         self.focus.rect.centery, delta)
                 # Otherwise, if the delta indicates that the transition is over, 
                 # set the camera's position to the position of the current target
