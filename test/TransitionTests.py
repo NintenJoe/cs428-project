@@ -8,6 +8,7 @@
 
 import unittest
 import src
+from src.Transition import *
 from src.Event import *
 
 ##  Container class for the test suite that tests the functionality of the
@@ -28,7 +29,7 @@ class TransitionTest( unittest.TestCase ):
 
     def setUp( self ):
         self._transition = Transition( TransitionTest.SRC_NAME,
-            TransitionTest.DST_NAME, TransitionTest.TRANS_EVENT )
+            TransitionTest.DST_NAME, repr(TransitionTest.TRANS_EVENT) )
 
     def tearDown( self ):
         self._transition = None
@@ -45,16 +46,16 @@ class TransitionTest( unittest.TestCase ):
         valid_event = TransitionTest.TRANS_EVENT
 
         self.assertEqual( self._transition.invoked_by( valid_event ), True,
-            "Transition not invoked by a valid invocation." )
+            "Transition not invoked by a valid invocation (exact same event)." )
+
+        diffparam_event = Event( EventType.NOTIFY, { "derp" : None } )
+
+        self.assertEqual( self._transition.invoked_by( diffparam_event ), True,
+            "Transition not invoked by a valid invocation (different event params)." )
 
     def test_invocation_by_invalid_events( self ):
         difftype_event = Event( EventType.COLLISION )
 
         self.assertEqual( self._transition.invoked_by( difftype_event ), False,
             "Transition invoked by an invalid invocation (different event type)." )
-
-        diffparam_event = Event( EventType.NOTIFY, { "derp" : None } )
-
-        self.assertEqual( self._transition.invoked_by( diffparam_event ), False,
-            "Transition invoked by an invalid invocation (different event params)." )
 
