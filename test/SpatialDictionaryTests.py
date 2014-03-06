@@ -20,17 +20,17 @@ class SpatialDictionaryTests(unittest.TestCase):
         self.width = 100
         self.height = 100
 
-        self.entityA = Entity(HashableRect(4, 28, 15, 20))
-        self.entityB = Entity(HashableRect(28, 10, 15, 20))
-        self.entityC = Entity(HashableRect(65, 15, 20, 20))
-        self.entityD = Entity(HashableRect(35, 35, 30, 45))
-        self.entityE = Entity(HashableRect(60, 60, 10, 10))
-        self.entityF = Entity(HashableRect(30, 76, 10, 10))
-        self.entityG = Entity(HashableRect(80, 20, 15, 20))
-        self.entityH = Entity(HashableRect(62, 68, 10, 10))
-        self.entityI = Entity(HashableRect(75, 50, 20, 20))
-        self.entityJ = Entity(HashableRect(80, 60, 10, 13))
-        self.entityK = Entity(HashableRect(78, 55, 15, 15))
+        self.entityA = HashableRect(4, 28, 15, 20)
+        self.entityB = HashableRect(28, 10, 15, 20)
+        self.entityC = HashableRect(65, 15, 20, 20)
+        self.entityD = HashableRect(35, 35, 30, 45)
+        self.entityE = HashableRect(60, 60, 10, 10)
+        self.entityF = HashableRect(30, 76, 10, 10)
+        self.entityG = HashableRect(80, 20, 15, 20)
+        self.entityH = HashableRect(62, 68, 10, 10)
+        self.entityI = HashableRect(75, 50, 20, 20)
+        self.entityJ = HashableRect(80, 60, 10, 13)
+        self.entityK = HashableRect(78, 55, 15, 15)
         self.some_entities = [self.entityA, self.entityB, self.entityC,
                               self.entityD, self.entityE, self.entityF,
                               self.entityG, self.entityH, self.entityI,
@@ -79,7 +79,7 @@ class SpatialDictionaryTests(unittest.TestCase):
     def test_clear_empty(self):
         self.dict_.remove_multiple(self.all_entities)
         self.dict_.clear()
-        self.assertEqual(len(self.dict_), 0,
+        self.assertEqual(self.dict_.size(), 0,
                          "Phantom entities exist after clearing empty list.")
 
         # Restore the deleted objects
@@ -89,17 +89,17 @@ class SpatialDictionaryTests(unittest.TestCase):
         self.dict_.add_multiple(self.all_entities)
         self.dict_.clear()
 
-        self.assertEqual(len(self.dict_), 0,
+        self.assertEqual(self.dict_.size(), 0,
                          "Entities still exists after clearing nonempty list.")
 
     def test_exists_true(self):
         self.dict_.add(self.entityJ)
-        assertTrue(self.dict_.exists(self.entityJ),
+        self.assertTrue(self.dict_.exists(self.entityJ),
                    "Entity does not exist after adding it.")
 
     def test_exists_false(self):
         self.dict_.remove(self.entityJ)
-        assertFalse(self.dict_.exists(self.entityJ),
+        self.assertFalse(self.dict_.exists(self.entityJ),
                     "Entity still exists after removing it.")
 
         # Restore the deleted object
@@ -125,7 +125,7 @@ class SpatialDictionaryTests(unittest.TestCase):
 
     def test_get_all_collisions_one_across_cells(self):
         entities = [self.entityC, self.entityG]
-        expect_collision = [frozenset([self.entityC, self.entityG])]
+        expected_collision = [frozenset([self.entityC, self.entityG])]
         self._test_get_all_collisions(entities, expected_collision)
 
     def test_get_all_collisions_multiple_inside_cell(self):

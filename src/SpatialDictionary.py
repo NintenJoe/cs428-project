@@ -6,8 +6,8 @@
 #
 #   Assumption: Width is a multiple of cell_size.
 
-from src import *
 from CollisionDetector import *
+from HashableRect import *
 
 
 class SpatialDictionary(CollisionDetector):
@@ -94,6 +94,7 @@ class SpatialDictionary(CollisionDetector):
         return len(self.objects)
 
     def clear(self):
+        self.objects = set([])
         self.table.clear()
 
     # Private helper methods
@@ -105,7 +106,7 @@ class SpatialDictionary(CollisionDetector):
             self.table.setdefault(cell, set()).add(obj)
 
     def _remove(self, cell, obj):
-        if cell in self.entries:
+        if cell in self.table:
             self.table[cell].discard(obj)
 
     def _hash(self, x, y):
@@ -116,17 +117,17 @@ class SpatialDictionary(CollisionDetector):
         nearby_objects = set([])
         cells = self._get_covered_cells(obj)
         for cell in cells:
-            nearby_objects = nearby_objects | self._objects_in(cell)
+            nearby_objects = nearby_objects | self._objs_in(cell)
 
         # Exclude the object from this list.
         return list(nearby_objects.discard(obj))
 
     # Returns a list of cells that a bounding volume overlaps
     def _get_covered_cells(self, obj):
-        x = obj.bounding_volume.x
-        y = obj.bounding_volume.y
-        w = obj.bounding_volume.width
-        h = obj.bounding_volume.height
+        x = obj.x
+        y = obj.y
+        w = obj.width
+        h = obj.height
 
         tl_cell = self._hash(x, y)
         tr_cell = self._hash(x + w, y)
