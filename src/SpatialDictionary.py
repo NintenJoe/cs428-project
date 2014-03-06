@@ -120,7 +120,8 @@ class SpatialDictionary(CollisionDetector):
             nearby_objects = nearby_objects | self._objs_in(cell)
 
         # Exclude the object from this list.
-        return list(nearby_objects.discard(obj))
+        nearby_objects.discard(obj)
+        return list(nearby_objects)
 
     # Returns a list of cells that a bounding volume overlaps
     def _get_covered_cells(self, obj):

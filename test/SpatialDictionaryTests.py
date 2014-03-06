@@ -95,12 +95,12 @@ class SpatialDictionaryTests(unittest.TestCase):
     def test_exists_true(self):
         self.dict_.add(self.entityJ)
         self.assertTrue(self.dict_.exists(self.entityJ),
-                   "Entity does not exist after adding it.")
+                        "Entity does not exist after adding it.")
 
     def test_exists_false(self):
         self.dict_.remove(self.entityJ)
         self.assertFalse(self.dict_.exists(self.entityJ),
-                    "Entity still exists after removing it.")
+                         "Entity still exists after removing it.")
 
         # Restore the deleted object
         self.dict_.add(self.entityJ)
