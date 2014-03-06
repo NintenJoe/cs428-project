@@ -19,6 +19,7 @@ from pygame.locals import *
 from World import World
 from Camera import Camera
 from Animation import Animation
+from InputController import InputController
 
 # Global Variables #
 GAME_NAME = "Zol"               # Name for the prototype game
@@ -81,12 +82,25 @@ def main():
     player = player_img.get_image_at((0,0,16,40))
     test = player_img.get_image_at((17,0,16,40))
 
+    input_controller = InputController()
+
     # Primary Game Loop #
     while GAME_RUNNING:
         # Retrieve/Handle User Inputs #
+        key_events = PG.event.get(PG.KEYDOWN)
+        input_controller.processKeyEvents(key_events)
+
         for event in PG.event.get():
             if event.type == PG.QUIT:
                 GAME_RUNNING = False
+            elif event.type == InputController.MOVE_LEFT:
+                print 'left'
+            elif event.type == InputController.MOVE_RIGHT:
+                print 'right'
+            elif event.type == InputController.MOVE_UP:
+                print 'up'
+            elif event.type == InputController.MOVE_DOWN:
+                print 'down'
 
             # TODO: Add more input handling.
 
