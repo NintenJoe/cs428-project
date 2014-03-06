@@ -2,111 +2,143 @@
 #   @author Josh Halstead
 #   @date Winter 2014
 #
-#   A sparse dictionary for spatial hashing.
+#   A spatial hashing collision detection strategy.
 #
-#   Assumption: Bounding volumes are much smaller than a cell such that the
-#   greatest number of cells that a bounding volume can overlap is 4.
+#   Assumption: Width is a multiple of cell_size.
+
+import pygame
+
+import CollisionDetector
 
 
-class SpatialDictionary:
+class SpatialDictionary(CollisionDetector):
+
+    # Public methods
 
     def __init__(self, cell_size=1, width=1, height=1):
         self.cell_size = cell_size
         self.columns = width/cell_size
         self.width = width
         self.height = height
-        self.entries = {}
+        self.table = {}
 
-    def add_objs(self, objs):
+        # Set of the objects (i.e. bounding volumes) being tracked
+        self.objects = set([])
+
+    def __repr__(self):
+        rep = "{"
+        for cell in self.table:
+            objects = ", ".join(str(obj) for obj in self.table[cell])
+            rep += str(cell) + ":Set([" + objects + "]),"
+
+        return rep + "}"
+
+    def __str__(self):
+        rep = "{"
+        for cell in self.table:
+            objects = ", ".join(str(obj) for obj in self.table[cell])
+            rep += str(cell) + ":Set([" + objects + "]),\n"
+
+        # Trim the last newline before appending the closing brace.
+        return rep[:-1] + "}"
+
+    def add_multiple(self, objs):
+        self.objects.update(objs)
+
         for obj in objs:
-            self.add_obj(obj)
+            self.add(obj)
 
-    def add_obj(self, obj):
+    def add(self, obj):
+        self.objects.add(obj)
+
         cells = self._get_covered_cells(obj)
         for cell in cells:
             self._add(cell, obj)
 
-    def _add(self, cell, obj):
-        if cell in self.entries:
-            self.entries[cell].add(obj)
-        else:
-            self.entries.setdefault(cell, set()).add(obj)
+    def remove_multiple(self, objs):
+        self.objects -= set(objs)
 
-    # Returns a list of cells that a bounding volume overlaps
-    def _get_covered_cells(self, obj):
-        x = obj.bounding_volume.x
-        y = obj.bounding_volume.y
-        w = obj.bounding_volume.width
-        h = obj.bounding_volume.height
-
-        top_left = self._hash(x, y)
-        top_right = self._hash(x + w, y)
-        bottom_left = self._hash(x, y + h)
-        bottom_right = self._hash(x + w, y + h)
-
-        row_count = (top_left - bottom_left)/self.columns
-
-        # Last resort, just add the cells that the 4 corners lie on and
-        # make the assumption that the bounding_volumes are small enough
-        # relative to the cell size so that a bounding volume can overlap
-        # at most 4 cells.
-        covered_cells = set()
-        covered_cells.add(top_left)
-        covered_cells.add(top_right)
-        covered_cells.add(bottom_left)
-        covered_cells.add(bottom_right)
-
-#        covered_cells = set()
-#        for i in range(0, 1 + row_count):
-#            step = i * self.columns
-#            lower = top_left + step
-#            upper = top_right + step
-#            covered_cells = covered_cells | set(range(lower, 1 + upper))
-
-        return list(covered_cells)
-
-    def _hash(self, x, y):
-        return (int(x/self.cell_size) +
-                int(y/self.cell_size) * self.columns)
-   
-    def remove_objs(self, objs):
         for obj in objs:
-            self.remove_obj(obj)
+            self.remove(obj)
 
-    def remove_obj(self, obj):
+    def remove(self, obj):
+        self.objects.discard(obj)
+
         cells = self._get_covered_cells(obj)
         for cell in cells:
             self._remove(cell, obj)
 
-    def _remove(self, cell, obj):
-        if cell in self.entries:
-            self.entries[cell].discard(obj)
+    def get_all_collisions(self):
+        collisions = set([])
+        for obj in self.objects:
+            nearby_objects = self._get_nearby_objects(obj)
+            for nearby_object in nearby_objects:
+                if obj.colliderect(nearby_object):
+                    collisions.add(frozenset([obj, nearby_object]))
 
-    def get_nearby_objs(self, obj):
-        nearby_objs = set([])
-        cells = self._get_covered_cells(obj)
-        for cell in cells:
-            nearby_objs = nearby_objs | self._objs_in(cell)
-
-        nearby_objs.discard(obj)
-        return nearby_objs
-
-    def _objs_in(self, cell):
-        if cell in self.entries:
-            return self.entries[cell]
-        else:
-            return set()
+        return list(collisions)
 
     def exists(self, obj):
         cells = self._get_covered_cells(obj)
-        present = True
         for cell in cells:
-            if cell in self.entries:
-                present = present and (obj in self.entries[cell])
-            else:
+            if (cell not in self.table or obj not in self.table[cell]):
                 return False
 
-        return present
+        return True
 
     def clear(self):
-        self.entries.clear()
+        self.table.clear()
+
+    # Private helper methods
+
+    def _add(self, cell, obj):
+        if cell in self.table:
+            self.table[cell].add(obj)
+        else:
+            self.table.setdefault(cell, set()).add(obj)
+
+    def _remove(self, cell, obj):
+        if cell in self.entries:
+            self.table[cell].discard(obj)
+
+    def _hash(self, x, y):
+        return (int(x/self.cell_size) +
+                int(y/self.cell_size) * self.columns)
+
+    def _get_nearby_objects(self, obj):
+        nearby_objects = set([])
+        cells = self._get_covered_cells(obj)
+        for cell in cells:
+            nearby_objects = nearby_objects | self._objects_in(cell)
+
+        # Exclude the object from this list.
+        return list(nearby_objects.discard(obj))
+
+    # Returns a list of cells that a bounding volume overlaps
+    def _get_covered_cells(self, obj):
+        x = obj.x
+        y = obj.y
+        w = obj.width
+        h = obj.height
+
+        tl_cell = self._hash(x, y)
+        tr_cell = self._hash(x + w, y)
+        bl_cell = self._hash(x, y + h)
+
+        covered_cells = set()
+        row_count = self._get_num_covered_rows(tl_cell, bl_cell)
+        for i in range(0, row_count):
+            col_start = tl_cell + (i * self.columns)
+            col_stop = tr_cell + (i * self.columns) + 1
+            covered_cells |= set(range(col_start, col_stop))
+
+        return list(covered_cells)
+
+    def _get_num_covered_rows(self, start, stop):
+        return (stop - start)/self.columns + 1
+
+    def _objs_in(self, cell):
+        if cell in self.table:
+            return self.table[cell]
+        else:
+            return set()
