@@ -128,9 +128,9 @@ def lerp( initial, final, delta ):
 #   @return A value that is in between the two given values based on the current time.
 def ease( initial, final, delta ):
     assert 0.0 <= delta and delta <= 1.0, "Interpolation delta factor out of range [0, 1]!"
-    delta = delta*2
+    delta = delta*2.0
     change = final - initial
     if(delta < 1):
-        return change/2*delta*delta + initial
+        return change/2.0*delta*delta + initial
     delta = delta-1
-    return -change/2 * (delta*(delta-2) - 1) + initial
+    return -change/2.0 * (delta*(delta-2) - 1) + initial
