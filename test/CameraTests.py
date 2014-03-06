@@ -28,7 +28,7 @@ class CameraTests(unittest.TestCase):
 
         self.shift_time = 3000
         accumulated_shift = 0
-        self.camera = Camera( self.move_tgt, self.shift_time, self.border)
+        self.camera = Camera( self.move_tgt, self.shift_time, self.border, 4)
 
     def tearDown(self):
         pass

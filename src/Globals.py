@@ -32,7 +32,7 @@ ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
 
 ##  Amount of movement that the camera will not follow
 #   comparable to slack in a rope pulling along the camera
-SLACK = 4
+SLACK = 0
 
 
 ### Global Functions ###
