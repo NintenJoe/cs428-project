@@ -12,30 +12,39 @@ from abc import ABCMeta, abstractmethod
 class CollisionDetector:
     __metaclass__ = ABCMeta
 
+    # Accept an arbitrary argument list
+    @abstractmethod
+    def __init__(self):
+        pass
+
     @abstractmethod
     def add_multiple(self, objs):
-        return
+        pass
 
     @abstractmethod
     def add(self, obj):
-        return
+        pass
 
     @abstractmethod
     def remove_multiple(self, objs):
-        return
+        pass
 
     @abstractmethod
     def remove(self, obj):
-        return
+        pass
 
     @abstractmethod
     def get_all_collisions(self):
-        return []
+        pass
 
     @abstractmethod
-    def clear(self):
-        return
+    def get_all_objects(self):
+        pass
 
     @abstractmethod
     def exists(self, entity):
-        return False
+        pass
+
+    @abstractmethod
+    def clear(self):
+        pass

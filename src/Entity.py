@@ -6,6 +6,8 @@
 
 import pygame
 
+from src.HashableRect import *
+
 class Entity:
     def __init__(self, bounding_volume):
         self.bounding_volume = bounding_volume

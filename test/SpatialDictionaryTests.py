@@ -1,24 +1,17 @@
-<<<<<<< Updated upstream
-=======
 ##  @file SpatialDictionaryTests.py
 #   @author Joshua Halstead
 #   @date Spring 2014
 #
-#   Test File for the "SpatialDictionary" Type
-#
-# TODO: Add __repr__ test
+#   Test File for the "SpatialDictionary" collision strategy
 
->>>>>>> Stashed changes
 import unittest
-import src
-import pygame as p
 
-from src.SpatialDictionary import *
 from src.Entity import *
+from src.HashableRect import *
+from src.SpatialDictionary import *
+from src.CollisionDetector import *
 
 
-##	Test case containment class for all of the test cases used in testing the
-#	library functions of the 'gamelib' library.
 class SpatialDictionaryTests(unittest.TestCase):
     ### Test Set Up/Tear Down ###
 
@@ -27,125 +20,164 @@ class SpatialDictionaryTests(unittest.TestCase):
         self.width = 100
         self.height = 100
 
-        self.entityA = Entity(p.Rect(4, 28, 15, 20))
-        self.entityB = Entity(p.Rect(28, 10, 15, 20))
-        self.entityC = Entity(p.Rect(65, 15, 20, 20))
-        self.entityD = Entity(p.Rect(35, 35, 30, 45))
-        self.entityE = Entity(p.Rect(60, 60, 10, 10))
-        self.entityF = Entity(p.Rect(30, 76, 10, 10))
-        self.entityG = Entity(p.Rect(80, 20, 15, 20))
-        self.entityH = Entity(p.Rect(62, 68, 10, 10))
-        self.entityI = Entity(p.Rect(75, 50, 20, 20))
-        self.entityJ = Entity(p.Rect(80, 60, 10, 13))
+        self.entityA = Entity(HashableRect(4, 28, 15, 20))
+        self.entityB = Entity(HashableRect(28, 10, 15, 20))
+        self.entityC = Entity(HashableRect(65, 15, 20, 20))
+        self.entityD = Entity(HashableRect(35, 35, 30, 45))
+        self.entityE = Entity(HashableRect(60, 60, 10, 10))
+        self.entityF = Entity(HashableRect(30, 76, 10, 10))
+        self.entityG = Entity(HashableRect(80, 20, 15, 20))
+        self.entityH = Entity(HashableRect(62, 68, 10, 10))
+        self.entityI = Entity(HashableRect(75, 50, 20, 20))
+        self.entityJ = Entity(HashableRect(80, 60, 10, 13))
+        self.entityK = Entity(HashableRect(78, 55, 15, 15))
         self.some_entities = [self.entityA, self.entityB, self.entityC,
                               self.entityD, self.entityE, self.entityF,
-                              self.entityG, self.entityH, self.entityI]
+                              self.entityG, self.entityH, self.entityI,
+                              self.entityK]
         self.all_entities = self.some_entities + [self.entityJ]
-        self.sp_dict = SpatialDictionary(self.cell_size, self.width,
-                                         self.height)
+
+        self.dict_ = SpatialDictionary(self.cell_size, self.width, self.height)
         pass
 
     def tearDown(self):
-        self.sp_dict.clear()
+        self.dict_.clear()
         pass
 
     ### Testing Functions ###
 
-<<<<<<< Updated upstream
-    def test_add_single_object(self):
-        self.sp_dict.add_obj(self.entityA)
-        self.assertTrue(self.sp_dict.exists(self.entityA), ("A single object was"
-                        " not added correctly."))
-
-    def test_add_multiple_objects(self):
-        self.sp_dict.add_objs(self.entities)
-        for entity in self.entities:
-            self.assertTrue(self.sp_dict.exists(entity), ("One or more objects"
-                           " were not added correctly."))
-
-    def test_remove_single_object(self):
-        self.sp_dict.remove_obj(self.entityA)
-        self.assertFalse(self.sp_dict.exists(self.entityA), ("A single object was"
-                                                        " not removed correctly."))
-        self.sp_dict.add_obj(self.entityA)
-
-    def test_remove_multiple_objects(self):
-        self.sp_dict.remove_objs(self.entities)
-        for entity in self.entities:
-            self.assertFalse(self.sp_dict.exists(entity), ("One or more"
-                           " objects were not removed correctly."))
-        self.sp_dict.add_objs(self.entities)
-=======
     def test_add_one_object(self):
-        self.sp_dict.add_obj(self.entityJ)
-        self.assertTrue(self.sp_dict.exists(self.entityJ),
+        self.dict_.add(self.entityJ)
+        self.assertTrue(self.dict_.exists(self.entityJ),
                         "A single object was not added correctly.")
 
     def test_add_multiple_objects(self):
-        self.sp_dict.add_objs(self.all_entities)
-        for entity in self.all_entities:
-            self.assertTrue(self.sp_dict.exists(entity),
-                            "One or more objects were not added correctly.")
+        self.dict_.add_multiple(self.some_entities)
+        for entity in self.some_entities:
+            self.assertTrue(self.dict_.exists(entity),
+                            "Some objects were not added correctly.")
 
     def test_remove_one_object(self):
-        self.sp_dict.remove_obj(self.entityJ)
-        self.assertFalse(self.sp_dict.exists(self.entityJ),
+        self.dict_.add(self.entityJ)
+        self.dict_.remove(self.entityJ)
+        self.assertFalse(self.dict_.exists(self.entityJ),
                          "A single object was not removed correctly.")
 
-        # Restore dictionary
-        self.sp_dict.add_obj(self.entityJ)
+        # Restore the deleted object
+        self.dict_.add(self.entityJ)
 
     def test_remove_multiple_objects(self):
-        self.sp_dict.remove_objs(self.all_entities)
+        self.dict_.add_multiple(self.some_entities)
+        self.dict_.remove_multiple(self.some_entities)
         for entity in self.all_entities:
-            self.assertFalse(self.sp_dict.exists(entity),
-                             "One or more objects were not removed correctly.")
+            self.assertFalse(self.dict_.exists(entity),
+                             "Some objects were not removed.")
 
-        # Restore dictionary
-        self.sp_dict.add_objs(self.all_entities)
->>>>>>> Stashed changes
+        # Restore the deleted objects
+        self.dict_.add_multiple(self.some_entities)
 
-    # Nearby objects to A => {}
-    def test_get_nearby_objs_none(self):
-<<<<<<< Updated upstream
-        nearby_objs = self.sp_dict.get_nearby_objs(self.entityA)
-        self.assertEqual(len(nearby_objs), 0, ("incorrect number of nearby"
-                        " objects repoted."))
+    def test_clear_empty(self):
+        self.dict_.remove_multiple(self.all_entities)
+        self.dict_.clear()
+        self.assertEqual(len(self.dict_), 0,
+                         "Phantom entities exist after clearing empty list.")
 
-#    def test_get_nearby_objs_one(self):
-#        nearby_objs = self.sp_dict.get_nearby_objs(self.entityF)
-#        self.assertEqual(len(nearby_objs), 1, ("Incorrect number of nearby"
-#                        " objects reported."))
+        # Restore the deleted objects
+        self.dict_.add_multiple(self.all_entities)
 
-#    def test_get_nearby_objs_multi(self):
-#        nearby_objs = self.sp_dict.get_nearby_objs(self.entityD)
-#        self.assertEqual(len(nearby_objs), 3, ("Incorrect number of nearby"
-#                        " objects reported."))
-=======
-        self.sp_dict.add_objs(self.all_entities)
-        correct_nearby_objs = []
+    def test_clear_nonempty(self):
+        self.dict_.add_multiple(self.all_entities)
+        self.dict_.clear()
 
-        self._test_get_nearby_objs(self.entityA, set([]))
+        self.assertEqual(len(self.dict_), 0,
+                         "Entities still exists after clearing nonempty list.")
 
-    # Nearby objects to F => D
-    def test_get_nearby_objs_one(self):
-        self.sp_dict.add_objs(self.all_entities)
-        correct_nearby_objs = [self.entityD]
+    def test_exists_true(self):
+        self.dict_.add(self.entityJ)
+        assertTrue(self.dict_.exists(self.entityJ),
+                   "Entity does not exist after adding it.")
 
-        self._test_get_nearby_objs(self.entityF, correct_nearby_objs)
+    def test_exists_false(self):
+        self.dict_.remove(self.entityJ)
+        assertFalse(self.dict_.exists(self.entityJ),
+                    "Entity still exists after removing it.")
 
-    # Nearby objects to D => B, C, E, F, and H
-    def test_get_nearby_objs_multi(self):
-        self.sp_dict.add_objs(self.all_entities)
-        correct_nearby_objs = [self.entityB, self.entityC, self.entityE,
-                               self.entityF, self.entityH]
+        # Restore the deleted object
+        self.dict_.add(self.entityJ)
 
-        self._test_get_nearby_objs(self.entityD, correct_nearby_objs)
+    def test_size_empty(self):
+        self.dict_.clear()
+        self.assertEqual(self.dict_.size(), 0,
+                         "Size mismatch with empty dictionary.")
 
-    def _test_get_nearby_objs(self, obj, correct_nearby_objs):
-        nearby_objs = self.sp_dict.get_nearby_objs(obj)
-        self.assertEqual(len(nearby_objs), len(correct_nearby_objs),
-                         "Incorrect number of nearby objects reported.")
-        self.assertTrue(set(nearby_objs) == set(correct_nearby_objs),
-                        "Reported nearby objects list is incomplete.")
->>>>>>> Stashed changes
+    def test_size_nonempty(self):
+        self.dict_.add_multiple(self.all_entities)
+        self.assertEqual(self.dict_.size(), len(self.all_entities),
+                         "Size mismatch with nonempty dictionary.")
+
+    def test_get_all_collisions_none(self):
+        self._test_get_all_collisions([], [])
+
+    def test_get_all_collisions_one_inside_cell(self):
+        entities = [self.entityI, self.entityJ]
+        expected_collision = [frozenset([self.entityI, self.entityJ])]
+        self._test_get_all_collisions(entities, expected_collision)
+
+    def test_get_all_collisions_one_across_cells(self):
+        entities = [self.entityC, self.entityG]
+        expect_collision = [frozenset([self.entityC, self.entityG])]
+        self._test_get_all_collisions(entities, expected_collision)
+
+    def test_get_all_collisions_multiple_inside_cell(self):
+        entities = [self.entityI, self.entityJ, self.entityK]
+        expected_collisions = [frozenset([self.entityI, self.entityJ]),
+                               frozenset([self.entityI, self.entityK]),
+                               frozenset([self.entityJ, self.entityK])]
+        self._test_get_all_collisions(entities, expected_collisions)
+
+    def test_get_all_collisions_multiple_across_cells(self):
+        entities = [self.entityB, self.entityC, self.entityD,
+                    self.entityE, self.entityF, self.entityH]
+        expected_collisions = [frozenset([self.entityD, self.entityF]),
+                               frozenset([self.entityD, self.entityE]),
+                               frozenset([self.entityD, self.entityH]),
+                               frozenset([self.entityE, self.entityH])]
+        self._test_get_all_collisions(entities, expected_collisions)
+
+    def test_get_all_collisions_universal(self):
+        expected_collisions = [frozenset([self.entityC, self.entityG]),
+                               frozenset([self.entityD, self.entityF]),
+                               frozenset([self.entityD, self.entityE]),
+                               frozenset([self.entityD, self.entityH]),
+                               frozenset([self.entityE, self.entityH]),
+                               frozenset([self.entityI, self.entityJ]),
+                               frozenset([self.entityI, self.entityK]),
+                               frozenset([self.entityJ, self.entityK])]
+        self._test_get_all_collisions(self.all_entities, expected_collisions)
+
+    def test_get_all_objects_empty(self):
+        self.dict_.remove_multiple(self.all_entities)
+        entities = self.dict_.get_all_objects()
+        self.assertEqual(entities, [],
+                         "Unknown objects present.")
+
+    def test_get_all_objects_nonempty(self):
+        self.dict_.remove_multiple(self.all_entities)
+        self.dict_.add(self.entityA)
+        self.dict_.add(self.entityB)
+        entities = self.dict_.get_all_objects()
+        self.assertEqual(entities, [self.entityA, self.entityB],
+                         "Unknown objects present.")
+
+    # Private helper functions
+
+    def _test_get_all_collisions(self, entities, expected_collisions):
+        self.dict_.remove_multiple(self.all_entities)
+        self.dict_.add_multiple(entities)
+
+        collisions = self.dict_.get_all_collisions()
+        self.assertTrue(set(collisions) == set(expected_collisions),
+                        "Incorrect list of collisions detected.")
+
+        # Restore the deleted objects
+        self.dict_.add_multiple(self.all_entities)

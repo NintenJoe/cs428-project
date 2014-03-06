@@ -6,9 +6,8 @@
 #
 #   Assumption: Width is a multiple of cell_size.
 
-import pygame
-
-import CollisionDetector
+from src import *
+from CollisionDetector import *
 
 
 class SpatialDictionary(CollisionDetector):
@@ -16,10 +15,12 @@ class SpatialDictionary(CollisionDetector):
     # Public methods
 
     def __init__(self, cell_size=1, width=1, height=1):
+        CollisionDetector.__init__(self)
+
         self.cell_size = cell_size
-        self.columns = width/cell_size
         self.width = width
         self.height = height
+        self.columns = width/cell_size
         self.table = {}
 
         # Set of the objects (i.e. bounding volumes) being tracked
@@ -78,6 +79,9 @@ class SpatialDictionary(CollisionDetector):
 
         return list(collisions)
 
+    def get_all_objects(self):
+        return list(self.objects)
+
     def exists(self, obj):
         cells = self._get_covered_cells(obj)
         for cell in cells:
@@ -85,6 +89,9 @@ class SpatialDictionary(CollisionDetector):
                 return False
 
         return True
+
+    def size(self):
+        return len(self.objects)
 
     def clear(self):
         self.table.clear()
@@ -116,10 +123,10 @@ class SpatialDictionary(CollisionDetector):
 
     # Returns a list of cells that a bounding volume overlaps
     def _get_covered_cells(self, obj):
-        x = obj.x
-        y = obj.y
-        w = obj.width
-        h = obj.height
+        x = obj.bounding_volume.x
+        y = obj.bounding_volume.y
+        w = obj.bounding_volume.width
+        h = obj.bounding_volume.height
 
         tl_cell = self._hash(x, y)
         tr_cell = self._hash(x + w, y)
