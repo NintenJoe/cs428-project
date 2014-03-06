@@ -148,7 +148,7 @@ class Segment():
     #   @return True if the tile is tangible (should cause collisions) and false
     #       otherwise.
     def _tile_tangible(self, x, y):
-        return self.surface.get_at((x,y)) == (0,0,0,255)
+        return self.data_surface.get_at((x,y)) == (0,0,0,255)
 
     ##  Finds certain types of tiles in the segments data surface.
     #

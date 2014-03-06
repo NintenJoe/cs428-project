@@ -59,13 +59,28 @@ class SegmentTests(unittest.TestCase):
         self.assertTrue( self.imagesEqual(segment3_image, level1.images['3']), ("Segment 1.3 image is not correct."))
 
     def testSegmentConstructor(self):
-        pass
+        level1 = self.world.levels['1']
+        seg1 = level1.segments['1']
+        seg2 = level1.segments['2']
+        seg3 = level1.segments['3']
 
-    def testSegmentGetCollisionMap(self):
-        pass
+        self.assertTrue(seg1.entry_point == (26,3), ("Entry point not set correctly."))
+        self.assertTrue(seg2.entry_point == None, ("Entry point not set correctly."))
+        self.assertTrue(seg3.entry_point == None, ("Entry point not set correctly."))
+
+        self.assertTrue(seg1.width == 30, ("Segment width not set correctly."))
+        self.assertTrue(seg2.width == 48, ("Segment width not set correctly."))
+        self.assertTrue(seg3.width == 20, ("Segment width not set correctly."))
+
+        self.assertTrue(seg1.height == 30, ("Segment height not set correctly."))
+        self.assertTrue(seg2.height == 48, ("Segment height not set correctly."))
+        self.assertTrue(seg3.height == 20, ("Segment height not set correctly."))
 
     def testSegmentTileTangible(self):
-        pass
+        level1 = self.world.levels['1']
+        seg1 = level1.segments['1']
+        self.assertTrue(seg1._tile_tangible(7,21), ("Tile should be tangible, but is not."))
+        self.assertFalse(seg1._tile_tangible(7,14), ("Tile shouldn't be tangible, but is."))
 
     # checks for equality by comparing every pixel
     def imagesEqual(self, surface1, surface2):
