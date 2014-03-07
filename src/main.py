@@ -28,7 +28,7 @@ FRAMES_PER_SECOND = 60              # Number of update frames per second
 
 
 
-##  The primary entry point for the game.  This function handles the primary 
+##  The primary entry point for the game.  This function handles the primary
 #   game loop and logic.  This function should serve as a high level manager for
 #   the game and should not need to perform complex operations.
 #
@@ -100,7 +100,7 @@ def main():
 
         if accumulated_shift > shift_time:
             accumulated_shift = 0
-        
+
         move_tgt.left = move_x
         move_tgt.top = move_y
 
@@ -110,23 +110,11 @@ def main():
         # TODO: Write the draw logic for the game here.
         GAME_SCREEN.fill( (0, 0, 0) )
 
-
-        # Testing of sprite loop animations#
-        if(playerflag == 1):
-            GAME_SCREEN.blit(player, (10,10))
-            
-        if(playerflag == 2):
-            GAME_SCREEN.blit(player2, (10,10))
-
-        if(playerflag == 1):
-            playerflag = 2
-        else:
-            playerflag = 1
-
         camera_pos = camera.get_position()
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
         GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
         #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
+        GAME_SCREEN.blit(player, (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
 
 
         PG.display.flip()
