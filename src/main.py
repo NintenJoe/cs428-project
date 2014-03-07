@@ -66,7 +66,7 @@ def main():
     move_y = 0
     move_tgt = PG.Rect(move_x, move_y, 640, 480)
 
-    border = PG.Rect(0, 0, 6400, 4800)
+    border = PG.Rect(0, 0, 960, 960)
 
     shift_time = 3000
     accumulated_shift = 0
