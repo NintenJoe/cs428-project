@@ -7,7 +7,6 @@
 #   @TODO
 #   - Since the 'PhysicalState' is a fairly volatile module, this testing file
 #     may need to be changed fairly often.
-#   - Test the equality operator.
 
 import unittest
 import src
@@ -62,6 +61,20 @@ class PhysicalStateTest( unittest.TestCase ):
             "Value physical state contructor doesn't initialize with given velocity." )
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
             "Value physical state contructor doesn't initialize with given mass." )
+
+
+    def test_equality_operator( self ):
+        physstate1 = PhysicalState()
+        physstate2 = PhysicalState()
+
+        self.assertTrue( physstate1 == physstate1,
+            "Equality operator doesn't return true for self equality in simple case." )
+        self.assertTrue( self._physstate == self._physstate,
+            "Equality operator doesn't return true for self equality in complex case." )
+        self.assertTrue( physstate1 == physstate2,
+            "Equality operator doesn't return true for two equivalent objects." )
+        self.assertTrue( physstate1 != self._physstate,
+            "Equality operator improperly returns true for two unequivalent objects." )
 
 
     def test_add_simple_delta( self ):
