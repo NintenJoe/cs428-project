@@ -139,7 +139,7 @@ class Camera():
             # with the camera.
             else:
                 clamped = PG.Rect(self.follow(self.fpos[0], self.focus.rect.centerx), 
-                    self.follow(self.fpos[1], self.focus.rect.centery), 1, 1).clamp(self.border)
+                    self.follow(self.fpos[1], self.focus.rect.centery), self.focus.rect.width, self.focus.rect.height).clamp(self.border)
                 self.fpos[0] = clamped.centerx
                 self.fpos[1] = clamped.centery
 

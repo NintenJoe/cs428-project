@@ -20,16 +20,14 @@ from World import World
 from Camera import Camera
 from Animation import Animation
 from InputController import InputController
+from Entity import *
 
 # Global Variables #
 GAME_NAME = "Zol"               # Name for the prototype game
 SCREEN_SIZE = ( 640, 480 )          # Default size for the game screen
 FRAMES_PER_SECOND = 60              # Number of update frames per second
 
-# TODO: Abstract this type to a separate module.
-class Entity():
-    def __init__(self):
-        self.rect = None
+
 
 ##  The primary entry point for the game.  This function handles the primary 
 #   game loop and logic.  This function should serve as a high level manager for
@@ -65,13 +63,13 @@ def main():
     #tgt_i = 0
     #tgt_list = [ tgt1, tgt2 ]
 
-    move_tgt = Entity()
+    move_tgt = Entity(PG.Rect(0,0,0,0))
     move_x = 0
     move_y = 0
     move_tgt.rect = PG.Rect(move_x, move_y, 640, 480)
 
-    border = Entity()
-    border.rect = PG.Rect(-400, -600, 6400, 4800)
+    border = Entity(PG.Rect(0,0,0,0))
+    border.rect = PG.Rect(0, 0, 6400, 4800)
 
     shift_time = 3000
     accumulated_shift = 0
@@ -94,13 +92,13 @@ def main():
             if event.type == PG.QUIT:
                 GAME_RUNNING = False
             elif event.type == InputController.MOVE_LEFT:
-                print 'left'
+                move_x-=10
             elif event.type == InputController.MOVE_RIGHT:
-                print 'right'
+                move_x+=10
             elif event.type == InputController.MOVE_UP:
-                print 'up'
+                move_y-=10
             elif event.type == InputController.MOVE_DOWN:
-                print 'down'
+                move_y+=10
 
             # TODO: Add more input handling.
 
@@ -113,16 +111,17 @@ def main():
             #tgt_i = (tgt_i + 1) % len(tgt_list)
             #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
-        if go_left:
-            move_x = move_x - 1
-        else:
-            move_x = move_x + 1
+        # if go_left:
+        #     move_x = move_x - 1
+        # else:
+        #     move_x = move_x + 1
         move_tgt.rect.left = move_x
+        move_tgt.rect.top = move_y
 
-        if move_x < -640:
-            go_left = False
-        if move_x > 640:
-            go_left = True
+        # if move_x < -640:
+        #     go_left = False
+        # if move_x > 640:
+        #     go_left = True
 
         camera.update( GAME_TIME )
 
