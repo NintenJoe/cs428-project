@@ -66,9 +66,10 @@ def main():
     camera = Camera( move_tgt, shift_time, border)
     go_left = True
 
-    player_img = Animation('man.bmp',1,33, False)
+    player_img = Animation('entities/man/man.bmp',1,33, False)
     player = player_img.get_image_at((0,0,16,40))
-    test = player_img.get_image_at((17,0,16,40))
+    player2 = player_img.get_image_at((17,0,16,40))
+    playerflag = 1
 
     input_controller = InputController()
 
@@ -109,15 +110,12 @@ def main():
         # TODO: Write the draw logic for the game here.
         GAME_SCREEN.fill( (0, 0, 0) )
 
-
-        # Testing of sprite sheet individual sprite gathering #
-        GAME_SCREEN.blit(test, (50,100))
-
         camera_pos = camera.get_position()
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
         GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
         #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
         GAME_SCREEN.blit(player, (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
+
 
         PG.display.flip()
 
