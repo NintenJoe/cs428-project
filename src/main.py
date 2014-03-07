@@ -20,7 +20,6 @@ from World import World
 from Camera import Camera
 from Animation import Animation
 from InputController import InputController
-from Entity import *
 
 # Global Variables #
 GAME_NAME = "Zol"               # Name for the prototype game
@@ -63,13 +62,11 @@ def main():
     #tgt_i = 0
     #tgt_list = [ tgt1, tgt2 ]
 
-    move_tgt = Entity(PG.Rect(0,0,0,0))
     move_x = 0
     move_y = 0
-    move_tgt.rect = PG.Rect(move_x, move_y, 640, 480)
+    move_tgt = PG.Rect(move_x, move_y, 640, 480)
 
-    border = Entity(PG.Rect(0,0,0,0))
-    border.rect = PG.Rect(0, 0, 6400, 4800)
+    border = PG.Rect(0, 0, 6400, 4800)
 
     shift_time = 3000
     accumulated_shift = 0
@@ -85,7 +82,7 @@ def main():
     # Primary Game Loop #
     while GAME_RUNNING:
         # Retrieve/Handle User Inputs #
-        key_events = PG.event.get(PG.KEYDOWN)
+        key_events = PG.event.get([PG.KEYDOWN, PG.KEYUP])
         input_controller.processKeyEvents(key_events)
 
         for event in PG.event.get():
@@ -115,8 +112,8 @@ def main():
         #     move_x = move_x - 1
         # else:
         #     move_x = move_x + 1
-        move_tgt.rect.left = move_x
-        move_tgt.rect.top = move_y
+        move_tgt.left = move_x
+        move_tgt.top = move_y
 
         # if move_x < -640:
         #     go_left = False
