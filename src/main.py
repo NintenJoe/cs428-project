@@ -117,7 +117,7 @@ def main():
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
         GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
         #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
-        GAME_SCREEN.blit(player, (move_x, move_y))
+        GAME_SCREEN.blit(player, (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0], move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1]))
 
         PG.display.flip()
 
