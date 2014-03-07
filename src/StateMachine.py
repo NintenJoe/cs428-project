@@ -8,6 +8,8 @@
 #   High Priority:
 #   - Add more flexible machine creation through listings and dictionaries 
 #     instead of explicit graphs.
+#   - Add functionality to read in state machine information from files.
+#       > Does networkx allow for this behavior?
 #   - Allow for greater flexibility in specifying event transition qualifications.
 #       > Should allow for finer granularity than simple event types (transition
 #         based on event parameters as well, use regex).
