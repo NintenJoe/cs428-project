@@ -55,13 +55,6 @@ def main():
     level_one = world.levels['1']
     seg_img = level_one.get_image('2')
 
-    #tgt1 = Entity()
-    #tgt2 = Entity()
-    #tgt1.rect = PG.Rect( 0, 0, 2, 2 )
-    #tgt2.rect = PG.Rect( -640, -480, 2, 2 )
-    #tgt_i = 0
-    #tgt_list = [ tgt1, tgt2 ]
-
     move_x = 0
     move_y = 0
     move_tgt = PG.Rect(move_x, move_y, 640, 480)
@@ -105,20 +98,10 @@ def main():
         GAME_TIME = PG.time.get_ticks()
 
         if accumulated_shift > shift_time:
-            #tgt_i = (tgt_i + 1) % len(tgt_list)
-            #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
-        # if go_left:
-        #     move_x = move_x - 1
-        # else:
-        #     move_x = move_x + 1
+        
         move_tgt.left = move_x
         move_tgt.top = move_y
-
-        # if move_x < -640:
-        #     go_left = False
-        # if move_x > 640:
-        #     go_left = True
 
         camera.update( GAME_TIME )
 

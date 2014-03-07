@@ -4,7 +4,6 @@ import pygame as pg
 
 from src.Globals import *
 from src.Camera import *
-from src.Entity import *
 from pygame.locals import *
 
 
