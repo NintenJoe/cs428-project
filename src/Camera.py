@@ -15,8 +15,9 @@
 #   Low Priority:
 #   - Fix the problems associated with fixed to free camera transitioning.
 
+import pygame as PG
 from pygame.locals import *
-from Globals import lerp, SLACK
+from Globals import lerp, ease, SLACK
 
 ##  Blueprint class for a camera that exists within a two-dimensional world.  
 #   The camera has the ability to target a particular entity within the game world 
@@ -33,15 +34,17 @@ class Camera():
     #       NEEDS TO BE THE WIDTH OF THE GAME SCREEN FOR CLAMPING TO WORK PROPERLY
     #   @param shift_time The amount of time the camera takes to switch between targets.
     #   @param new_border The current border to which the camera is attached
-    def __init__(self, target=None, shift_time=1000, new_border=None):
+    def __init__(self, target=None, shift_time=1000, new_border=None, slack=SLACK):
         self.prev_focal_position = None
         self.focus = target
         self.offset = [0,0]
         self.border = new_border
+        self.slack = slack
 
         self.shift_time = float(shift_time)
         self.shift_start_time = -1
 
+        self.fpos = [ 0, 0 ] if self.focus == None else [ self.focus.rect.centerx, self.focus.rect.centery ]
         self.position = [ 0, 0 ] if self.focus == None else [ self.focus.rect.centerx, self.focus.rect.centery ]
 
     # Methods #
@@ -95,13 +98,13 @@ class Camera():
     #   @param focal Where the focus (x or y) coordinate position is
     def follow(self, curr, focal):
         new_acc = focal - curr
-        if abs(new_acc) < SLACK:
+        if abs(new_acc) < self.slack:
             new_acc = 0
         else:
             if new_acc < 0:
-                new_acc = new_acc + SLACK
+                new_acc = new_acc + self.slack
             if new_acc > 0:
-                new_acc = new_acc - SLACK
+                new_acc = new_acc - self.slack
         return curr + new_acc
 
     ##  Updates the positioning of the camera given the current game time.
@@ -119,24 +122,26 @@ class Camera():
                 # the camera position based on linear interpolation between 
                 # the targets.
                 if delta < 1:
-                    self.position[0] = lerp(self.prev_focal_position[0],
+                    self.fpos[0] = ease(self.prev_focal_position[0],
                         self.focus.rect.centerx, delta)
-                    self.position[1] = lerp(self.prev_focal_position[1],
+                    self.fpos[1] = ease(self.prev_focal_position[1],
                         self.focus.rect.centery, delta)
                 # Otherwise, if the delta indicates that the transition is over, 
                 # set the camera's position to the position of the current target
                 # and stop the transitioning.
                 else:
-                    self.position[0] = self.focus.rect.centerx
-                    self.position[1] = self.focus.rect.centery
+                    self.fpos[0] = self.focus.rect.centerx
+                    self.fpos[1] = self.focus.rect.centery
 
                     self.prev_focal_position = None
                     self.shift_start_time = -1
             # If the camera is attached to one target, simply follow that target
             # with the camera.
             else:
-                self.position[0] = self.follow(self.position[0], self.focus.rect.clamp(self.border).centerx)
-                self.position[1] = self.follow(self.position[1], self.focus.rect.clamp(self.border).centery)
+                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.rect.centerx), 
+                    self.follow(self.fpos[1], self.focus.rect.centery), 1, 1).clamp(self.border)
+                self.fpos[0] = clamped.centerx
+                self.fpos[1] = clamped.centery
 
-        self.position[0] = int( self.position[0] + self.offset[0] )
-        self.position[1] = int( self.position[1] + self.offset[1] )
+        self.position[0] = int( self.fpos[0] + self.offset[0] )
+        self.position[1] = int( self.fpos[1] + self.offset[1] )

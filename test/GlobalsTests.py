@@ -3,10 +3,6 @@
 #	@date Winter 2014
 #
 #	Test File for the Global Functions in the "Globals" Module
-#
-#	@TODO
-#	- Write more tests to more fully evaluate the correctness of the 'lerp' 
-#	  function.
 
 import unittest
 import src
@@ -43,4 +39,11 @@ class FunctionTests( unittest.TestCase ):
 	def test_lerp( self ):
 		result = lerp( 0, 1, 0.5 )
 
-		self.assertEqual( result, 0.5, "Linear interpolation equation is incorrect." )
+		self.assertEqual( result, 0.5 )
+		self.assertEqual( lerp( 0, 1, 0.75 ), .75)
+		self.assertEqual( lerp( 0, 1, 0 ), 0)
+
+	def test_ease( self ):
+		self.assertEqual( ease( 0, 1, 0.5), 0.5)
+		self.assertEqual( ease( 0, 1, 1), 1)
+		self.assertEqual( ease( 0, 1, 0.25), 0.125)

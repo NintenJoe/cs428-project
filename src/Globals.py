@@ -32,7 +32,7 @@ ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
 
 ##  Amount of movement that the camera will not follow
 #   comparable to slack in a rope pulling along the camera
-SLACK = 4
+SLACK = 0
 
 
 ### Global Functions ###
@@ -117,3 +117,20 @@ def lerp( initial, final, delta ):
     assert 0.0 <= delta and delta <= 1.0, "Interpolation delta factor out of range [0, 1]!"
 
     return initial * (1 - delta) + final * delta
+
+##  Quadratic easing in and out between two values based on the time delta
+#   Based on code from http://www.gizma.com/easing/
+#   
+#   @param initial The starting value for the interpolation.
+#   @param final The ending value for the interpolation.
+#   @param delta The current position for the interpolation (represented as a 
+#       floating-point value between 0 and 1).
+#   @return A value that is in between the two given values based on the current time.
+def ease( initial, final, delta ):
+    assert 0.0 <= delta and delta <= 1.0, "Interpolation delta factor out of range [0, 1]!"
+    delta = delta*2.0
+    change = final - initial
+    if(delta < 1):
+        return change/2.0*delta*delta + initial
+    delta = delta-1
+    return -change/2.0 * (delta*(delta-2) - 1) + initial
