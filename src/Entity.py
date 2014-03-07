@@ -9,7 +9,8 @@
 #   - Override the default behvior of the "setup_machine" function to load a
 #     finite-state machine from a file (when the logic is available).
 
-import pygame
+from abc import ABCMeta, abstractmethod
+from PhysicalState import *
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
@@ -23,7 +24,7 @@ class Entity( object ):
     #   @param name The name identifier for the entity object instance.
     #   @param initial_state The initial physical state configuration for the 
     #    entity object instance.
-    def __init__( self, name, initial_state ):
+    def __init__( self, name, initial_state=PhysicalState() ):
         self._event_queue = Queue()
 
         self._phys_state = initial_state
