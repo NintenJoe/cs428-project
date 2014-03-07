@@ -26,10 +26,7 @@ GAME_NAME = "Zol"               # Name for the prototype game
 SCREEN_SIZE = ( 640, 480 )          # Default size for the game screen
 FRAMES_PER_SECOND = 60              # Number of update frames per second
 
-# TODO: Abstract this type to a separate module.
-class Entity():
-    def __init__(self):
-        self.rect = None
+
 
 ##  The primary entry point for the game.  This function handles the primary 
 #   game loop and logic.  This function should serve as a high level manager for
@@ -58,20 +55,11 @@ def main():
     level_one = world.levels['1']
     seg_img = level_one.get_image('2')
 
-    #tgt1 = Entity()
-    #tgt2 = Entity()
-    #tgt1.rect = PG.Rect( 0, 0, 2, 2 )
-    #tgt2.rect = PG.Rect( -640, -480, 2, 2 )
-    #tgt_i = 0
-    #tgt_list = [ tgt1, tgt2 ]
-
-    move_tgt = Entity()
     move_x = 0
     move_y = 0
-    move_tgt.rect = PG.Rect(move_x, move_y, 640, 480)
+    move_tgt = PG.Rect(move_x, move_y, 640, 480)
 
-    border = Entity()
-    border.rect = PG.Rect(-400, -600, 6400, 4800)
+    border = PG.Rect(0, 0, 960, 960)
 
     shift_time = 3000
     accumulated_shift = 0
@@ -87,20 +75,20 @@ def main():
     # Primary Game Loop #
     while GAME_RUNNING:
         # Retrieve/Handle User Inputs #
-        key_events = PG.event.get(PG.KEYDOWN)
+        key_events = PG.event.get([PG.KEYDOWN, PG.KEYUP])
         input_controller.processKeyEvents(key_events)
 
         for event in PG.event.get():
             if event.type == PG.QUIT:
                 GAME_RUNNING = False
             elif event.type == InputController.MOVE_LEFT:
-                print 'left'
+                move_x-=10
             elif event.type == InputController.MOVE_RIGHT:
-                print 'right'
+                move_x+=10
             elif event.type == InputController.MOVE_UP:
-                print 'up'
+                move_y-=10
             elif event.type == InputController.MOVE_DOWN:
-                print 'down'
+                move_y+=10
 
             # TODO: Add more input handling.
 
@@ -110,19 +98,10 @@ def main():
         GAME_TIME = PG.time.get_ticks()
 
         if accumulated_shift > shift_time:
-            #tgt_i = (tgt_i + 1) % len(tgt_list)
-            #camera.set_target( GAME_TIME, tgt_list[ tgt_i ] )
             accumulated_shift = 0
-        if go_left:
-            move_x = move_x - 1
-        else:
-            move_x = move_x + 1
-        move_tgt.rect.left = move_x
-
-        if move_x < -640:
-            go_left = False
-        if move_x > 640:
-            go_left = True
+        
+        move_tgt.left = move_x
+        move_tgt.top = move_y
 
         camera.update( GAME_TIME )
 

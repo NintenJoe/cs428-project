@@ -4,7 +4,6 @@ import pygame as pg
 
 from src.Globals import *
 from src.Camera import *
-from src.Entity import *
 from pygame.locals import *
 
 
@@ -20,11 +19,9 @@ class CameraTests(unittest.TestCase):
         pg.quit()
 
     def setUp(self):
-        self.move_tgt = Entity(PG.Rect(0,0,0,0))
-        self.move_tgt.rect = PG.Rect(500, 500, 1, 1)
+        self.move_tgt = PG.Rect(500, 500, 1, 1)
 
-        self.border = Entity(PG.Rect(0,0,0,0))
-        self.border.rect = PG.Rect(0, 0, 6400, 4800)
+        self.border = PG.Rect(0, 0, 6400, 4800)
 
         self.shift_time = 3000
         accumulated_shift = 0
@@ -53,8 +50,8 @@ class CameraTests(unittest.TestCase):
         self.assertEquals(self.camera.position[1], 506)
 
     def testMovement(self):
-        self.move_tgt.rect.left = 460
-        self.move_tgt.rect.top = 501
+        self.move_tgt.left = 460
+        self.move_tgt.top = 501
         self.camera.update(1)
         self.assertEquals(self.camera.position[0], 464)
         self.assertEquals(self.camera.position[1], 500)
@@ -65,20 +62,19 @@ class CameraTests(unittest.TestCase):
 
     def testMovementWithOffset(self):
         self.camera.set_offset(5,6)
-        self.move_tgt.rect.left = 460
-        self.move_tgt.rect.top = 501
+        self.move_tgt.left = 460
+        self.move_tgt.top = 501
         self.camera.update(1)
         self.assertEquals(self.camera.position[0], 469)
         self.assertEquals(self.camera.position[1], 506)
-        self.move_tgt.rect.left = 468
-        self.move_tgt.rect.top = 508
+        self.move_tgt.left = 468
+        self.move_tgt.top = 508
         self.camera.update(2)
         self.assertEquals(self.camera.position[0], 469)
         self.assertEquals(self.camera.position[1], 510)
 
     def testFocusTransition(self):
-        new_focus = Entity(PG.Rect(0,0,0,0))
-        new_focus.rect = PG.Rect(550, 550, 1, 1)
+        new_focus = PG.Rect(550, 550, 1, 1)
         self.camera.set_target(0, new_focus)
         self.assertEquals(new_focus, self.camera.focus)
         self.camera.update(0)
@@ -92,13 +88,13 @@ class CameraTests(unittest.TestCase):
         self.assertEquals(self.camera.position[1], 550)
 
     def testBorderClamp(self):
-        self.move_tgt.rect.left = -50
-        self.move_tgt.rect.top = 40
+        self.move_tgt.left = -50
+        self.move_tgt.top = 40
         self.camera.update(1)
         self.assertEquals(self.camera.position[0], 0)
         self.assertEquals(self.camera.position[1], 44)
-        self.move_tgt.rect.left = 50
-        self.move_tgt.rect.top = -40
+        self.move_tgt.left = 50
+        self.move_tgt.top = -40
         self.camera.update(2)
         self.assertEquals(self.camera.position[0], 46)
         self.assertEquals(self.camera.position[1], 0)

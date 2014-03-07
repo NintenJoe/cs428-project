@@ -44,8 +44,8 @@ class Camera():
         self.shift_time = float(shift_time)
         self.shift_start_time = -1
 
-        self.fpos = [ 0, 0 ] if self.focus == None else [ self.focus.rect.centerx, self.focus.rect.centery ]
-        self.position = [ 0, 0 ] if self.focus == None else [ self.focus.rect.centerx, self.focus.rect.centery ]
+        self.fpos = [ 0, 0 ] if self.focus == None else [ self.focus.centerx, self.focus.centery ]
+        self.position = [ 0, 0 ] if self.focus == None else [ self.focus.centerx, self.focus.centery ]
 
     # Methods #
 
@@ -123,23 +123,23 @@ class Camera():
                 # the targets.
                 if delta < 1:
                     self.fpos[0] = ease(self.prev_focal_position[0],
-                        self.focus.rect.centerx, delta)
+                        self.focus.centerx, delta)
                     self.fpos[1] = ease(self.prev_focal_position[1],
-                        self.focus.rect.centery, delta)
+                        self.focus.centery, delta)
                 # Otherwise, if the delta indicates that the transition is over, 
                 # set the camera's position to the position of the current target
                 # and stop the transitioning.
                 else:
-                    self.fpos[0] = self.focus.rect.centerx
-                    self.fpos[1] = self.focus.rect.centery
+                    self.fpos[0] = self.focus.centerx
+                    self.fpos[1] = self.focus.centery
 
                     self.prev_focal_position = None
                     self.shift_start_time = -1
             # If the camera is attached to one target, simply follow that target
             # with the camera.
             else:
-                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.rect.centerx), 
-                    self.follow(self.fpos[1], self.focus.rect.centery), 1, 1).clamp(self.border)
+                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.centerx), 
+                    self.follow(self.fpos[1], self.focus.centery), self.focus.width, self.focus.height).clamp(self.border)
                 self.fpos[0] = clamped.centerx
                 self.fpos[1] = clamped.centery
 
