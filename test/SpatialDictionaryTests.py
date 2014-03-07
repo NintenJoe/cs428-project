@@ -6,10 +6,8 @@
 
 import unittest
 
-from src.Entity import *
 from src.HashableRect import *
 from src.SpatialDictionary import *
-from src.CollisionDetector import *
 
 
 class SpatialDictionaryTests(unittest.TestCase):
