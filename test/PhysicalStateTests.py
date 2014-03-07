@@ -7,6 +7,7 @@
 #   @TODO
 #   - Since the 'PhysicalState' is a fairly volatile module, this testing file
 #     may need to be changed fairly often.
+#   - Test the equality operator.
 
 import unittest
 import src
@@ -53,6 +54,7 @@ class PhysicalStateTest( unittest.TestCase ):
         self.assertEqual( default_physstate.get_mass(), 0.0,
             "Default physical state contructor doesn't initialize identity mass." )
 
+
     def test_value_constructor( self ):
         self.assertEqual( self._physstate.get_volume(), PhysicalStateTest.VOLUME,
             "Value physical state contructor doesn't initialize with given volume." )
@@ -72,6 +74,7 @@ class PhysicalStateTest( unittest.TestCase ):
             "Adding a zero delta to a state changes its velocity value." )
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
             "Adding a zero delta to a state changes its mass value." )
+
 
     def test_add_complex_delta( self ):
         simple_delta = PhysicalState( PG.Rect(1, 2, 3, 4), (-5.0, -3.0), 18.0 )
@@ -93,6 +96,7 @@ class PhysicalStateTest( unittest.TestCase ):
 
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS + 18.0,
             "Adding a non-zero delta to a state doesn't properly alter its mass." )
+
 
     def test_update( self ):
         self._physstate.update( PhysicalStateTest.TIME_DELTA )

@@ -9,13 +9,15 @@
 #     duplicaton on updates.
 #       > If the current method isn't fast enough, remove the tuple dependence
 #         and replace it with a list or something similar.
+#   - Refine the equality operator (the implementation is currently pretty 
+#     inelegant).
 
 import pygame as PG
 
 ##  A representation of the tangible state of an object within the game world.
 #   This type describes all physical information associated with an object,
 #   such as its current position, bounding volume, velocity, et cetera.
-class PhysicalState():
+class PhysicalState( object ):
     ### Constructors ###
 
     ##  Initializes a physical state with the given collision volume, velocity,
@@ -30,6 +32,22 @@ class PhysicalState():
         self._volume = volume
         self._velocity = velocity
         self._mass = mass
+
+    ### Operator Overloading ###
+
+    ##  Returns true if all aspects of the physical state instances are
+    #   equivalent (i.e. volume, velocity, mass).
+    #
+    #   @return True if the instance state is equivalent to the given state and
+    #    false otherwise.
+    def __eq__( self, other ):
+        return self._mass == other._mass and \
+            self._velocity[0] == other._velocity[0] and \
+            self._velocity[1] == other._velocity[1] and \
+            self._volume.x == other._volume.x and \
+            self._volume.y == other._volume.y and \
+            self._volume.w == other._volume.w and \
+            self._volume.h == other._volume.h
 
     ### Methods ###
 

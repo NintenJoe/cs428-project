@@ -17,7 +17,7 @@ import re
 ##  The representation of a directed edge within a state machine.  Each transition
 #   encodes a set of events that invoke the transition from the source state of
 #   the transition to the destination state.
-class Transition():
+class Transition( object ):
     ### Constructors ###
 
     ##  Creates a transition that encodes a transition from the given source state

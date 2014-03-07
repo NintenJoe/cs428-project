@@ -17,12 +17,12 @@
 #     returning the physical state.
 
 from abc import ABCMeta, abstractmethod
-# from PhysicalState import *
+from PhysicalState import *
 
 ##  The representation of a single node within a state machine.  Each state
 #   represents a distinct set of update behaviors, which encode how an object
 #   "in" the state should change over time.
-class State():
+class State( object ):
     ### Constructors ###
 
     ##  Constructs a state instance with the given string identifier.
@@ -44,7 +44,7 @@ class State():
     def simulate_step( self, time_delta ):
         self._active_time += time_delta
 
-        return self._calculate_step_changes( time_delta )
+        return self._calc_step_changes( time_delta )
 
     ##  Simulates an arrival at the instance state, returning the physical state
     #   changes that accompany such a change.
@@ -54,7 +54,7 @@ class State():
     def simulate_arrival( self ):
         self._active_time = 0.0
 
-        return self._calc_arrivial_changes()
+        return self._calc_arrival_changes()
 
     ##  Simulates a departure from the instance state, returning the physical state
     #   changes that accompany such a change.
@@ -84,7 +84,7 @@ class State():
     #    by simulating the instance 
     @abstractmethod
     def _calc_step_changes( self, time_delta ):
-        return PhysicalState()
+        pass
 
     ##  Simulates an arrival at the instance state, returning the physical state
     #   changes that accompany such a change.
@@ -93,7 +93,7 @@ class State():
     #    by arriving at the instance state.
     @abstractmethod
     def _calc_arrival_changes( self ):
-        return PhysicalState()
+        pass
 
     ##  Simulates an departure at the instance state, returning the physical state
     #   changes that accompany such a change.
@@ -102,7 +102,7 @@ class State():
     #    by departure at the instance state.
     @abstractmethod
     def _calc_departure_changes( self ):
-        return PhysicalState()
+        pass
 
     ### Class Setup ###
 
