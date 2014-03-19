@@ -1,4 +1,4 @@
-##  @file IdleState.py
+##  @file MoveState.py
 #   @author Eric Christianson
 #   @date Spring 2014
 #
@@ -18,6 +18,7 @@ class MoveState( State ):
     #
     #   @param identifier A string identifier for that will represent the
     #    name of the instance state.
+    #   @param (vx,vy) the x and y components of the velocity of movement
     def __init__( self, identifier, (vx, vy) ):
         super( MoveState, self ).__init__( "move_" + identifier )
         self._vx = vx
