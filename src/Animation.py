@@ -119,7 +119,7 @@ class Animation(object):
 	def get_frame(self, game_time):
 		assert self.start_time >= 0, "Animation '%s' not started before frame retrieval." % self.sheet_path
 
-		frame_num = _get_frame_number(game_time)
+		frame_num = self._get_frame_number(game_time)
 		frame_rect = PG.Rect(frame_num * self.frame_width, 0, self.frame_width, self.frame_height)
 
 		return self.sprite_sheet.subsurface(frame_rect)
