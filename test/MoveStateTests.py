@@ -47,7 +47,7 @@ class MoveStateTest( unittest.TestCase ):
         self.assertTrue( first_change == second_change,
             "Simulating a step in a move state results in different changes over time." )
         self.assertEqual( first_change, PhysicalState(PG.Rect(0, 0, 1.0, 1.0), (0,0), 0.0),
-            "Each step simulated in a move state results in a non-empty physical delta." )
+            "The physical delta for each step is incorrect." )
 
 
     def test_arrival_simulation( self ):
