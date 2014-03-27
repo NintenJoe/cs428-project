@@ -68,6 +68,20 @@ class SimulationDeltaTests( unittest.TestCase ):
             "Value construcor doesn't deepy copy the parameter event listing." )
 
 
+    def test_equality_operator( self ):
+        delta1 = SimulationDelta()
+        delta2 = SimulationDelta()
+
+        self.assertTrue( delta1 == delta1,
+            "Equality operator doesn't return true for self equality in simple case." )
+        self.assertTrue( self._delta == self._delta,
+            "Equality operator doesn't return true for self equality in complex case." )
+        self.assertTrue( delta1 == delta2,
+            "Equality operator doesn't return true for two equivalent objects." )
+        self.assertTrue( delta1 != self._delta,
+            "Equality operator improperly returns true for two unequivalent objects." )
+
+
     def test_add_simple( self ):
         simple_delta = SimulationDelta()
         aggregate_delta = self._delta + simple_delta

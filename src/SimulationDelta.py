@@ -14,6 +14,8 @@
 #         to read (with multiple classes in a single file).
 #   - Fix the shallow copy issue within the "add" function if necessary (should
 #     be fine since the "Event" elements are immutable).
+#   - Make the equality operator agnostic of event ordering if event ordering
+#     doesn't end up mattering.
 
 import copy
 from PhysicalState import *
@@ -39,6 +41,15 @@ class SimulationDelta( object ):
         self._events = copy.deepcopy( events )
 
     ### Overloaded Operators ###
+
+    ##  Returns true if all aspects of the delta operands are equivalent (i.e.
+    #   physical state changes, event listing, etc.).
+    #
+    #   @return True if the operand deltas are equivalent in changes and
+    #    false otherwise.
+    def __eq__( self, other ):
+        return self._entity_delta == other._entity_delta and \
+            self._events == other._events
 
     ##  Aggregates two "SimulationDelta" instances by combining all changes
     #   represented in the two operand deltas, returning the resultant aggregation.

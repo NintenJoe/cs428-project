@@ -13,6 +13,7 @@
 #         as "State," should there be a dedicated module?
 
 from abc import ABCMeta, abstractmethod
+from SimulationDelta import *
 from Event import *
 
 ##  The representation of a single node within a state machine.  Each state
@@ -50,7 +51,7 @@ class State( object ):
         self._active_time += time_delta
 
         return self._calc_step_changes( time_delta ) if not self.has_timed_out() \
-            else SimulationDelta( events=[ Event(EventType.STATE_TIMEOUT) ] )
+            else SimulationDelta( events=[ Event(EventType.TIMEOUT) ] )
 
     ##  Simulates an arrival at the instance state, returning the resultant
     #   changes as a "SimulationDelta" instance.
@@ -85,10 +86,10 @@ class State( object ):
     def get_active_time( self ):
         return self._active_time
 
-    ##  @return The maximum amount of time for which the state can be active (or
-    #    "None" if this time is infinite).
+    ##  @return The maximum amount of time for which the state can be active
+    #    (which will be infinite if the state has no time out time).
     def get_timeout_time( self ):
-        return self._timeout_time if self._timeout_time != float("inf") else None
+        return self._timeout_time
 
     ### Helper Methods ###
 
