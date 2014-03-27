@@ -151,3 +151,7 @@ class Segment():
                 if (color != (0,0,0) and color != (255,255,255)):
                     tiles.append(((x,y),color))
         return tiles
+
+    #   @return A list of the entities in this segment.
+    def get_entities(self):
+        return self.entities
