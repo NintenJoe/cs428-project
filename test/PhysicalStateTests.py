@@ -10,8 +10,8 @@
 
 import unittest
 import src
-import copy
 import pygame as PG
+
 from src.PhysicalState import *
 
 ##  Container class for the test suite that tests the functionality of the
@@ -34,16 +34,15 @@ class PhysicalStateTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._physstate = PhysicalState( copy.deepcopy(PhysicalStateTest.VOLUME),
-            copy.deepcopy(PhysicalStateTest.VELOCITY),
-            copy.deepcopy(PhysicalStateTest.MASS) )
+        self._physstate = PhysicalState( PhysicalStateTest.VOLUME,
+            PhysicalStateTest.VELOCITY, PhysicalStateTest.MASS )
 
     def tearDown( self ):
         self._physstate = None
 
     ### Testing Functions ###
 
-    def test_default_constructor( self ):
+    def test_default_constructor_initialization( self ):
         default_physstate = PhysicalState()
 
         self.assertEqual( default_physstate.get_volume(), PG.Rect(0, 0, 0, 0),
@@ -54,13 +53,19 @@ class PhysicalStateTest( unittest.TestCase ):
             "Default physical state contructor doesn't initialize identity mass." )
 
 
-    def test_value_constructor( self ):
+    def test_value_constructor_initialization( self ):
         self.assertEqual( self._physstate.get_volume(), PhysicalStateTest.VOLUME,
             "Value physical state contructor doesn't initialize with given volume." )
         self.assertEqual( self._physstate.get_velocity(), PhysicalStateTest.VELOCITY,
             "Value physical state contructor doesn't initialize with given velocity." )
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
             "Value physical state contructor doesn't initialize with given mass." )
+
+
+    def test_value_constructor_independence( self ):
+        self._physstate._volume.x += 1
+        self.assertNotEqual( self._physstate.get_volume(), PhysicalStateTest.VOLUME,
+            "Value constructor for physical state doesn't deep copy parameter objects." )
 
 
     def test_equality_operator( self ):

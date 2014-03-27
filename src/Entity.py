@@ -16,6 +16,11 @@ from PhysicalState import *
 #   entity object is an independent and autonomous item within the game world with 
 #   its own physical and mental state.
 class Entity( object ):
+    ### Class Setup ###
+
+    ##  Identifies the class as an abstract base class.
+    __metaclass__ = ABCMeta
+
     ### Constructors ###
 
     ##  Constructs an entity with the given initial physical state configuration
@@ -65,9 +70,4 @@ class Entity( object ):
     @abstractmethod
     def _setup_machine( self ):
         pass
-
-    ### Class Setup ###
-
-    ##  Identifies the class as an abstract base class.
-    __metaclass__ = ABCMeta
 

@@ -1,17 +1,17 @@
-##  @file StateTests.py
+##  @file EntityTests.py
 #   @author Joseph Ciurej
 #   @date Spring 2014
 #
-#   Test File for the "State" Type
+#   Test File for the "Entity" Type
 #
 #   @TODO
-#   - Add tests for the timeout functionality added to states!
+#   - Write the implementation in this file!
 
 import unittest
 
 ##  Container class for the test suite that tests the functionality of the
-#   "State" type.
-class StateTest( unittest.TestCase ):
+#   "Entity" type.
+class EntityTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):

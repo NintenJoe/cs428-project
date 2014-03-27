@@ -13,6 +13,7 @@
 #     inelegant).
 
 import pygame as PG
+import copy
 
 ##  A representation of the tangible state of an object within the game world.
 #   This type describes all physical information associated with an object,
@@ -29,11 +30,11 @@ class PhysicalState( object ):
     #    2-tuple).
     #   @param mass The floating-point value that will represent the state mass.
     def __init__( self, volume=PG.Rect(0, 0, 0, 0), velocity=(0, 0), mass=0.0 ):
-        self._volume = volume
+        self._volume = copy.deepcopy( volume )
         self._velocity = velocity
         self._mass = mass
 
-    ### Operator Overloading ###
+    ### Overloaded Operators ###
 
     ##  Returns true if all aspects of the physical state instances are
     #   equivalent (i.e. volume, velocity, mass).
@@ -88,3 +89,4 @@ class PhysicalState( object ):
     ##  @return The mass value associated with the instance state.
     def get_mass( self ):
         return self._mass
+

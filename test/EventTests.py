@@ -51,6 +51,20 @@ class EventTest( unittest.TestCase ):
             "Incorrect parameters on explicit value initialization." )
 
 
+    def test_equality_operator( self ):
+        event1 = Event()
+        event2 = Event()
+
+        self.assertTrue( event1 == event1,
+            "Equality operator doesn't return true for self equality in simple case." )
+        self.assertTrue( self._event == self._event,
+            "Equality operator doesn't return true for self equality in complex case." )
+        self.assertTrue( event1 == event2,
+            "Equality operator doesn't return true for two equivalent objects." )
+        self.assertTrue( event1 != self._event,
+            "Equality operator improperly returns true for two unequivalent objects." )
+
+
     def test_repr_empty( self ):
         event_repr = repr( Event() )
 
@@ -66,11 +80,11 @@ class EventTest( unittest.TestCase ):
             "Incorrect type within string representation of non-empty event." )
         self.assertEqual( repr_components[1],
             "two:" + str( EventTest.EVENT_PARAMS["two"] ),
-            "The first entry in the parameter dictionary shows up improperly " +
+            "The first entry in the parameter dictionary shows up improperly " \
             "in event representation." )
         self.assertEqual( repr_components[2],
             "one:" + str( EventTest.EVENT_PARAMS["one"] ),
-            "The second entry in the parameter dictionary shows up improperly " +
+            "The second entry in the parameter dictionary shows up improperly " \
             "in event representation." )
 
 
