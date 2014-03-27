@@ -1,16 +1,17 @@
 ##  @file MoveStateTests.py
-#   @author Eric Christianson
+#   @author Eric Christianson, Joseph Ciurej
 #   @date Spring 2014
 #
 #   Test File for the "MoveState" Type
 #
 #   @TODO
-#   - Write the implementation in this file!
+#   - 
 
 import unittest
 import src
 from src.MoveState import *
 from src.PhysicalState import *
+from src.SimulationDelta import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "MoveState" type.
@@ -26,7 +27,7 @@ class MoveStateTests( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._state = MoveState( MoveStateTests.STATE_NAME, (1.0, 1.0))
+        self._state = MoveState( MoveStateTests.STATE_NAME, (1.0, 1.0) )
 
     def tearDown( self ):
         self._state = None
@@ -46,7 +47,8 @@ class MoveStateTests( unittest.TestCase ):
 
         self.assertTrue( first_change == second_change,
             "Simulating a step in a move state results in different changes over time." )
-        self.assertEqual( first_change, PhysicalState(PG.Rect(0, 0, 1.0, 1.0), (0,0), 0.0),
+        self.assertEqual( first_change,
+            SimulationDelta( PhysicalState(PG.Rect(0, 0, 1.0, 1.0), (0,0), 0.0) ),
             "The physical delta for each step is incorrect." )
 
 
@@ -54,7 +56,7 @@ class MoveStateTests( unittest.TestCase ):
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_arrival(), PhysicalState(),
+        self.assertEqual( self._state.simulate_arrival(), SimulationDelta(),
             "Simulating an arrival at a move state results in a non-empty physical delta." )
 
 
@@ -62,6 +64,6 @@ class MoveStateTests( unittest.TestCase ):
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_departure(), PhysicalState(),
+        self.assertEqual( self._state.simulate_departure(), SimulationDelta(),
             "Simulating a departure from a move state results in a non-empty physical delta." )
 

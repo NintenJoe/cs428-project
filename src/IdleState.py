@@ -5,8 +5,7 @@
 #   Source File for the "IdleState" Type
 #
 #   @TODO
-#   - Determine whether or not this class should be in the 'State' module or
-#     not.
+#   - Determine whether or not this class should be in the 'State' module or not.
 
 from State import *
 from SimulationDelta import *

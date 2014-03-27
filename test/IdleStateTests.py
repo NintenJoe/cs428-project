@@ -5,12 +5,12 @@
 #   Test File for the "IdleState" Type
 #
 #   @TODO
-#   - Write the implementation in this file!
+#   - 
 
 import unittest
 import src
 from src.IdleState import *
-from src.PhysicalState import *
+from src.SimulationDelta import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "IdleState" type.
@@ -46,7 +46,7 @@ class IdleStateTests( unittest.TestCase ):
 
         self.assertTrue( first_change == second_change,
             "Simulating a step in an idle state results in different changes over time." )
-        self.assertEqual( first_change, PhysicalState(),
+        self.assertEqual( first_change, SimulationDelta(),
             "Each step simulated in an idle state results in a non-empty physical delta." )
 
 
@@ -54,14 +54,14 @@ class IdleStateTests( unittest.TestCase ):
         self._state.simulate_step( IdleStateTests.TIME_DELTA )
         self._state.simulate_step( IdleStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_arrival(), PhysicalState(),
-            "Simulating an arrival at an idle state results in a non-empty physical delta." )
+        self.assertEqual( self._state.simulate_arrival(), SimulationDelta(),
+            "Simulating an arrival at an idle state results in a non-zero delta." )
 
 
     def test_departure_simulation( self ):
         self._state.simulate_step( IdleStateTests.TIME_DELTA )
         self._state.simulate_step( IdleStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_departure(), PhysicalState(),
-            "Simulating a departure from an idle state results in a non-empty physical delta." )
+        self.assertEqual( self._state.simulate_departure(), SimulationDelta(),
+            "Simulating a departure from an idle state results in a non-zero delta." )
 
