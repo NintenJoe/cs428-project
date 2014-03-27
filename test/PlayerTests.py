@@ -23,4 +23,4 @@ class PlayerTest( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_player_constructor( self ):
-        pass
+        self.assertIsInstance(self.player._ephm_state._state, IdleState)
