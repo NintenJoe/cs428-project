@@ -18,7 +18,7 @@ from src.SimulationDelta import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "SimulationDelta" type.
-class SimulationDeltaTest( unittest.TestCase ):
+class SimulationDeltaTests( unittest.TestCase ):
     ### Testing Constants ###
 
     ##  The physical state delta that will be assigned to the test delta.
@@ -31,8 +31,8 @@ class SimulationDeltaTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._delta = SimulationDelta( SimulationDeltaTest.PHYSICAL_DELTA,
-            SimulationDeltaTest.EVENT_LIST )
+        self._delta = SimulationDelta( SimulationDeltaTests.PHYSICAL_DELTA,
+            SimulationDeltaTests.EVENT_LIST )
 
     def tearDown( self ):
         self._delta = None
@@ -50,21 +50,21 @@ class SimulationDeltaTest( unittest.TestCase ):
 
     def test_value_constructor_initialization( self ):
         self.assertEqual( self._delta.get_entity_delta(),
-            SimulationDeltaTest.PHYSICAL_DELTA,
+            SimulationDeltaTests.PHYSICAL_DELTA,
             "Incorrect entity physical state delta on explicit initialization." )
         self.assertEqual( self._delta.get_events(),
-            SimulationDeltaTest.EVENT_LIST,
+            SimulationDeltaTests.EVENT_LIST,
             "Incorrect new event listing on explicit initialization." )
 
 
     def test_value_constructor_independence( self ):
-        self._delta._entity_delta.add_delta( SimulationDeltaTest.PHYSICAL_DELTA )
-        self._delta._events.append( SimulationDeltaTest.EVENT_LIST[0] )
+        self._delta._entity_delta.add_delta( SimulationDeltaTests.PHYSICAL_DELTA )
+        self._delta._events.append( SimulationDeltaTests.EVENT_LIST[0] )
         self.assertNotEqual( self._delta.get_entity_delta(),
-            SimulationDeltaTest.PHYSICAL_DELTA,
+            SimulationDeltaTests.PHYSICAL_DELTA,
             "Value constructor doesn't deep copy the parameter physical state." )
         self.assertNotEqual( self._delta.get_events(),
-            SimulationDeltaTest.EVENT_LIST,
+            SimulationDeltaTests.EVENT_LIST,
             "Value construcor doesn't deepy copy the parameter event listing." )
 
 
@@ -73,10 +73,10 @@ class SimulationDeltaTest( unittest.TestCase ):
         aggregate_delta = self._delta + simple_delta
 
         self.assertEqual( aggregate_delta.get_entity_delta(),
-            SimulationDeltaTest.PHYSICAL_DELTA,
+            SimulationDeltaTests.PHYSICAL_DELTA,
             "Adding a zero delta to a non-zero delta produces physical state changes." )
         self.assertEqual( aggregate_delta.get_events(),
-            SimulationDeltaTest.EVENT_LIST,
+            SimulationDeltaTests.EVENT_LIST,
             "Adding a zero delta to a non-zero delta produces event listing changes." )
 
 

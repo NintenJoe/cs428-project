@@ -49,7 +49,7 @@ class State( object ):
     def simulate_step( self, time_delta ):
         self._active_time += time_delta
 
-        return self._calc_step_changes( time_delta ) if not self.is_timed_out() \
+        return self._calc_step_changes( time_delta ) if not self.has_timed_out() \
             else SimulationDelta( events=[ Event(EventType.STATE_TIMEOUT) ] )
 
     ##  Simulates an arrival at the instance state, returning the resultant
@@ -74,7 +74,7 @@ class State( object ):
 
     ##  @return True if the state has exceeded its maximum "time out" time and
     #    false otherwise.
-    def is_timed_out( self ):
+    def has_timed_out( self ):
         return self._active_time > self._timeout_time
 
     ##  @return The identifying name for the state object instance.

@@ -8,10 +8,17 @@
 #   - Add tests for the timeout functionality added to states!
 
 import unittest
+import src
+from src.State import *
+from src.PhysicalState import *
+
+##  Testing class that overrides the abstract "State" class with the most
+#   basic functionality.
+#class 
 
 ##  Container class for the test suite that tests the functionality of the
 #   "State" type.
-class StateTest( unittest.TestCase ):
+class StateTests( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
@@ -22,6 +29,6 @@ class StateTest( unittest.TestCase ):
 
     ### Testing Functions ###
 
-    def testTest( self ):
+    def test_test( self ):
         self.assertEqual( True, True, "" )
 

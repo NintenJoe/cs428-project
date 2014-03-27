@@ -11,7 +11,7 @@ import unittest
 
 ##  Container class for the test suite that tests the functionality of the
 #   "Entity" type.
-class EntityTest( unittest.TestCase ):
+class EntityTests( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):

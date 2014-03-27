@@ -10,7 +10,7 @@ from src.Globals import *
 
 ##	Test case containment class for all of the test cases used in testing the
 #	library functions of the 'gamelib' library.
-class FunctionTests( unittest.TestCase ):
+class GlobalTests( unittest.TestCase ):
 	### Test Set Up/Tear Down ###
 
 	def setUp( self ):

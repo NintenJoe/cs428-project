@@ -16,7 +16,7 @@ from src.Event import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "Event" type.
-class EventTest( unittest.TestCase ):
+class EventTests( unittest.TestCase ):
     ### Testing Constants ###
 
     ##  The event type that will be assigned to the test event.
@@ -28,7 +28,7 @@ class EventTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._event = Event( EventTest.EVENT_TYPE, EventTest.EVENT_PARAMS )
+        self._event = Event( EventTests.EVENT_TYPE, EventTests.EVENT_PARAMS )
 
     def tearDown( self ):
         self._event = None
@@ -45,9 +45,9 @@ class EventTest( unittest.TestCase ):
 
 
     def test_value_contructor( self ):
-        self.assertEqual( self._event.get_type(), EventTest.EVENT_TYPE,
+        self.assertEqual( self._event.get_type(), EventTests.EVENT_TYPE,
             "Incorrect type on explicit value initialization." )
-        self.assertEqual( self._event.get_parameters(), EventTest.EVENT_PARAMS,
+        self.assertEqual( self._event.get_parameters(), EventTests.EVENT_PARAMS,
             "Incorrect parameters on explicit value initialization." )
 
 
@@ -76,14 +76,14 @@ class EventTest( unittest.TestCase ):
         event_repr = repr( self._event )
         repr_components = event_repr.split( "," )
 
-        self.assertEqual( repr_components[0], EventTest.EVENT_TYPE,
+        self.assertEqual( repr_components[0], EventTests.EVENT_TYPE,
             "Incorrect type within string representation of non-empty event." )
         self.assertEqual( repr_components[1],
-            "two:" + str( EventTest.EVENT_PARAMS["two"] ),
+            "two:" + str( EventTests.EVENT_PARAMS["two"] ),
             "The first entry in the parameter dictionary shows up improperly " \
             "in event representation." )
         self.assertEqual( repr_components[2],
-            "one:" + str( EventTest.EVENT_PARAMS["one"] ),
+            "one:" + str( EventTests.EVENT_PARAMS["one"] ),
             "The second entry in the parameter dictionary shows up improperly " \
             "in event representation." )
 
@@ -98,8 +98,8 @@ class EventTest( unittest.TestCase ):
     def test_str_nonempty( self ):
         event_str = str( self._event )
 
-        self.assertEqual( event_str, "[" + EventTest.EVENT_TYPE + "]( " +
-            "two->" + str( EventTest.EVENT_PARAMS["two"] ) + " "
-            "one->" + str( EventTest.EVENT_PARAMS["one"] ) + " )",
+        self.assertEqual( event_str, "[" + EventTests.EVENT_TYPE + "]( " +
+            "two->" + str( EventTests.EVENT_PARAMS["two"] ) + " "
+            "one->" + str( EventTests.EVENT_PARAMS["one"] ) + " )",
             "Incorrect string formatting for a non-empty event." )
 
