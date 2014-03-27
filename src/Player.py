@@ -14,6 +14,8 @@ from StateMachine import *
 from Graph import *
 from Event import *
 
+##  Represents the Player and the actions that the Player character can execute
+#   For now, this includes only walking around
 class Player( Entity ):
 
     ## Setup state machine

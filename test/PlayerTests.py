@@ -8,16 +8,17 @@
 #   - Cover at least 90% of code in Player and Entity
 import unittest
 import src
+from src.Player import *
 
 class PlayerTest( unittest.TestCase ):
 
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        pass
+        self.player = Player("player")
 
     def tearDown( self ):
-        pass
+        self.player = None
 
     ### Testing Functions ###
 
