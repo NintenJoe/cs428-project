@@ -11,6 +11,7 @@
 
 from abc import ABCMeta, abstractmethod
 from PhysicalState import *
+import Queue
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
@@ -25,10 +26,10 @@ class Entity( object ):
     #   @param initial_state The initial physical state configuration for the 
     #    entity object instance.
     def __init__( self, name, initial_state=PhysicalState() ):
-        self._event_queue = Queue()
+        self._event_queue = Queue.Queue()
 
         self._phys_state = initial_state
-        self._ephm_state = self._setup_statemachine()
+        self._ephm_state = self._setup_machine()
 
     ### Methods ###
 
