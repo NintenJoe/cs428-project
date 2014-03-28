@@ -28,8 +28,8 @@ class PhysicalState( object ):
     #   @param velocity The velocity that will be initialized to the state (as a
     #    2-tuple).
     #   @param mass The floating-point value that will represent the state mass.
-    def __init__( self, volume=PG.Rect(0, 0, 0, 0), velocity=(0, 0), mass=0.0 ):
-        self._volume = volume
+    def __init__( self, volume=None, velocity=(0, 0), mass=0.0 ):
+        self._volume = volume if volume !=None else PG.Rect(0,0,0,0)
         self._velocity = velocity
         self._mass = mass
 
