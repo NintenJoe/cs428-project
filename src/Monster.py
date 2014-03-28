@@ -16,7 +16,7 @@ from Event import *
 
 ##  Represents a single Monster and the actions that the Monster can execute
 #   For now, this includes only walking around
-class Player( Entity ):
+class Monster( Entity ):
 
     ## Setup state machine
     #   Build state machine and set up initial state
@@ -34,6 +34,7 @@ class Player( Entity ):
         G.add_node(IdleState("3"))
         G.add_node(IdleState("4"))
         timeout = 20
+        self.timeout = timeout
         edges = [("idle_1","move_up", Event(EventType.NOTIFY, {"timeout" : timeout})),
         ("idle_2","move_left", Event(EventType.NOTIFY, {"timeout" : timeout})),
         ("idle_4","move_right", Event(EventType.NOTIFY, {"timeout" : timeout})),

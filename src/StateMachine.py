@@ -53,12 +53,19 @@ class StateMachine():
 
     ##  Automates a step of the state machine given the current time delta 
     #   between steps, returning a description of incurred state changes.
+    #   Also triggers state changes when timeout condition is met
     #
     #   @param time_delta The amount of elapsed time in between machine steps.
     #   @return An user-dependent description of the state changes caused by
     #    automating a machine step.
     def automate_step( self, time_delta ):
         self._idle_time += time_delta
+        change = self._state.simulate_step(time_delta)
+        new_state = self._machine.transition(self._state, Event(EventType.NOTIFY, {"timeout" : int(self._idle_time)}))
+        if new_state != self._state:
+            change.add_delta(self._state.simulate_departure())
+            change.add_delta(new_state.simulate_arrival())
+            self._change_state( new_state )
 
         return self._state.simulate_step(time_delta)
 
