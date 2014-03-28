@@ -5,9 +5,7 @@
 #   Source File for the "Graph" Type
 #
 #   @TODO
-#   - Add functions for checking edges and what nodes exists
-#   - Write tests
-#   - Replace networkx graphs in the entire codebase, especially StateMachine and StateMachineTests
+#   - Stop using the string representation of an event as its key value
 
 from State import *
 
