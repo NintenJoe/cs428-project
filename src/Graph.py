@@ -20,8 +20,11 @@ class Graph():
     def __init__(self):
         self.nodes = {}
         self.edges = {}
+        self.first_added = None
 
     def add_node(self, new_node):
+        if self.first_added == None:
+            self.first_added = new_node
         self.nodes[new_node.get_name()] = new_node
         self.edges[new_node.get_name()] = {}
 

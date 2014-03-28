@@ -46,7 +46,7 @@ class StateMachine():
     #    state machine.
     def __init__( self, state_graph, start_state=None ):
         self._machine = state_graph
-        self._state = start_state if start_state != None else state_graph.nodes()[0]
+        self._state = start_state if start_state != None else state_graph.first_added
 
         self._idle_time = 0.0
 
