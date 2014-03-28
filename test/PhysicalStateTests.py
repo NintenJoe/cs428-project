@@ -130,3 +130,8 @@ class PhysicalStateTest( unittest.TestCase ):
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
             "Updating the physical state improperly updates the mass." )
 
+    def test_state_independence( self ):
+        state1 = PhysicalState()
+        state1.add_delta(PhysicalState(PG.Rect(2,3,-1,5), (0,0), 0))
+        state2 = PhysicalState()
+        self.assertNotEqual(state1.get_volume(), state2.get_volume())

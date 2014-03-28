@@ -27,6 +27,7 @@
 
 import networkx as NX
 from Event import *
+from PhysicalState import *
 
 ##  An implementation of the finite state machine pattern, which is used to 
 #   facilitate state representation and transition specification for game
@@ -60,7 +61,7 @@ class StateMachine():
     def automate_step( self, time_delta ):
         self._idle_time += time_delta
 
-        return self._machine.node[ self._state ][ "step" ]( self._idle_time, time_delta )
+        return self._state.simulate_step(time_delta)
 
     ##  Notifies the instance machine that the given event has ocurred, which
     #   will drive state changes within the machine based on the current state.
@@ -68,12 +69,13 @@ class StateMachine():
     #   @param event The event related to the instance machine of which the
     #    machine will be notified.
     def notify_of( self, event ):
-        outgoing_edges = self._machine.out_edges( self._state, data=True )
-
-        # TODO: Update this transition to be dependent on more than event type.
-        for ( src_state, dst_state, edge_data ) in outgoing_edges:
-            if edge_data[ "event" ] == event.get_type():
-                self._change_state( dst_state )
+        new_state = self._machine.transition(self._state, event)
+        if new_state != self._state:
+            change = self._state.simulate_departure()
+            change.add_delta(new_state.simulate_arrival())
+            self._change_state( new_state )
+            return change
+        return PhysicalState()
 
     ##  @return The string identifier for the current state of the instance
     #   state machine.

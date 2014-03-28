@@ -32,3 +32,7 @@ class Graph():
         for (x,y,z) in edges:
             self.add_edge(x,y,z)
 
+    def transition(self, state, event):
+        if repr(event) in self.edges[state.get_name()]:
+            return self.nodes[self.edges[state.get_name()][repr(event)]]
+        return state

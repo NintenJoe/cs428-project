@@ -38,17 +38,17 @@ class MoveState( State ):
     def _calc_step_changes( self, time_delta ):
         deltax = self._vx * time_delta;
         deltay = self._vy * time_delta;
-        return PhysicalState(PG.Rect(0, 0, deltax, deltay), (0, 0), 0.0)
+        return PhysicalState(PG.Rect(deltax, deltay, 0, 0), (0, 0), 0.0)
 
     ##  Returns an empty set of physical changes.
     #
     #   @override
     def _calc_arrival_changes( self ):
-        return PhysicalState()
+        return PhysicalState(PG.Rect(0, 0, 0, 0), (self._vx, self._vy), 0.0)
 
     ##  Returns an empty set of physical changes.
     #
     #   @override
     def _calc_departure_changes( self ):
-        return PhysicalState()
+        return PhysicalState(PG.Rect(0, 0, 0, 0), (-1*self._vx, -1*self._vy), 0.0)
 
