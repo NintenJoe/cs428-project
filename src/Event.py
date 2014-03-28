@@ -18,7 +18,7 @@ class EventType():
 
     ##  Indicates that the event is a simple notification event with no associated
     #   information.
-    #   Parameters: { }
+    #   Parameters: { } OR { "timeout" : int }
     NOTIFY = "notify"
 
     ### Collision-Related Events ###
