@@ -9,6 +9,8 @@
 #     for event string representations change.
 #   - Determine how user requests events will be classified as enumerated items
 #     in the 'EventType' enumeration.
+#   - Add functions that transform event classifications into regular
+#     expressions.
 
 ##  An enumeration that contains the broad classifications for events that occur
 #   within the game world.  These classifications are used to help better identify

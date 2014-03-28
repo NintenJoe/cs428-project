@@ -5,6 +5,16 @@
 #   Source File for the "State" Type
 #
 #   @TODO
+#   High Priority:
+#   - Finalize the step simulation logic when time outs occur.
+#       > Choice 1 (current): Quantize time on a per-frame basis.  This option entails
+#         that if a state times out, then it will return an empty delta and
+#         all time delta will be delegated to the next state.
+#       > Choice 2: Delegate time based on the amount of time given to each
+#         state.  This option entails that intermediate timeouts may be invisible,
+#         but that they will always occur and eat up time proportional to their
+#         timeout time.
+#   Low Priority:
 #   - Determine if this is more appropriate for this module file or if it 
 #     should be contained within the "StateMachine" module instead.
 #   - Determine how the inheritance hierarchy for the "State" type
@@ -51,7 +61,7 @@ class State( object ):
         self._active_time += time_delta
 
         return self._calc_step_changes( time_delta ) if not self.has_timed_out() \
-            else SimulationDelta( events=[ Event(EventType.TIMEOUT) ] )
+            else SimulationDelta()
 
     ##  Simulates an arrival at the instance state, returning the resultant
     #   changes as a "SimulationDelta" instance.
@@ -76,7 +86,7 @@ class State( object ):
     ##  @return True if the state has exceeded its maximum "time out" time and
     #    false otherwise.
     def has_timed_out( self ):
-        return self._active_time > self._timeout_time
+        return self.get_excess_time() > 0.0
 
     ##  @return The identifying name for the state object instance.
     def get_name( self ):
@@ -90,6 +100,11 @@ class State( object ):
     #    (which will be infinite if the state has no time out time).
     def get_timeout_time( self ):
         return self._timeout_time
+
+    ##  @return The amount of excess time that the instance state has been
+    #    active (which will be 0 if no such excess time exists).
+    def get_excess_time( self ):
+        return max( self.get_active_time() - self.get_timeout_time(), 0.0 )
 
     ### Helper Methods ###
 

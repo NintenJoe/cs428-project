@@ -33,7 +33,7 @@ class Entity( object ):
         self._event_queue = Queue()
 
         self._phys_state = initial_state
-        self._ephm_state = self._setup_statemachine()
+        self._ephm_state = self._setup_machine()
 
     ### Methods ###
 
