@@ -25,7 +25,6 @@
 #   - Add error handling in the constructor to ensure that the specified start
 #     state is valid.
 
-import networkx as NX
 from Event import *
 from PhysicalState import *
 

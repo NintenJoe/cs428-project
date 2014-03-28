@@ -25,10 +25,10 @@ class Entity( object ):
     #   @param name The name identifier for the entity object instance.
     #   @param initial_state The initial physical state configuration for the 
     #    entity object instance.
-    def __init__( self, name, initial_state=PhysicalState() ):
+    def __init__( self, name, initial_state=None ):
         self._event_queue = Queue.Queue()
 
-        self._phys_state = initial_state
+        self._phys_state = initial_state if initial_state!=None else PhysicalState()
         self._ephm_state = self._setup_machine()
 
     ### Methods ###
