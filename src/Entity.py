@@ -83,6 +83,21 @@ class Entity( object ):
     def notify_of( self, event ):
         self._event_queue.put( event )
 
+    ##  @return The status of the "Entity" instance as a string of the form
+    #    "[entity-name] [state-name] [state-time]".
+    def get_status( self ):
+        entity_name = str( self._name )
+        entity_state = self._mntl_state.get_current_state()
+
+        entity_state_name = str( entity_state.get_name() )
+        entity_state_time = str( entity_state.get_active_time() )
+
+        return entity_name + " " + entity_state_name + " " + entity_state_time
+
+    ##  @return The name identifier assigned to the "Entity" object instance.
+    def get_name( self ):
+        return self._name
+
     ##  @return The physical state of the "Entity" object instance (as a 
     #    "PhysicalState" object).
     def get_physical_state( self ):
@@ -97,17 +112,6 @@ class Entity( object ):
     #    object (returned as a PyGame "Rect" object).
     def get_hitbox( self ):
         return self.get_physical_state().get_volume()
-
-    ##  @return The status of the "Entity" instance as a string of the form
-    #    "[entity-name] [state-name] [state-time]".
-    def get_status( self ):
-        entity_name = self._name
-        entity_state = self._mntl_state.get_current_state()
-
-        entity_state_name = entity_state.get_name()
-        entity_state_time = entity_state.get_active_time()
-
-        return entity_name + " " + entity_state_name + " " + entity_state_time
 
     ### Helper Methods ###
 

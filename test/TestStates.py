@@ -15,6 +15,7 @@
 #   - Reduce code redundancy by implementing copy function for the
 #     'SimulationDelta' type.
 
+import src
 from src.State import *
 from src.PhysicalState import *
 from src.Event import *
@@ -24,21 +25,21 @@ from src.SimulationDelta import *
 #   functionality to facilitate testing.
 class SimpleTestState( State ):
     ##  The "SimulationDelta" instance returned on a state step operation.
-    STEP_DELTA = SimulationDelta( PhysicalState(mass=1.0) )
+    STEP_DELTA = SimulationDelta( PhysicalState(mass=1.0), [ Event() ] )
 
     ##  The "SimulationDelta" instance returned on a state arrival operation.
-    ARRIVAL_DELTA = SimulationDelta( PhysicalState(mass=2.0) )
+    ARRIVAL_DELTA = SimulationDelta( PhysicalState(mass=2.0), [ Event() ] )
 
     ##  The "SimulationDelta" instance returned on a state departure operation.
     DEPARTURE_DELTA = SimulationDelta( PhysicalState(mass=3.0) )
 
     ##  @override
     def _calc_step_changes( self, time_delta ):
-        return SimulationDelta( PhysicalState(mass=1.0) )
+        return SimulationDelta( PhysicalState(mass=1.0), [ Event() ] )
 
     ##  @override
     def _calc_arrival_changes( self ):
-        return SimulationDelta( PhysicalState(mass=2.0) )
+        return SimulationDelta( PhysicalState(mass=2.0), [ Event() ] )
 
     ##  @override
     def _calc_departure_changes( self ):
