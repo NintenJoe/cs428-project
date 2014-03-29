@@ -5,7 +5,7 @@
 #   Test File for the "State" Type
 #
 #   @TODO
-#   - Add tests for the timeout functionality added to states!
+#   - 
 
 import unittest
 import src
@@ -36,6 +36,7 @@ class TestState( State ):
     ##  @override
     def _calc_departure_changes( self ):
         return TestState.DEPARTURE_DELTA
+
 
 ##  Container class for the test suite that tests the functionality of the
 #   "State" type.
