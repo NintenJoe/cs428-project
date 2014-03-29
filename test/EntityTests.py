@@ -34,6 +34,10 @@ class TestEntity( State ):
 ##  Container class for the test suite that tests the functionality of the
 #   "Entity" type.
 class EntityTests( unittest.TestCase ):
+    ### Testing Constants ###
+
+    pass
+
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):

@@ -6,16 +6,18 @@
 #
 #   @TODO
 #   High Priority:
-#   - Test the state machine with states that exhibit more complex arrive/depart
-#     behavior.
+#   - Update the 'TestStates' reference in this testing file once the location
+#     of this file changes.
 #   Low Priority:
 #   - Refactor the set-up procedure to allow for conditional construction
 #     of graphs based on the testing function.
+#   - Update the tests further to test for even more complex behavior in the
+#     state machine transition/update functions (i.e. different states with
 
 import unittest
 import src
+from TestStates import *
 from src.StateMachine import *
-from src.IdleState import *
 from src.Transition import *
 from src.Event import *
 from src.SimulationDelta import *
@@ -30,15 +32,15 @@ class StateMachineTests( unittest.TestCase ):
     TIME_DELTA = 1.0
 
     ##  The state information that will be used in the simple test state machine.
-    SIMPLE_STATES = [ IdleState("0") ]
+    SIMPLE_STATES = [ SimpleTestState("0") ]
     ##  The transition information that will be used in the simple test state machine.
     SIMPLE_TRANS = []
 
     ##  The state information that will be used in the complex test state machine.
     COMPLEX_STATES = [
-        IdleState( "0", 2.0 ),
-        IdleState( "1", 2.0 ),
-        IdleState( "2", 0.0 )
+        SimpleTestState( "0", 2.0 * TIME_DELTA ),
+        SimpleTestState( "1", 2.0 * TIME_DELTA ),
+        SimpleTestState( "2", 0.0 * TIME_DELTA )
     ]
     ##  The transition information that will be used in the complex test state machine.
     COMPLEX_TRANS = [
@@ -56,7 +58,7 @@ class StateMachineTests( unittest.TestCase ):
         # Simple Machine: Single Node Graph
         #
         #               ----------
-        #               | idle_0 |
+        #               |    0   |
         #               ----------
         #
         self._simple_machine = StateMachine(
@@ -67,10 +69,10 @@ class StateMachineTests( unittest.TestCase ):
         # Complex Machine: Cyclic Graph w/ Three Nodes
         #
         #               ----------*
-        #       +-------| idle_1 |<-----+
+        #       +-------|    1   |<-----+
         #       V *     ----------      |
         #  ----------       ^ N     ----------
-        #  | idle_0 |-------+------>| idle_2 |
+        #  |    0   |-------+------>|    2   |
         #  ----------              T----------
         #
         self._complex_machine = StateMachine(
@@ -135,7 +137,7 @@ class StateMachineTests( unittest.TestCase ):
 
 
     def test_singular_step( self ):
-        self._complex_machine.simulate_step( StateMachineTests.TIME_DELTA )
+        sd = self._complex_machine.simulate_step( StateMachineTests.TIME_DELTA )
 
         self.assertEqual(
             self._complex_machine.get_current_state(),
@@ -143,8 +145,8 @@ class StateMachineTests( unittest.TestCase ):
             "Singular step improperly causes a state transition in a FSM."
         )
         self.assertEqual(
-            self._complex_machine.simulate_step( StateMachineTests.TIME_DELTA ),
-            IdleState( "TEST" ).simulate_step( StateMachineTests.TIME_DELTA ),
+            sd,
+            SimpleTestState.STEP_DELTA,
             "Singular step in a FSM returns an inaccurate simulation delta."
         )
 
@@ -184,7 +186,7 @@ class StateMachineTests( unittest.TestCase ):
         )
         self.assertEqual(
             td1,
-            SimulationDelta(),
+            SimpleTestState.ARRIVAL_DELTA + SimpleTestState.DEPARTURE_DELTA,
             "Valid event transitions return an incorrect sim delta."
         )
 
@@ -196,7 +198,7 @@ class StateMachineTests( unittest.TestCase ):
         )
         self.assertEqual(
             td2,
-            SimulationDelta(),
+            SimpleTestState.ARRIVAL_DELTA + SimpleTestState.DEPARTURE_DELTA,
             "Subsequent valid event transitions return an incorrect sim delta."
         )
 
@@ -242,9 +244,17 @@ class StateMachineTests( unittest.TestCase ):
             StateMachineTests.COMPLEX_STATES[ 1 ],
             "Multipart transitions aren't properly caused by step simulation."
         )
+
+        # Step consists of two arrival/departure combinations and a single step
+        # delta at the final state.
+        soln_delta = SimpleTestState.DEPARTURE_DELTA + \
+            SimpleTestState.ARRIVAL_DELTA + \
+            SimpleTestState.DEPARTURE_DELTA + \
+            SimpleTestState.ARRIVAL_DELTA + \
+            SimpleTestState.STEP_DELTA
         self.assertEqual(
             sd,
-            SimulationDelta(),
+            soln_delta,
             "Multipart transitions through steps return an incorrect sim delta."
         )
 
