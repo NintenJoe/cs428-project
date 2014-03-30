@@ -9,6 +9,8 @@
 #     for event string representations change.
 #   - Determine how user requests events will be classified as enumerated items
 #     in the 'EventType' enumeration.
+#   - Add functions that transform event classifications into regular
+#     expressions.
 
 ##  An enumeration that contains the broad classifications for events that occur
 #   within the game world.  These classifications are used to help better identify
@@ -20,6 +22,11 @@ class EventType():
     #   information.
     #   Parameters: { }
     NOTIFY = "notify"
+
+    ##  Indicates that the event represents a state timeout for the given game
+    #   world object.
+    #   Parameters: { "objects": Entity }
+    TIMEOUT = "timeout"
 
     ### Collision-Related Events ###
 
@@ -47,6 +54,15 @@ class Event():
         self._params = params
 
     ### Overloaded Operators ###
+
+    ##  Returns true if all aspects of the event operands are equivalent (i.e.
+    #   type, parameters, etc.).
+    #
+    #   @return True if the instance event is equivalent to the given event and
+    #    false otherwise.
+    def __eq__( self, other ):
+        return self._type == other._type and \
+            self._params == other._params
 
     ##  @return A string of the form "[type],[paramName]:[paramValue], ..."
     #    (where the parameters are listed in an arbitrary order).

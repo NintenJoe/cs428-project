@@ -7,8 +7,6 @@
 #   @TODO
 #   High Priority:
 #   - Update the logic of the main game loop (current contents are examples).
-#   - Remove the 'Entity' class from this file and abstract it to its own
-#     file module.
 #   Low Priority:
 #   - Move the global game variables (i.e. 'GAME_NAME', 'SCREEN_SIZE') to
 #     the 'Globals' module.
@@ -21,12 +19,14 @@ from Camera import Camera
 from Animation import Animation
 from InputController import InputController
 
-# Global Variables #
-GAME_NAME = "Zol"               # Name for the prototype game
+
+### Global Variables ###
+GAME_NAME = "Zol"                   # Name for the prototype game
 SCREEN_SIZE = ( 640, 480 )          # Default size for the game screen
 FRAMES_PER_SECOND = 60              # Number of update frames per second
 
 
+### Primary Entry Point ###
 
 ##  The primary entry point for the game.  This function handles the primary
 #   game loop and logic.  This function should serve as a high level manager for
