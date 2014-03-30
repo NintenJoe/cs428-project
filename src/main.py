@@ -56,8 +56,6 @@ def main():
     accumulated_shift = 0
     camera = Camera( move_tgt, shift_time, border)
 
-    #currently render_entity only works for a single image
-    #TODO: fix for multiple images for an entity
     player = gameView.generate_entity([(16,0,16,40),(0,0,16,40)],'entities/man/man.bmp',1, 33, False)
     playerflag = 1
 
