@@ -12,7 +12,7 @@ TOOL_DIR = ./tool
 DOC_DIR = ./doc
 MAIN_SCRIPT = $(SRC_DIR)/main.py
 
-UML_DIAG_FILETYPE = dot
+UML_OUTPUT = dot
 
 .PHONY : clean main tests coverage
 
@@ -30,12 +30,20 @@ coverage :
 %Tests : $(TEST_DIR)/%Tests.py $(SRC_DIR)/%.py
 	$(INTERPRETER) $(TEST_FLAGS) discover -s $(TEST_DIR) -p '$@.py'
 
-# --output: run `dot -Txxx` to see the list of supported image types. 
-# 			Common types include: bmp, dot, eps, png, svg
+# Default output is `dot` file, which is automatically converted to a `graphml`
+# file.
+#
+# Override the output type by passing in a desired image format. For example,
+#
+# 	make UML_IMG_TYPE=png uml
+#
+# which will produce a classes_Zol.png and packages_Zol.png file.
 uml :
-	pyreverse $(SRC_DIR) --output=$(UML_DIAG_FILETYPE) --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
-ifeq ($(UML_DIAG_FILETYPE),dot)
-	python $(TOOL_DIR)/dottoxml/dottoxml.py ./classes_$(PROJECT_NAME).$(UML_DIAG_FILETYPE) ./classes_$(PROJECT_NAME).graphml
+ifndef UML_IMG_TYPE
+	pyreverse $(SRC_DIR) --output=dot --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
+	python $(TOOL_DIR)/dottoxml/dottoxml.py ./classes_$(PROJECT_NAME).dot ./classes_$(PROJECT_NAME).graphml
+else
+	pyreverse $(SRC_DIR) --output=$(UML_IMG_TYPE) --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
 endif
 
 clean :
