@@ -39,11 +39,12 @@ coverage :
 #
 # which will produce a classes_Zol.png and packages_Zol.png file.
 uml :
-ifndef UML_IMG_TYPE
+ifndef IMG_TYPE
 	pyreverse $(SRC_DIR) --output=dot --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
 	python $(TOOL_DIR)/dottoxml/dottoxml.py ./classes_$(PROJECT_NAME).dot ./classes_$(PROJECT_NAME).graphml
+	python $(TOOL_DIR)/dottoxml/dottoxml.py ./packages_$(PROJECT_NAME).dot ./packages_$(PROJECT_NAME).graphml
 else
-	pyreverse $(SRC_DIR) --output=$(UML_IMG_TYPE) --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
+	pyreverse $(SRC_DIR) --output=$(IMG_TYPE) --filter-mode=PUB_ONLY --ignore=$(DOC_DIR) --ignore=$(TEST_DIR) --ignore=$(TOOL_DIR) --project=$(PROJECT_NAME)
 endif
 
 clean :
