@@ -7,10 +7,6 @@
 #   @TODO
 #   - Determine if this is more appropriate for this module file or if it 
 #     should be contained within the "StateMachine" module instead.
-#   - Determine how the inheritance hierarchy for the "Transition" type
-#     should affect module containment.
-#       > If "Transition" subclasses are to be contained in the same module
-#         as "Transition," should there be a dedicated module?
 
 import re
 

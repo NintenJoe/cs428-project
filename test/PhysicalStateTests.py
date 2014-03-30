@@ -10,13 +10,13 @@
 
 import unittest
 import src
-import copy
 import pygame as PG
+
 from src.PhysicalState import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "PhysicalState" type.
-class PhysicalStateTest( unittest.TestCase ):
+class PhysicalStateTests( unittest.TestCase ):
     ### Testing Constants ###
 
     ##  The volume that will be initialized to the test physical state.
@@ -34,16 +34,15 @@ class PhysicalStateTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._physstate = PhysicalState( copy.deepcopy(PhysicalStateTest.VOLUME),
-            copy.deepcopy(PhysicalStateTest.VELOCITY),
-            copy.deepcopy(PhysicalStateTest.MASS) )
+        self._physstate = PhysicalState( PhysicalStateTests.VOLUME,
+            PhysicalStateTests.VELOCITY, PhysicalStateTests.MASS )
 
     def tearDown( self ):
         self._physstate = None
 
     ### Testing Functions ###
 
-    def test_default_constructor( self ):
+    def test_default_constructor_initialization( self ):
         default_physstate = PhysicalState()
 
         self.assertEqual( default_physstate.get_volume(), PG.Rect(0, 0, 0, 0),
@@ -54,13 +53,19 @@ class PhysicalStateTest( unittest.TestCase ):
             "Default physical state contructor doesn't initialize identity mass." )
 
 
-    def test_value_constructor( self ):
-        self.assertEqual( self._physstate.get_volume(), PhysicalStateTest.VOLUME,
+    def test_value_constructor_initialization( self ):
+        self.assertEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Value physical state contructor doesn't initialize with given volume." )
-        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTest.VELOCITY,
+        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
             "Value physical state contructor doesn't initialize with given velocity." )
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
+        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Value physical state contructor doesn't initialize with given mass." )
+
+
+    def test_value_constructor_independence( self ):
+        self._physstate._volume.x += 1
+        self.assertNotEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
+            "Value constructor for physical state doesn't deep copy parameter objects." )
 
 
     def test_equality_operator( self ):
@@ -81,11 +86,11 @@ class PhysicalStateTest( unittest.TestCase ):
         simple_delta = PhysicalState()
         self._physstate.add_delta( simple_delta )
 
-        self.assertEqual( self._physstate.get_volume(), PhysicalStateTest.VOLUME,
+        self.assertEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Adding a zero delta to a state changes its volume value." )
-        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTest.VELOCITY,
+        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
             "Adding a zero delta to a state changes its velocity value." )
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
+        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Adding a zero delta to a state changes its mass value." )
 
 
@@ -93,40 +98,40 @@ class PhysicalStateTest( unittest.TestCase ):
         simple_delta = PhysicalState( PG.Rect(1, 2, 3, 4), (-5.0, -3.0), 18.0 )
         self._physstate.add_delta( simple_delta )
 
-        self.assertEqual( self._physstate.get_volume().x, PhysicalStateTest.VOLUME.x + 1,
+        self.assertEqual( self._physstate.get_volume().x, PhysicalStateTests.VOLUME.x + 1,
             "Adding a non-zero delta to a state doesn't properly alter volume X." )
-        self.assertEqual( self._physstate.get_volume().y, PhysicalStateTest.VOLUME.y + 2,
+        self.assertEqual( self._physstate.get_volume().y, PhysicalStateTests.VOLUME.y + 2,
             "Adding a non-zero delta to a state doesn't properly alter volume Y." )
-        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTest.VOLUME.w + 3,
+        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTests.VOLUME.w + 3,
             "Adding a non-zero delta to a state doesn't properly alter volume W." )
-        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTest.VOLUME.h + 4,
+        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTests.VOLUME.h + 4,
             "Adding a non-zero delta to a state doesn't properly alter volume H." )
 
-        self.assertEqual( self._physstate.get_velocity()[0], PhysicalStateTest.VELOCITY[0] - 5.0,
+        self.assertEqual( self._physstate.get_velocity()[0], PhysicalStateTests.VELOCITY[0] - 5.0,
             "Adding a non-zero delta to a state doesn't properly alter velocity X." )
-        self.assertEqual( self._physstate.get_velocity()[1], PhysicalStateTest.VELOCITY[1] - 3.0,
+        self.assertEqual( self._physstate.get_velocity()[1], PhysicalStateTests.VELOCITY[1] - 3.0,
             "Adding a non-zero delta to a state doesn't properly alter velocity Y." )
 
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS + 18.0,
+        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS + 18.0,
             "Adding a non-zero delta to a state doesn't properly alter its mass." )
 
 
     def test_update( self ):
-        self._physstate.update( PhysicalStateTest.TIME_DELTA )
+        self._physstate.update( PhysicalStateTests.TIME_DELTA )
 
         self.assertEqual( self._physstate.get_volume().x,
-            PhysicalStateTest.VOLUME.x + PhysicalStateTest.TIME_DELTA * PhysicalStateTest.VELOCITY[0],
+            PhysicalStateTests.VOLUME.x + PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[0],
             "Updating the physical state properly updates the x-value of position." )
         self.assertEqual( self._physstate.get_volume().y,
-            PhysicalStateTest.VOLUME.y + PhysicalStateTest.TIME_DELTA * PhysicalStateTest.VELOCITY[1],
+            PhysicalStateTests.VOLUME.y + PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[1],
             "Updating the physical state properly updates the y-value of position." )
 
-        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTest.VOLUME.w,
+        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTests.VOLUME.w,
             "Updating the physical state improperly updates the volume." )
-        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTest.VOLUME.h,
+        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTests.VOLUME.h,
             "Updating the physical state improperly updates the volume." )
-        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTest.VELOCITY,
+        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
             "Updating the physical state improperly updates the velocity." )
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTest.MASS,
+        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Updating the physical state improperly updates the mass." )
 

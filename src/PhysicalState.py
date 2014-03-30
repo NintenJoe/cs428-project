@@ -5,14 +5,18 @@
 #   Source File for the "PhysicalState" Type
 #
 #   @TODO
+#   High Priority:
 #   - Tuples are used for the velocity vector, which requires an uneccesary
 #     duplicaton on updates.
 #       > If the current method isn't fast enough, remove the tuple dependence
 #         and replace it with a list or something similar.
+#   - Determine whether it's acceptable for the constructor to take a 
+#   Low Priority:
 #   - Refine the equality operator (the implementation is currently pretty 
 #     inelegant).
 
 import pygame as PG
+from HashableRect import *
 
 ##  A representation of the tangible state of an object within the game world.
 #   This type describes all physical information associated with an object,
@@ -29,11 +33,11 @@ class PhysicalState( object ):
     #    2-tuple).
     #   @param mass The floating-point value that will represent the state mass.
     def __init__( self, volume=PG.Rect(0, 0, 0, 0), velocity=(0, 0), mass=0.0 ):
-        self._volume = volume
+        self._volume = HashableRect( volume.x, volume.y, volume.w, volume.h )
         self._velocity = velocity
         self._mass = mass
 
-    ### Operator Overloading ###
+    ### Overloaded Operators ###
 
     ##  Returns true if all aspects of the physical state instances are
     #   equivalent (i.e. volume, velocity, mass).
@@ -77,14 +81,17 @@ class PhysicalState( object ):
         self._volume.centerx += position_delta[ 0 ]
         self._volume.centery += position_delta[ 1 ]
 
-    ##  @return The collision volume associated with the instance state.
+    ##  @return The collision volume associated with the instance state (of type
+    #    "HashableRect").
     def get_volume( self ):
         return self._volume
 
-    ##  @return The velocity vector associated with the instance state.
+    ##  @return The velocity vector associated with the instance state (of type
+    #    integer two-tuple).
     def get_velocity( self ):
         return self._velocity
 
-    ##  @return The mass value associated with the instance state.
+    ##  @return The mass value associated with the instance state (of type float).
     def get_mass( self ):
         return self._mass
+

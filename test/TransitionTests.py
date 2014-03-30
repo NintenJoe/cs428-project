@@ -13,7 +13,7 @@ from src.Event import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "Transition" type.
-class TransitionTest( unittest.TestCase ):
+class TransitionTests( unittest.TestCase ):
     ### Testing Constants ###
 
     ##  The string identifier for the source node in the test transition.
@@ -28,8 +28,8 @@ class TransitionTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._transition = Transition( TransitionTest.SRC_NAME,
-            TransitionTest.DST_NAME, repr(TransitionTest.TRANS_EVENT) )
+        self._transition = Transition( TransitionTests.SRC_NAME,
+            TransitionTests.DST_NAME, repr(TransitionTests.TRANS_EVENT) )
 
     def tearDown( self ):
         self._transition = None
@@ -37,14 +37,14 @@ class TransitionTest( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_constructor( self ):
-        self.assertEqual( self._transition.get_source(), TransitionTest.SRC_NAME,
+        self.assertEqual( self._transition.get_source(), TransitionTests.SRC_NAME,
             "Incorrect source node identifier on default construction." )
-        self.assertEqual( self._transition.get_destination(), TransitionTest.DST_NAME,
+        self.assertEqual( self._transition.get_destination(), TransitionTests.DST_NAME,
             "Incorrect destination node identifier on default construction." )
 
 
     def test_invocation_by_valid_events( self ):
-        valid_event = TransitionTest.TRANS_EVENT
+        valid_event = TransitionTests.TRANS_EVENT
 
         self.assertEqual( self._transition.invoked_by( valid_event ), True,
             "Transition not invoked by a valid invocation (exact same event)." )
