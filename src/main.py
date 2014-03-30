@@ -44,11 +44,8 @@ def main():
     gameView = GameView(SCREEN_SIZE)
     GAME_RUNNING = True
     GAME_TIME = PG.time.get_ticks()
-    GAME_CLOCK = PG.time.Clock()
 
-    world = World()
-    level_one = world.levels['1']
-    seg_img = level_one.get_image('2')
+    gameView.change_environment('1','2')
 
     move_x = 0
     move_y = 0
@@ -61,7 +58,9 @@ def main():
     camera = Camera( move_tgt, shift_time, border)
     go_left = True
 
-    player = gameView.render_entity((16,0,16,40),'entities/man/man.bmp',1, 33, False)
+    #currently render_entity only works for a single image
+    #TODO: fix for multiple images for an entity
+    player = gameView.generate_entity([(16,0,16,40),(0,0,16,40)],'entities/man/man.bmp',1, 33, False)
     playerflag = 1
 
     input_controller = InputController()
@@ -86,7 +85,6 @@ def main():
 
             # TODO: Add more input handling.
 
-        # Update Game World #
         # TODO: Write updating logic here.
         accumulated_shift += PG.time.get_ticks() - GAME_TIME
         GAME_TIME = PG.time.get_ticks()
@@ -101,14 +99,14 @@ def main():
 
         # Draw Graphics #
         # TODO: Write the draw logic for the game here.
-        gameView.draw_tick(camera, player, move_tgt, seg_img, SCREEN_SIZE)
+        gameView.draw_tick(camera, player, move_tgt, SCREEN_SIZE)
 
-        # Stalls the current fram until a sufficient amount of time passes to
+        # Stalls the current frame until a sufficient amount of time passes to
         # achieve the given frame rate.
-        GAME_CLOCK.tick(FRAMES_PER_SECOND)
+        gameView.GAME_CLOCK.tick(FRAMES_PER_SECOND)
 
     # Exit the game after the primary game loop has been terminated.
-    gameView.exit()
+    gameView.exit_game()
 
 
 if __name__ == "__main__":

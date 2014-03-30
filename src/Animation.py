@@ -72,7 +72,10 @@ class Animation(object):
         #
 
         def get_images_at(self, rectangles):
-                return [self.get_image_at(rect) for rect in rectangles]
+                imgs = []
+                for rect in rectangles:
+                        imgs.append(self.get_image_at(rect))
+                return imgs
 
         ##      Stores all the file names for all images associated
         #       with a given entity into a list
@@ -88,18 +91,6 @@ class Animation(object):
                         image_names.append(filename)
                         
                 return image_names
-
-        ##      Loads all the images for a given array
-        #
-
-        def load_entity_images(self):
-
-                for image_names in self:
-                        sprite = load_image(image_names, (255, 0 ,255))
-
-                #Todo: Load images of entity at their given (x, y) locations
-                #       blit(sprite, (entity.x, entity.y))
-
         
 	##	Starts the animation at the given time (which should be measured in 
 	#	milliseconds since the game started up).

@@ -33,29 +33,52 @@ class GameView():
         PG.init()
         self.GAME_SCREEN = PG.display.set_mode( SCREEN_SIZE )
         self.GAME_FONT = PG.font.Font( None, 14 )
+        self.GAME_TIME = PG.time.get_ticks()
+        self.GAME_CLOCK = PG.time.Clock()
         PG.display.set_caption( "Zol" )
         PG.mouse.set_visible( True )
 
+        self.environment = None
+
     ### Methods ###
 
-    ## Calls the load function from World.py to render a new new level 
-
-    def draw_tick(self, camera, player, move_tgt, seg_img, SCREEN_SIZE):
+    ## Update and draw the Game World
+    def draw_tick(self, camera, player, move_tgt, SCREEN_SIZE):
         self.GAME_SCREEN.fill( (0, 0, 0) )
 
         camera_pos = camera.get_position()
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
-        self.GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
+        self.GAME_SCREEN.blit(self.environment, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
         #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
-        self.GAME_SCREEN.blit(player, (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
+        self.GAME_SCREEN.blit(player[0], (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
 
 
         PG.display.flip()
-    ## Calls the animation class in order to render an entity to draw
-    def render_entity(self, coordinates, filename, frame_count, frame_time, is_looping):
+    ##  Calls the animation class in order to generate an entity to draw
+    #
+    #   @param coordinates  Rectangle Coordinates for the sprites on a spritesheet
+    #   @param filename     Path and Filename of the spritesheet
+    #
+    #   @return entity      Returns an entity to be rendered
+    #
+    
+    def generate_entity(self, coordinates, filename, frame_count, frame_time, is_looping):
         img = Animation(filename, frame_count, frame_time, is_looping)
-        entity = img.get_image_at(coordinates)
+        entity = img.get_images_at(coordinates)
         return entity
+    ##  Calls the World class in order to switch levels to draw
+    #
+    #
+    #   @param level        Level Name
+    #   @param segment      Segment Name
+    #
+    #   @return environment      Returns a world
+    #
+    def change_environment(self, level, segment):
+        world = World()
+        levelselect = world.levels[level]
+        environment = levelselect.get_image(segment)
+        self.environment = environment
 
     def exit_game(self):
         PG.quit()
