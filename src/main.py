@@ -43,7 +43,6 @@ FRAMES_PER_SECOND = 60              # Number of update frames per second
 def main():
     gameView = GameView(SCREEN_SIZE)
     GAME_RUNNING = True
-    GAME_TIME = PG.time.get_ticks()
 
     #Set initial level
     gameView.change_environment('1','2')
@@ -53,11 +52,9 @@ def main():
     move_tgt = PG.Rect(move_x, move_y, 640, 480)
 
     border = PG.Rect(0, 0, 960, 960)
-
     shift_time = 3000
     accumulated_shift = 0
     camera = Camera( move_tgt, shift_time, border)
-    go_left = True
 
     #currently render_entity only works for a single image
     #TODO: fix for multiple images for an entity
@@ -91,13 +88,13 @@ def main():
         move_tgt.left = move_x
         move_tgt.top = move_y
 
-        accumulated_shift += PG.time.get_ticks() - GAME_TIME
-        GAME_TIME = PG.time.get_ticks()
+        accumulated_shift += PG.time.get_ticks() - gameView.GAME_TIME
+        gameView.GAME_TIME = PG.time.get_ticks()
 
         if accumulated_shift > shift_time:
             accumulated_shift = 0
 
-        camera.update( GAME_TIME )
+        camera.update( gameView.GAME_TIME )
 
         # Draw Graphics #
         # TODO: Write the draw logic for the game here.

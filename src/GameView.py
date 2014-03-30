@@ -35,6 +35,7 @@ class GameView():
         self.GAME_FONT = PG.font.Font( None, 14 )
         self.GAME_TIME = PG.time.get_ticks()
         self.GAME_CLOCK = PG.time.Clock()
+        self.GAME_TIME = PG.time.get_ticks()
         PG.display.set_caption( "Zol" )
         PG.mouse.set_visible( True )
 
