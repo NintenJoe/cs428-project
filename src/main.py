@@ -45,6 +45,7 @@ def main():
     GAME_RUNNING = True
     GAME_TIME = PG.time.get_ticks()
 
+    #Set initial level
     gameView.change_environment('1','2')
 
     move_x = 0
@@ -86,20 +87,22 @@ def main():
             # TODO: Add more input handling.
 
         # TODO: Write updating logic here.
+
+        move_tgt.left = move_x
+        move_tgt.top = move_y
+
         accumulated_shift += PG.time.get_ticks() - GAME_TIME
         GAME_TIME = PG.time.get_ticks()
 
         if accumulated_shift > shift_time:
             accumulated_shift = 0
 
-        move_tgt.left = move_x
-        move_tgt.top = move_y
-
         camera.update( GAME_TIME )
 
         # Draw Graphics #
         # TODO: Write the draw logic for the game here.
-        gameView.draw_tick(camera, player, move_tgt, SCREEN_SIZE)
+        gameView.render_environment(camera, SCREEN_SIZE)
+        gameView.render_entity(camera, player, move_tgt, SCREEN_SIZE)
 
         # Stalls the current frame until a sufficient amount of time passes to
         # achieve the given frame rate.

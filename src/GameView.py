@@ -42,15 +42,27 @@ class GameView():
 
     ### Methods ###
 
-    ## Update and draw the Game World
-    def draw_tick(self, camera, player, move_tgt, SCREEN_SIZE):
+    ##  Update and draw the Game World
+    #
+    
+    def render_environment(self, camera, SCREEN_SIZE):
         self.GAME_SCREEN.fill( (0, 0, 0) )
 
         camera_pos = camera.get_position()
         #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
         self.GAME_SCREEN.blit(self.environment, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
-        #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
-        self.GAME_SCREEN.blit(player[0], (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
+
+    ##  Update and render a given entity
+    #
+    #   @param camera
+    #   @oaram entity       Entity to be rendered
+    #   @param new_loc      Location where entity will be rendered
+    #
+    
+    def render_entity(self, camera, entity, new_loc, SCREEN_SIZE):
+        #self.GAME_SCREEN.blit(self.GAME_FONT.render("FPS: %.3g" % self.GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
+        camera_pos = camera.get_position()
+        self.GAME_SCREEN.blit(entity[0], (new_loc.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , new_loc.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
 
 
         PG.display.flip()
@@ -66,6 +78,7 @@ class GameView():
         img = Animation(filename, frame_count, frame_time, is_looping)
         entity = img.get_images_at(coordinates)
         return entity
+    
     ##  Calls the World class in order to switch levels to draw
     #
     #
