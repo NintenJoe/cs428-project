@@ -20,8 +20,7 @@
 from CollisionDetector import *
 from HashableRect import *
 
-
-class SpatialDictionary(CollisionDetector):
+class SpatialDictionary( CollisionDetector ):
 
     ### Construtors ###
 
