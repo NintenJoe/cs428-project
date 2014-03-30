@@ -20,6 +20,7 @@ from World import World
 from Camera import Camera
 from Animation import Animation
 from InputController import InputController
+from GameView import GameView
 
 # Global Variables #
 GAME_NAME = "Zol"               # Name for the prototype game
@@ -40,16 +41,10 @@ FRAMES_PER_SECOND = 60              # Number of update frames per second
 #       5. Draw Graphics
 #       6. Play Sounds
 def main():
-    PG.init()
-
-    GAME_SCREEN = PG.display.set_mode( SCREEN_SIZE )
-    GAME_CLOCK = PG.time.Clock()
-    GAME_FONT = PG.font.Font( None, 14 )
+    gameView = GameView(SCREEN_SIZE)
     GAME_RUNNING = True
     GAME_TIME = PG.time.get_ticks()
-
-    PG.display.set_caption( GAME_NAME )
-    PG.mouse.set_visible( True )
+    GAME_CLOCK = PG.time.Clock()
 
     world = World()
     level_one = world.levels['1']
@@ -66,9 +61,7 @@ def main():
     camera = Camera( move_tgt, shift_time, border)
     go_left = True
 
-    player_img = Animation('entities/man/man.bmp',1,33, False)
-    player = player_img.get_image_at((0,0,16,40))
-    player2 = player_img.get_image_at((17,0,16,40))
+    player = gameView.render_entity((16,0,16,40),'entities/man/man.bmp',1, 33, False)
     playerflag = 1
 
     input_controller = InputController()
@@ -108,23 +101,14 @@ def main():
 
         # Draw Graphics #
         # TODO: Write the draw logic for the game here.
-        GAME_SCREEN.fill( (0, 0, 0) )
-
-        camera_pos = camera.get_position()
-        #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
-        GAME_SCREEN.blit( seg_img, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
-        #GAME_SCREEN.blit(GAME_FONT.render("FPS: %.3g" % GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
-        GAME_SCREEN.blit(player, (move_tgt.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , move_tgt.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
-
-
-        PG.display.flip()
+        gameView.draw_tick(camera, player, move_tgt, seg_img, SCREEN_SIZE)
 
         # Stalls the current fram until a sufficient amount of time passes to
         # achieve the given frame rate.
         GAME_CLOCK.tick(FRAMES_PER_SECOND)
 
     # Exit the game after the primary game loop has been terminated.
-    PG.quit()
+    gameView.exit()
 
 
 if __name__ == "__main__":
