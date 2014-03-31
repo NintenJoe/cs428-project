@@ -20,7 +20,7 @@ class EventType():
 
     ##  Indicates that the event is a simple notification event with no associated
     #   information.
-    #   Parameters: { }
+    #   Parameters: { } OR { "timeout" : int }
     NOTIFY = "notify"
 
     ##  Indicates that the event represents a state timeout for the given game
@@ -34,6 +34,14 @@ class EventType():
     #   objects.
     #   Parameters: { "objects": (Entity, Entity), "volumes": (Rect list, Rect list) }
     COLLISION = "collision"
+
+    ##  Indicates that the event represents a the pressing of a key
+    #   Parameters: { "key": Key }
+    KEYDOWN = "keydown"
+
+    ##  Indicates that the event represents the release of a key
+    #   Parameters: { "key": Key }
+    KEYUP = "keyup"
 
 
 ##  A representation of a discrete event that has occured within the scope of the

@@ -30,6 +30,7 @@ from Queue import Queue
 
 from PhysicalState import *
 from SimulationDelta import *
+import Queue
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
@@ -49,7 +50,7 @@ class Entity( object ):
     #   @param initial_delta The initial physical state delta for the new "Entity."
     def __init__( self, name, initial_delta=PhysicalState() ):
         self._name = name
-        self._event_queue = Queue()
+        self._event_queue = Queue.Queue()
 
         self._phys_state = self._produce_physical()
         self._mntl_state = self._produce_machine()
