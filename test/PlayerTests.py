@@ -42,3 +42,22 @@ class PlayerTest( unittest.TestCase ):
         self.player.notify_of( Event(EventType.COLLISION, {}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+
+    def test_player_stop( self ):
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.update(1)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.player.notify_of( Event(EventType.KEYUP, {"key" : InputController.MOVE_UP}) )
+        self.player.update(1)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+
+    def test_player_movement( self ):
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_RIGHT}) )
+        self.player.update(1)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.update(1)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.player.notify_of( Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}) )
+        self.player.update(1)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)

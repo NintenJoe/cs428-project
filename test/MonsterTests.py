@@ -41,3 +41,16 @@ class MonsterTest( unittest.TestCase ):
         self.monster.notify_of( Event(EventType.COLLISION, {}) )
         self.monster.update(1)
         self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)
+
+    def test_monster_movement( self ):
+        self.monster.update(self.monster.timeout)
+        self.monster.update(1)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)
+        self.monster.update(1)
+        self.monster.update(1)
+        self.monster.update(1)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)
+        self.monster.update(self.monster.timeout-4)
+        self.monster.update(1)
+        self.monster.update(1)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)
