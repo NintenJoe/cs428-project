@@ -62,7 +62,8 @@ class SpatialDictionary( CollisionDetector ):
             objects = ", ".join(str(obj) for obj in self.table[cell])
             rep += str(cell) + ":Set([" + objects + "]),"
 
-        return rep + "}"
+        # Trim the last comma before appending the closing brace.
+        return rep[:-1] + "}" if not rep == "{" else rep + "}"
 
     ## Returns a string representation of the spatial hashing dictionary. THis
     #  is intended to be human-readable
@@ -72,13 +73,13 @@ class SpatialDictionary( CollisionDetector ):
             objects = ", ".join(str(obj) for obj in self.table[cell])
             rep += str(cell) + ":Set([" + objects + "]),\n"
 
-        # Trim the last newline before appending the closing brace.
-        return rep[:-1] + "}"
+        # Trim the last newline and comma before appending the closing brace.
+        return rep[:-2] + "}" if not rep == "{" else rep + "}"
 
-    ## Adds a list of bounding volumes to the dictionary. These bounding 
+    ## Adds a list of bounding volumes to the dictionary. These bounding
     #  represent the hitboxes of the game world entities.
     #
-    #  Note: The bounding volumes MUST be hashable. 
+    #  Note: The bounding volumes MUST be hashable.
     #
     #  @param objs A list of _hashable_ bounding volumes
     def add_multiple(self, objs):
@@ -230,9 +231,7 @@ class SpatialDictionary( CollisionDetector ):
     def _get_num_covered_rows(self, start, stop):
         return (stop - start)/self.columns + 1
 
-    ## @return A set containing all the bounding volumes in a given cell.
+    ## @return A set containing all the bounding volumes in a given cell. The
+    #  cell is assumed to exist in the table.
     def _objs_in(self, cell):
-        if cell in self.table:
             return self.table[cell]
-        else:
-            return set()
