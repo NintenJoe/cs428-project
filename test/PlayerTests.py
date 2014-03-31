@@ -9,6 +9,7 @@
 import unittest
 import src
 from src.Player import *
+from src.InputController import *
 
 class PlayerTest( unittest.TestCase ):
 
@@ -30,6 +31,6 @@ class PlayerTest( unittest.TestCase ):
         self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_transition( self ):
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : "up"}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
