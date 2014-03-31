@@ -48,7 +48,7 @@ class MoveStateTests( unittest.TestCase ):
         self.assertTrue( first_change == second_change,
             "Simulating a step in a move state results in different changes over time." )
         self.assertEqual( first_change,
-            SimulationDelta( PhysicalState(PG.Rect(0, 0, 1.0, 1.0), (0,0), 0.0) ),
+            SimulationDelta( PhysicalState(PG.Rect(1.0, 1.0, 0, 0), (0,0), 0.0) ),
             "The physical delta for each step is incorrect." )
 
 
@@ -56,7 +56,7 @@ class MoveStateTests( unittest.TestCase ):
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_arrival(), SimulationDelta(),
+        self.assertEqual( self._state.simulate_arrival(), SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (1.0, 1.0), 0.0)),
             "Simulating an arrival at a move state results in a non-empty physical delta." )
 
 
@@ -64,6 +64,6 @@ class MoveStateTests( unittest.TestCase ):
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
         self._state.simulate_step( MoveStateTests.TIME_DELTA )
 
-        self.assertEqual( self._state.simulate_departure(), SimulationDelta(),
+        self.assertEqual( self._state.simulate_departure(), SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (-1.0, -1.0), 0.0)),
             "Simulating a departure from a move state results in a non-empty physical delta." )
 
