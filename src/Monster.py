@@ -36,7 +36,11 @@ class Monster( Entity ):
         Transition("move_up","idle_2", ".*timeout.*"),
         Transition("move_left","idle_3", ".*timeout.*"),
         Transition("move_right","idle_1", ".*timeout.*"),
-        Transition("move_down","idle_4", ".*timeout.*")]
+        Transition("move_down","idle_4", ".*timeout.*"),
+        Transition("move_up","idle_2", ".*collision.*"),
+        Transition("move_left","idle_3", ".*collision.*"),
+        Transition("move_right","idle_1", ".*collision.*"),
+        Transition("move_down","idle_4", ".*collision.*")]
         return StateMachine(states, edges, "idle_1")
 
     def _produce_physical( self ):

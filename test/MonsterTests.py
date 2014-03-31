@@ -33,3 +33,11 @@ class MonsterTest( unittest.TestCase ):
         self.monster.update(self.monster.timeout)
         self.monster.update(1)
         self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)
+
+    def test_monster_collision( self ):
+        self.monster.update(self.monster.timeout)
+        self.monster.update(1)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)
+        self.monster.notify_of( Event(EventType.COLLISION, {}) )
+        self.monster.update(1)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)

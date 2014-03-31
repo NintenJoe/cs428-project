@@ -33,7 +33,11 @@ class Player( Entity ):
         Transition("move_up","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_UP}))+"$"),
         Transition("move_left","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_LEFT}))+"$"),
         Transition("move_right","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}))+"$"),
-        Transition("move_down","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_DOWN}))+"$")]
+        Transition("move_down","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_DOWN}))+"$"),
+        Transition("move_up","idle_1", ".*collision.*"),
+        Transition("move_left","idle_1", ".*collision.*"),
+        Transition("move_right","idle_1", ".*collision.*"),
+        Transition("move_down","idle_1", ".*collision.*")]
         return StateMachine(states, edges, "idle_1")
 
     def _produce_physical( self ):
