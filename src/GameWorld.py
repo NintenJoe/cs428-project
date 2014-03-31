@@ -76,7 +76,10 @@ class GameWorld():
             entity.update( time_delta )
 
         for entity_collision in self._collision_detector.get_all_collisions():
-            self._resolve_entity_collision( entity_collision )
+            collision = []
+            for entity in entity_collision:
+                collision.append( entity )
+            self._resolve_entity_collision( collision )
 
         # NOTE: There should be some easy way to get the tiles with which an
         # `Entity` in the game world collides.
@@ -125,6 +128,7 @@ class GameWorld():
     #    detection system for the game world.
     def _add_to_collision_detector( self, entity ):
         self._cdrepr2entity_dict[ entity.get_hitbox() ] = entity
+        self._collision_detector.add( entity.get_hitbox() )
 
     ##  Removes the given entity from the collision detection system.
     #
@@ -132,6 +136,7 @@ class GameWorld():
     #    collision detection system for the game world.
     def _remove_from_collision_detector( self, entity ):
         del self._cdrepr2entity_dict[ entity.get_hitbox() ]
+        self._collision_detector.remove( entity.get_hitbox() )
 
     ##  Given the collision system's representation of an entity, this function
     #   returns the actual `Entity` object associated with this representation.

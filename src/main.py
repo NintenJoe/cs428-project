@@ -36,7 +36,6 @@ def main():
 
     ## Game Variables ##
     game_view = GameView()
-    PG.display.set_mode((640,480))
     game_world = GameWorld()
     input_controller = InputController()
 
@@ -72,7 +71,8 @@ def main():
         # Update Game World #
         prev_game_time = game_time
         game_time = PG.time.get_ticks()
-        game_world.update( game_time - prev_game_time )
+        # TODO: Adjust the frame time here in a more elegant fashion.
+        game_world.update( (game_time - prev_game_time) / 10 )
 
         # Render Game World #
         game_view.render( game_world )
