@@ -23,24 +23,32 @@ class Monster( Entity ):
     #   TODO: Implement timeouts as an optional parameter to Notify
     #   @override
     def _produce_machine( self ):
-        timeout = 20
+        timeout = 1000
         self.timeout = timeout
-        states = [IdleState("1", timeout), IdleState("2", timeout), 
-        IdleState("3", timeout), IdleState("4", timeout), 
-        MoveState("up", (0,-1), timeout), MoveState("down", (0,1), timeout), 
-        MoveState("left", (-1,0), timeout), MoveState("right", (1,0), timeout)]
-        edges = [Transition("idle_1","move_up", ".*timeout.*"),
-        Transition("idle_2","move_left", ".*timeout.*"),
-        Transition("idle_4","move_right", ".*timeout.*"),
-        Transition("idle_3","move_down", ".*timeout.*"),
-        Transition("move_up","idle_2", ".*timeout.*"),
-        Transition("move_left","idle_3", ".*timeout.*"),
-        Transition("move_right","idle_1", ".*timeout.*"),
-        Transition("move_down","idle_4", ".*timeout.*"),
-        Transition("move_up","idle_2", ".*collision.*"),
-        Transition("move_left","idle_3", ".*collision.*"),
-        Transition("move_right","idle_1", ".*collision.*"),
-        Transition("move_down","idle_4", ".*collision.*")]
+        states = [
+            IdleState("1", timeout),
+            IdleState("2", timeout),
+            IdleState("3", timeout),
+            IdleState("4", timeout),
+            MoveState("up", (0,-1), timeout),
+            MoveState("down", (0,1), timeout),
+            MoveState("left", (-1,0), timeout),
+            MoveState("right", (1,0), timeout)
+        ]
+        edges = [
+            Transition("idle_1","move_up", ".*timeout.*"),
+            Transition("idle_2","move_left", ".*timeout.*"),
+            Transition("idle_4","move_right", ".*timeout.*"),
+            Transition("idle_3","move_down", ".*timeout.*"),
+            Transition("move_up","idle_2", ".*timeout.*"),
+            Transition("move_left","idle_3", ".*timeout.*"),
+            Transition("move_right","idle_1", ".*timeout.*"),
+            Transition("move_down","idle_4", ".*timeout.*"),
+            Transition("move_up","idle_2", ".*collision.*"),
+            Transition("move_left","idle_3", ".*collision.*"),
+            Transition("move_right","idle_1", ".*collision.*"),
+            Transition("move_down","idle_4", ".*collision.*")
+        ]
         return StateMachine(states, edges, "idle_1")
 
     def _produce_physical( self ):

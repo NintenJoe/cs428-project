@@ -42,5 +42,5 @@ class GameWorldTests( unittest.TestCase ):
             for y in range( len(tilemap) ):
                 string += tilemap[x][y] + " "
             string += "\n"
-        print string
+        #print string
 

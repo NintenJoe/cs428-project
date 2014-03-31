@@ -16,12 +16,16 @@
 #     world.
 #   - Implement functionality associated with interpretting events sent back
 #     by `Entity` object instances on update.
+#   - Remove all 'NOTE' items within this file by fixing up the `GameWorld`
+#     type.
 #   Low Priority:
 #   - 
 
 import pygame as PG
 from Globals import TILE_DIMS
 
+from Monster import *
+from Player import *
 from Event import *
 from CollisionDetector import *
 from SpatialDictionary import *
@@ -44,17 +48,16 @@ class GameWorld():
         self._world = World()
         # NOTE: World must provide an interface to get the inhabiting entities
         # by default (at least the names of these entities).
-        self._entities = []
-        #    Monster( "monster", PhysicalState(PG.Rect(200, 200, 0, 0)) ),
-        #    Player( "player", Physical(PG.Rect(480, 480, 0, 0)) ),
-        #]
+        self._entities = [
+            Monster( "monster", PhysicalState(PG.Rect(200, 200, 0, 0)) ),
+            Player( "player", PhysicalState(PG.Rect(480, 480, 0, 0)) ),
+        ]
 
         self._setup_tilemap()
 
         # NOTE: Must designate some entity within the entity list as the 'main'
         # entity.  This entity's hitbox will be set as the camera's focus.
-        self._camera = Camera()
-        #self._camera = Camera( target=self._entities[1].get_hitbox(), new_border=PG.Rect(0, 0, 960, 960) )
+        self._camera = Camera( target=self._entities[1].get_hitbox(), new_border=PG.Rect(0, 0, 960, 960) )
         # NOTE: World must provide an interface to get level width/height in pixels.
         self._collision_detector = SpatialDictionary( 240, 960, 960 )
 

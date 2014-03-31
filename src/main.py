@@ -8,11 +8,8 @@
 #   High Priority:
 #   - Re-integrate the `InputController` type to handle with user inputs once
 #     it implements different key-up and key-down events.
-#   - Update the logic of the main game loop (current contents are examples).
 #   Low Priority:
-#   - Move the global game variables (i.e. 'GAME_NAME', 'SCREEN_SIZE') to
-#     the 'Globals' module.
-#   - Spruce up the file and remove unnecessary comments.
+#   -
 
 import pygame as PG
 from pygame.locals import *
@@ -66,10 +63,10 @@ def main():
                 elif input_event.key == K_RIGHT:
                     input_key = InputController.MOVE_RIGHT
 
-                key_event = Event(
-                    EventType.NOTIFY,#EventType.KEYDOWN if event.type == KEYDOWN else EventType.KEYUP,
-                    { "key": input_key }
-                )
+                event_type = EventType.KEYDOWN if input_event.type == KEYDOWN \
+                    else EventType.KEYUP
+
+                key_event = Event( event_type, {"key": input_key} )
                 game_world.notify_of( key_event )
 
         # Update Game World #
@@ -79,6 +76,8 @@ def main():
 
         # Render Game World #
         #game_view.render( game_world )
+        player_entity = game_world.get_entities()[1]
+        print player_entity.get_physical_state().get_volume()
 
         # Frame Stall #
         game_clock.tick( FRAMES_PER_SECOND )
