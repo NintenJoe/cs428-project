@@ -7,6 +7,7 @@
 #   @TODO
 #   - Write the implementation in this file!
 
+import pygame as pg
 import unittest
 import src
 from src.GameWorld import *
@@ -16,14 +17,30 @@ from src.GameWorld import *
 class GameWorldTests( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
+    @classmethod
+    def setUpClass(cls):
+        pg.init()
+        pg.display.set_mode((640,480))
+
+    @classmethod
+    def tearDownClass(self):
+        pg.quit()
+
     def setUp( self ):
-        pass
+        self._world = GameWorld()
 
     def tearDown( self ):
-        pass
+        self._world = None
 
     ### Testing Functions ###
 
     def test_test( self ):
-        self.assertEqual( True, True, "" )
+        tilemap = self._world.get_tilemap()
+
+        string = ""
+        for x in range( len(tilemap) ):
+            for y in range( len(tilemap) ):
+                string += tilemap[x][y] + " "
+            string += "\n"
+        print string
 
