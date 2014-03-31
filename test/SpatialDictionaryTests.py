@@ -44,6 +44,38 @@ class SpatialDictionaryTests(unittest.TestCase):
 
     ### Testing Functions ###
 
+    def test_repr_empty(self):
+        temp_dict = SpatialDictionary(self.cell_size, self.width, self.height)
+        self.assertTrue(
+            repr(temp_dict) == "{}",
+            "Invalid object representation."
+        )
+
+    def test_repr_nonempty(self):
+        temp_dict = SpatialDictionary(self.cell_size, self.width, self.height)
+        temp_dict.add(self.entityA)
+
+        self.assertTrue(
+            repr(temp_dict) == "{4:Set([<rect(4, 28, 15, 20)>])}",
+            "Invalid object representation."
+        )
+
+    def test_str_empty(self):
+        temp_dict = SpatialDictionary(self.cell_size, self.width, self.height)
+        self.assertTrue(
+            str(temp_dict) == "{}",
+            "Invalid stribg representation."
+        )
+
+    def test_str_nonempty(self):
+        temp_dict = SpatialDictionary(self.cell_size, self.width, self.height)
+        temp_dict.add(self.entityA)
+
+        self.assertTrue(
+            str(temp_dict) == "{4:Set([<rect(4, 28, 15, 20)>])}",
+            "Invalid stribg representation."
+        )
+
     def test_add_one_object(self):
         self.dict_.add(self.entityJ)
         self.assertTrue(self.dict_.exists(self.entityJ),
