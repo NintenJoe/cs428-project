@@ -20,7 +20,7 @@ class EventType():
 
     ##  Indicates that the event is a simple notification event with no associated
     #   information.
-    #   Parameters: { } OR { "timeout" : int }
+    #   Parameters: { }
     NOTIFY = "notify"
 
     ##  Indicates that the event represents a state timeout for the given game

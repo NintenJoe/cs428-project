@@ -22,26 +22,22 @@ class Monster( Entity ):
     #   Build state machine and set up initial state
     #   TODO: Implement timeouts as an optional parameter to Notify
     #   @override
-    def _setup_machine( self ):
-        G=Graph()
-        G.add_node(MoveState("up", (0,-1)))
-        G.add_node(MoveState("down", (0,1)))
-        G.add_node(MoveState("left", (-1,0)))
-        G.add_node(MoveState("right", (1,0)))
-        idle = IdleState("1")
-        G.add_node(idle)
-        G.add_node(IdleState("2"))
-        G.add_node(IdleState("3"))
-        G.add_node(IdleState("4"))
+    def _produce_machine( self ):
         timeout = 20
         self.timeout = timeout
-        edges = [("idle_1","move_up", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("idle_2","move_left", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("idle_4","move_right", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("idle_3","move_down", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("move_up","idle_2", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("move_left","idle_3", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("move_right","idle_1", Event(EventType.NOTIFY, {"timeout" : timeout})),
-        ("move_down","idle_4", Event(EventType.NOTIFY, {"timeout" : timeout}))]
-        G.add_edges_from_source(edges)
-        return StateMachine(G, idle)
+        states = [IdleState("1", timeout), IdleState("2", timeout), 
+        IdleState("3", timeout), IdleState("4", timeout), 
+        MoveState("up", (0,-1), timeout), MoveState("down", (0,1), timeout), 
+        MoveState("left", (-1,0), timeout), MoveState("right", (1,0), timeout)]
+        edges = [Transition("idle_1","move_up", "timeout"),
+        Transition("idle_2","move_left", "timeout"),
+        Transition("idle_4","move_right", "timeout"),
+        Transition("idle_3","move_down", "timeout"),
+        Transition("move_up","idle_2", "timeout"),
+        Transition("move_left","idle_3", "timeout"),
+        Transition("move_right","idle_1", "timeout"),
+        Transition("move_down","idle_4", "timeout")]
+        return StateMachine(states, edges, "idle_1")
+
+    def _produce_physical( self ):
+        return PhysicalState(PG.Rect(0, 0, 20, 20), (0,0), 1.0)

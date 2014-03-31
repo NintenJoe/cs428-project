@@ -23,12 +23,12 @@ class MonsterTest( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_monster_constructor( self ):
-        self.assertIsInstance(self.monster._ephm_state._state, IdleState)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)
 
     def test_monster_update( self ):
         self.monster.update(1)
-        self.assertIsInstance(self.monster._ephm_state._state, IdleState)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)
 
     def test_monster_transition( self ):
         self.monster.update(self.monster.timeout)
-        self.assertIsInstance(self.monster._ephm_state._state, MoveState)
+        self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)

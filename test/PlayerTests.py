@@ -23,13 +23,13 @@ class PlayerTest( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_player_constructor( self ):
-        self.assertIsInstance(self.player._ephm_state._state, IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_update( self ):
         self.player.update(1)
-        self.assertIsInstance(self.player._ephm_state._state, IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_transition( self ):
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : "up"}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._ephm_state._state, MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
