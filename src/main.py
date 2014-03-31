@@ -6,28 +6,19 @@
 #
 #   @TODO
 #   High Priority:
-#   - Update the logic of the main game loop (current contents are examples).
+#   - Re-integrate the `InputController` type to handle with user inputs once
+#     it implements different key-up and key-down events.
 #   Low Priority:
-#   - Move the global game variables (i.e. 'GAME_NAME', 'SCREEN_SIZE') to
-#     the 'Globals' module.
-#   - Spruce up the file and remove unnecessary comments.
+#   -
 
 import pygame as PG
 from pygame.locals import *
-from World import World
-from Camera import Camera
-from Animation import Animation
-from InputController import InputController
+
+from Globals import GAME_NAME, FRAMES_PER_SECOND
 from GameView import GameView
-
-
-### Global Variables ###
-GAME_NAME = "Zol"                   # Name for the prototype game
-SCREEN_SIZE = ( 640, 480 )          # Default size for the game screen
-FRAMES_PER_SECOND = 60              # Number of update frames per second
-
-
-### Primary Entry Point ###
+from GameWorld import GameWorld
+from InputController import InputController
+from Event import Event, EventType
 
 ##  The primary entry point for the game.  This function handles the primary
 #   game loop and logic.  This function should serve as a high level manager for
@@ -42,73 +33,55 @@ FRAMES_PER_SECOND = 60              # Number of update frames per second
 #       6. Play Sounds
 def main():
     PG.init()
-    gameView = GameView()
-    GAME_RUNNING = True
 
-    #Set initial level
-    gameView.change_environment('1','2')
-    gameView.load_tilemap()
-
-    print gameView.loaded_tiles
-
-    move_x = 0
-    move_y = 0
-    move_tgt = PG.Rect(move_x, move_y, 640, 480)
-
-    border = PG.Rect(0, 0, 960, 960)
-    shift_time = 3000
-    accumulated_shift = 0
-    camera = Camera( move_tgt, shift_time, border)
-
-    player = gameView.generate_entity([(16,0,16,40),(0,0,16,40)],'entities/man/man.bmp',1, 33, False)
-    playerflag = 1
-
+    ## Game Variables ##
+    game_view = GameView()
+    game_world = GameWorld()
     input_controller = InputController()
 
-    # Primary Game Loop #
-    while GAME_RUNNING:
+    game_clock = PG.time.Clock()
+    prev_game_time = 0.0
+    game_time = PG.time.get_ticks()
+    game_running = True
+
+    ## Primary Game Loop ##
+    while game_running:
         # Retrieve/Handle User Inputs #
-        key_events = PG.event.get([PG.KEYDOWN, PG.KEYUP])
-        input_controller.processKeyEvents(key_events)
+        for input_event in PG.event.get():
+            if input_event.type == PG.QUIT:
+                game_running = False
+                InputController.MOVE_UP
+            elif input_event.type == KEYDOWN or input_event.type == KEYUP:
+                input_key = ""
+                if input_event.key == K_UP:
+                    input_key = InputController.MOVE_UP
+                elif input_event.key == K_DOWN:
+                    input_key = InputController.MOVE_DOWN
+                elif input_event.key == K_LEFT:
+                    input_key = InputController.MOVE_LEFT
+                elif input_event.key == K_RIGHT:
+                    input_key = InputController.MOVE_RIGHT
 
-        for event in PG.event.get():
-            if event.type == PG.QUIT:
-                GAME_RUNNING = False
-            elif event.type == InputController.MOVE_LEFT:
-                move_x-=10
-            elif event.type == InputController.MOVE_RIGHT:
-                move_x+=10
-            elif event.type == InputController.MOVE_UP:
-                move_y-=10
-            elif event.type == InputController.MOVE_DOWN:
-                move_y+=10
+                event_type = EventType.KEYDOWN if input_event.type == KEYDOWN \
+                    else EventType.KEYUP
 
-            # TODO: Add more input handling.
+                key_event = Event( event_type, {"key": input_key} )
+                game_world.notify_of( key_event )
 
-        # TODO: Write updating logic here.
+        # Update Game World #
+        prev_game_time = game_time
+        game_time = PG.time.get_ticks()
+        # TODO: Adjust the frame time here in a more elegant fashion.
+        game_world.update( (game_time - prev_game_time) / 10 )
 
-        move_tgt.left = move_x
-        move_tgt.top = move_y
+        # Render Game World #
+        game_view.render( game_world )
 
-        accumulated_shift += PG.time.get_ticks() - gameView.GAME_TIME
-        gameView.GAME_TIME = PG.time.get_ticks()
-
-        if accumulated_shift > shift_time:
-            accumulated_shift = 0
-
-        camera.update( gameView.GAME_TIME )
-
-        # Draw Graphics #
-        # TODO: Write the draw logic for the game here.
-        gameView.render(camera, SCREEN_SIZE)
-        gameView.render_entity(camera, player, move_tgt, SCREEN_SIZE)
-
-        # Stalls the current frame until a sufficient amount of time passes to
-        # achieve the given frame rate.
-        gameView.GAME_CLOCK.tick(FRAMES_PER_SECOND)
+        # Frame Stall #
+        game_clock.tick( FRAMES_PER_SECOND )
 
     # Exit the game after the primary game loop has been terminated.
-    gameView.exit_game()
+    PG.quit()
 
 
 if __name__ == "__main__":

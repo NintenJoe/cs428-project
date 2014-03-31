@@ -145,7 +145,7 @@ class Camera():
             # If the camera is attached to one target, simply follow that target
             # with the camera.
             else:
-                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.centerx) - self.width/2, 
+                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.centerx) - self.width/2,
                     self.follow(self.fpos[1], self.focus.centery) - self.height/2, self.width, self.height).clamp(self.border)
                 self.fpos[0] = clamped.centerx
                 self.fpos[1] = clamped.centery

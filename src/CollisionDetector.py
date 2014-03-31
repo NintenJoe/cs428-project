@@ -5,11 +5,9 @@
 #   An abstract base class that defines the interface that all future collision
 #   detection implementations must support.
 
-
 from abc import ABCMeta, abstractmethod
 
-
-class CollisionDetector:
+class CollisionDetector( object ):
     __metaclass__ = ABCMeta
 
     # Accept an arbitrary argument list

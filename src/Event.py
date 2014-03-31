@@ -32,7 +32,7 @@ class EventType():
 
     ##  Indicates that the event represents a collision between two game world
     #   objects.
-    #   Parameters: { "objects": (Entity, Entity), "volumes": (Rect list, Rect list) }
+    #   Parameters: { "objects": (Entity, Entity), "volumes": (Rect, Rect) }
     COLLISION = "collision"
 
     ##  Indicates that the event represents a the pressing of a key

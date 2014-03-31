@@ -65,3 +65,4 @@ class World():
             level.load_tiles()
             level.generate_images()
             self.levels[lvl_id] = level
+

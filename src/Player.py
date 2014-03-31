@@ -25,19 +25,27 @@ class Player( Entity ):
     #   TODO: Use actual key value and not just placeholder
     #   @override
     def _produce_machine( self ):
-        states = [IdleState("1"), MoveState("up", (0,-1)), MoveState("down", (0,1)), MoveState("left", (-1,0)), MoveState("right", (1,0))]
-        edges = [Transition("idle_1","move_up", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}))+"$"),
-        Transition("idle_1","move_left", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_LEFT}))+"$"),
-        Transition("idle_1","move_right", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_RIGHT}))+"$"),
-        Transition("idle_1","move_down", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_DOWN}))+"$"),
-        Transition("move_up","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_UP}))+"$"),
-        Transition("move_left","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_LEFT}))+"$"),
-        Transition("move_right","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}))+"$"),
-        Transition("move_down","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_DOWN}))+"$"),
-        Transition("move_up","idle_1", ".*collision.*"),
-        Transition("move_left","idle_1", ".*collision.*"),
-        Transition("move_right","idle_1", ".*collision.*"),
-        Transition("move_down","idle_1", ".*collision.*")]
+        states = [
+            IdleState("1"),
+            MoveState("up", (0,-1)),
+            MoveState("down", (0,1)),
+            MoveState("left", (-1,0)),
+            MoveState("right", (1,0))
+        ]
+        edges = [
+            Transition("idle_1","move_up", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}))+"$"),
+            Transition("idle_1","move_left", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_LEFT}))+"$"),
+            Transition("idle_1","move_right", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_RIGHT}))+"$"),
+            Transition("idle_1","move_down", "^"+ repr(Event(EventType.KEYDOWN, {"key" : InputController.MOVE_DOWN}))+"$"),
+            Transition("move_up","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_UP}))+"$"),
+            Transition("move_left","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_LEFT}))+"$"),
+            Transition("move_right","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}))+"$"),
+            Transition("move_down","idle_1", "^"+ repr(Event(EventType.KEYUP, {"key" : InputController.MOVE_DOWN}))+"$"),
+            Transition("move_up","idle_1", ".*collision.*"),
+            Transition("move_left","idle_1", ".*collision.*"),
+            Transition("move_right","idle_1", ".*collision.*"),
+            Transition("move_down","idle_1", ".*collision.*")
+        ]
         return StateMachine(states, edges, "idle_1")
 
     def _produce_physical( self ):

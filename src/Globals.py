@@ -22,6 +22,29 @@ from os.path import isfile as is_file
 
 ### Global Variables ###
 
+## General Game Information Variables ##
+
+##  The name of the game, which will appear in various debugging strings and
+#   views.
+GAME_NAME = "Zol"
+
+## Game Model Variables ##
+
+##  The number of frames per second tha the game will attempt to achieve while
+#   running.
+FRAMES_PER_SECOND = 60
+
+##  Amount of movement that the camera will not follow comparable to slack 
+#   in a rope pulling along the camera.
+SLACK = 0
+
+## Game View Variables ##
+
+##  The dimensions of the tiles that comprise the game world in number of pixels.
+TILE_DIMS = ( 20, 20 )
+
+## File System/Path Information Variables ##
+
 ##  The base path of the project expressed in terms of its absolute path
 #   information.
 PROJECT_PATH = get_path( get_path(__file__) )
@@ -29,10 +52,6 @@ PROJECT_PATH = get_path( get_path(__file__) )
 ##  The path to the assets folder for the game, which contains all assets 
 #   associated with the game.
 ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
-
-##  Amount of movement that the camera will not follow
-#   comparable to slack in a rope pulling along the camera
-SLACK = 0
 
 
 ### Global Functions ###
