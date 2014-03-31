@@ -23,7 +23,7 @@ class Monster( Entity ):
     #   TODO: Implement timeouts as an optional parameter to Notify
     #   @override
     def _produce_machine( self ):
-        timeout = 1000
+        timeout = 100
         self.timeout = timeout
         states = [
             IdleState("1", timeout),

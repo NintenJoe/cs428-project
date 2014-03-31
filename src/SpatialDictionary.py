@@ -234,4 +234,9 @@ class SpatialDictionary( CollisionDetector ):
     ## @return A set containing all the bounding volumes in a given cell. The
     #  cell is assumed to exist in the table.
     def _objs_in(self, cell):
+        if cell in self.table:
             return self.table[cell]
+        else:
+            return set()
+
+

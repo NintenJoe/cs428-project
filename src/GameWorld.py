@@ -49,7 +49,7 @@ class GameWorld():
         # NOTE: World must provide an interface to get the inhabiting entities
         # by default (at least the names of these entities).
         self._entities = [
-            Monster( "monster", PhysicalState(PG.Rect(200, 200, 0, 0)) ),
+            Monster( "monster", PhysicalState(PG.Rect(400, 400, 0, 0)) ),
             Player( "player", PhysicalState(PG.Rect(480, 480, 0, 0)) ),
         ]
 

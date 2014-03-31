@@ -41,7 +41,6 @@ class GameView():
     #
     #   @param game_world   Game World, which contains information about the world
     #                        and all the entities contained in it.
-    
     def render( self, game_world ):
         self._screen.fill( (0, 0, 0) )
 
@@ -63,7 +62,6 @@ class GameView():
     #   @param viewport     The camera's view, should be a pygame rect
     #   @param tilemap      2D Array of strings that contain the all the
     #                        information about each tile.
-    
     def render_environment( self, viewport, tilemap ):
         self._load_tiles_for_tilemap( tilemap )
 
@@ -88,7 +86,6 @@ class GameView():
     #
     #   @param viewport     The camera's view, should be a pygame rect
     #   @param entity_list  List of all entities and their information
-    
     def render_entities( self, viewport, entity_list ):
         self._load_entities( entity_list )
 
@@ -106,7 +103,6 @@ class GameView():
     #
     #   @param tilemap      2D Array of strings that contain the all the
     #                        information about each tile.
-    
     def _load_tiles_for_tilemap( self, tilemap ):
         for idx_x in range( len(tilemap) ):
             for idx_y in range( len(tilemap[0]) ):
@@ -119,7 +115,6 @@ class GameView():
     #   its corresponding sprite sheet.
     #
     #   @param entity_list  List of all entities and their information
-    
     def _load_entities( self, entity_list ):
         for entity in entity_list:
             entity_key = self._get_entity_key( entity )
@@ -142,7 +137,6 @@ class GameView():
     #   @param entity       The entity in which we need information from
     #
     #   @return             The key which is a combination of an entity's name and state
-    
     def _get_entity_key( self, entity ):
         entity_info = entity.get_status().split()
         return entity_info[0] + " " + entity_info[1]
@@ -152,7 +146,6 @@ class GameView():
     #   @param entity       The entity in which we need information from
     #
     #   @return             The filepath for the entity's spritesheet
-    
     def _get_entity_path( self, entity ):
         entity_info = entity.get_status().split()
         return ASSET_PATH + "/graphics/entities/" + entity_info[0] + "/" + entity_info[1] + ".png"
