@@ -57,8 +57,10 @@ class Camera():
     #   @return A tuple that contains the positioning information for the camera
     #   of the form (xPos, yPos).
     def get_position(self):
-        return self.position[0]
+        return self.position
 
+    ##  Returns a rectangle that outlines the section of the world that is viewable
+    #   from the window
     def get_viewport(self):
         return PG.Rect(self.position[0] - self.width/2, self.position[1]-self.height/2, self.width, self.height)
 
