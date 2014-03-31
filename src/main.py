@@ -41,11 +41,15 @@ FRAMES_PER_SECOND = 60              # Number of update frames per second
 #       5. Draw Graphics
 #       6. Play Sounds
 def main():
-    gameView = GameView(SCREEN_SIZE)
+    PG.init()
+    gameView = GameView()
     GAME_RUNNING = True
 
     #Set initial level
     gameView.change_environment('1','2')
+    gameView.load_tilemap()
+
+    print gameView.loaded_tiles
 
     move_x = 0
     move_y = 0
@@ -96,7 +100,7 @@ def main():
 
         # Draw Graphics #
         # TODO: Write the draw logic for the game here.
-        gameView.render_environment(camera, SCREEN_SIZE)
+        gameView.render(camera, SCREEN_SIZE)
         gameView.render_entity(camera, player, move_tgt, SCREEN_SIZE)
 
         # Stalls the current frame until a sufficient amount of time passes to

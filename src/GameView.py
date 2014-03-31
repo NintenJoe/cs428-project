@@ -1,23 +1,23 @@
 ##  @file GameView.py
 #   @author Edwin Chan
-#   @date 3/27/2014
+#   @date Spring 2014
 #
 #   Source File for Viewing 
 #
 #   @TODO
-#   - Implement everything
+#   High Priority:
+#   - 
+#   Low Priority:
+#   - Init will take as input the screen size of our game
 
 import os.path
-import glob
-import string
 import pygame as PG
 from pygame.locals import *
-from Level import Level
-from Segment import Segment
-from World import World
+
+from GameWorld import GameWorld
 from Animation import Animation
 from Event import Event
-
+from Globals import *
 
 ##  This class is a container and viewing methods for camera,
 #   world, and all entities. Its job is to load and construct the
@@ -26,75 +26,96 @@ class GameView():
     ### Constructors ###
 
     ##  
-    #   
-    def __init__(self, SCREEN_SIZE):
-        #self.eventManager = event
+    def __init__(self):
+        self._screen = PG.display.set_mode( (640, 480) )
         
-        PG.init()
-        self.GAME_SCREEN = PG.display.set_mode( SCREEN_SIZE )
-        self.GAME_FONT = PG.font.Font( None, 14 )
-        self.GAME_TIME = PG.time.get_ticks()
-        self.GAME_CLOCK = PG.time.Clock()
-        self.GAME_TIME = PG.time.get_ticks()
-        PG.display.set_caption( "Zol" )
+        PG.display.set_caption( GAME_NAME )
         PG.mouse.set_visible( True )
-
-        self.environment = None
+        
+        self._loaded_tiles = {}
+        self._loaded_entities = {}
 
     ### Methods ###
 
-    ##  Update and draw the Game World
-    #
-    
-    def render_environment(self, camera, SCREEN_SIZE):
-        self.GAME_SCREEN.fill( (0, 0, 0) )
+    ##  
+    def render( self, game_world ):
+        self.screen.fill( (0, 0, 0) )
 
-        camera_pos = camera.get_position()
-        #Needed to multiply by negative 1 so that camera movement doesn't look 'backwards'
-        self.GAME_SCREEN.blit(self.environment, ( -1*camera_pos[0] + SCREEN_SIZE[0] / 2, -1*camera_pos[1] + SCREEN_SIZE[1] / 2 ) )
+        viewport = game_world.get_camera().get_viewport()
+        tilemap = game_world.get_tilemap()
+        entity_list = game_world.get_entities()
 
-    ##  Update and render a given entity
-    #
-    #   @param camera
-    #   @oaram entity       Entity to be rendered
-    #   @param new_loc      Location where entity will be rendered
-    #
-    
-    def render_entity(self, camera, entity, new_loc, SCREEN_SIZE):
-        #self.GAME_SCREEN.blit(self.GAME_FONT.render("FPS: %.3g" % self.GAME_CLOCK.get_fps(), 0, (255, 255, 255)), (5, 5))
-        camera_pos = camera.get_position()
-        self.GAME_SCREEN.blit(entity[0], (new_loc.centerx - camera_pos[0] + SCREEN_SIZE[0] / 2 , new_loc.centery - camera_pos[1] + SCREEN_SIZE[1] / 2))
+        self.render_environment( viewport, tilemap )
+        self.render_entities( viewport, entity_list )
 
+    ##  
+    def render_environment( self, viewport, tilemap ):
+        self._load_tiles_for_tilemap( tilemap )
 
-        PG.display.flip()
-    ##  Calls the animation class in order to generate an entity to draw
-    #
-    #   @param coordinates  Rectangle Coordinates for the sprites on a spritesheet
-    #   @param filename     Path and Filename of the spritesheet
-    #
-    #   @return entity      Returns an entity to be rendered
-    #
-    
-    def generate_entity(self, coordinates, filename, frame_count, frame_time, is_looping):
-        img = Animation(filename, frame_count, frame_time, is_looping)
-        entity = img.get_images_at(coordinates)
-        return entity
-    
-    ##  Calls the World class in order to switch levels to draw
-    #
-    #
-    #   @param level        Level Name
-    #   @param segment      Segment Name
-    #
-    #   @return environment      Returns a world
-    #
-    def change_environment(self, level, segment):
-        world = World()
-        levelselect = world.levels[level]
-        environment = levelselect.get_image(segment)
-        self.environment = environment
-
-    def exit_game(self):
-        PG.quit()
-
+        num_tiles_x = len( tilemap )
+        num_tiles_y = len( tilemap[0] )
         
+        start_idx_x = clamp( int(viewport.left / TILE_DIMS[0]), 0, num_tiles_x )
+	start_idx_y = clamp( int(viewport.top / TILE_DIMS[1]), 0, num_tiles_y )
+	final_idx_x = clamp( int(viewport.right / TILE_DIMS[0]) + 1, 0, num_tiles_x )
+	final_idx_y = clamp( int(viewport.bottom / TILE_DIMS[1]) + 1, 0, num_tiles_y )
+
+        for idx_x in range( start_idx_x, final_idx_x ):
+            for idx_y in range( start_idx_y, final_idx_y ):
+                tile_pos_x = curr_x * TILE_DIMS[0] - viewport.x
+                tile_pos_y = curr_y * TILE_DIMS[1] - viewport.y
+
+                tile_id = tilemap[ idx_x ][ idx_y ]
+                
+                self._screen.blit( self.tile_list[tile_id], (tile_pos_x, tile_pos_y) )
+
+    ##  
+    def render_entities( self, viewport, entity_list ):
+        self._load_entities( entity_list )
+
+        for entity in entity_list:
+            entity_pos_x = entity.get_hitbox().x - viewport.x
+            entity_pos_y = entity.get_hitbox().y - viewport.y
+            
+            entity_key = self._get_entity_key( entity )
+            entity_animation = self._loaded_entities[ entity_key ]
+            game_time = float( entity.get_status().split()[2] )
+
+            self._screen.blit( entity_animation.get_frame(game_time), (entity_pos_x, entity_pos_y) )
+
+    ##  
+    def _load_tiles_for_tilemap( self, tilemap ):
+        for idx_x in range( len(tilemap) ):
+            for idx_y in range( len(tilemap[0]) ):
+                tile_id = tilemap[ idx_x ][ idx_y ]
+                
+                if tile_id not in self._loaded_tiles:
+                      self._loaded_tiles[ tild_id ] = load_image("assets/graphics/tiles/" + tile_id + ".bmp")
+
+    ##  
+    def _load_entities( self, entity_list ):
+        for entity in entity_list:
+            entity_key = self._get_entity_key( entity )
+            entity_path = self._get_entity_path( entity )
+
+            # TODO: Remove this and replace it with a valid frame count loaded.
+            frame_count = 1
+            if entity_key == "player idle_1":
+                frame_count = 6
+            elif entity_key.find( "move" ) != -1:
+                frame_count = 4
+            elif entity_key.find( "monster" ) !=-1:
+                frame_count = 7
+            
+            if entity_key not in self._loaded_entities:
+                self._loaded_entities[ entitiy_key ] = Animation( entity_path, frame_count, frame_time=33, True )
+
+    ##  
+    def _get_entity_key( self, entity ):
+        entity_info = entity.get_status().split()
+        return entity_info[0] + " " + entity_info[1]
+
+    ##  
+    def _get_entity_path( self, entity ):
+        entity_info = entity.get_status().split()
+        return "assets/graphics/entities/" + entity_info[0] + "/" + entity_info[1] + ".png"
