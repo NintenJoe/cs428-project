@@ -50,6 +50,10 @@ class Segment():
         # { (x,y) => (dest_segment, (dest_x,dest_y)) }
         self.transitions = {}
 
+        # initial position of entities, of the form:
+        # { (x,y) => Entity Type (string) }
+        self.entities = {}
+
         # Find transition and entry point tiles
         self.transition_tiles = []
         special_tiles = self._find_special_tiles()
@@ -58,6 +62,8 @@ class Segment():
                 self.entry_point = tile[0]
             elif (tile[1][0] == tile[1][1] == tile[1][2]): # color is grayscale
                 self.transition_tiles.append(tile)
+            elif (tile[1] == (0,0,255)):
+                self.entities[tile[0]] = "monster"
 
     # Methods #
 
@@ -145,3 +151,7 @@ class Segment():
                 if (color != (0,0,0) and color != (255,255,255)):
                     tiles.append(((x,y),color))
         return tiles
+
+    #   @return A list of the entities in this segment.
+    def get_entities(self):
+        return self.entities
