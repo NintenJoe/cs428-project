@@ -15,7 +15,7 @@ import pygame as PG
 from pygame.locals import *
 
 from Globals import GAME_NAME, FRAMES_PER_SECOND
-#from GameView import GameView
+from GameView import GameView
 from GameWorld import GameWorld
 from InputController import InputController
 from Event import Event, EventType
@@ -35,7 +35,7 @@ def main():
     PG.init()
 
     ## Game Variables ##
-    #game_view = GameView()
+    game_view = GameView()
     PG.display.set_mode((640,480))
     game_world = GameWorld()
     input_controller = InputController()
@@ -75,9 +75,7 @@ def main():
         game_world.update( game_time - prev_game_time )
 
         # Render Game World #
-        #game_view.render( game_world )
-        player_entity = game_world.get_entities()[1]
-        print player_entity.get_physical_state().get_volume()
+        game_view.render( game_world )
 
         # Frame Stall #
         game_clock.tick( FRAMES_PER_SECOND )

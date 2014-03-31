@@ -1,6 +1,7 @@
 ##	@file
 #	Module file for the "Animation" type, which represents game animations.
 #       @authors Joseph Ciurej / Edwin Chan
+#       TODO: Fix everything in this file (duct tape with frame delta instead of game time).
 
 # Pygame Imports #
 import pygame as PG
@@ -72,7 +73,10 @@ class Animation(object):
         #
 
         def get_images_at(self, rectangles):
-                return [self.get_image_at(rect) for rect in rectangles]
+                imgs = []
+                for rect in rectangles:
+                        imgs.append(self.get_image_at(rect))
+                return imgs
 
         ##      Stores all the file names for all images associated
         #       with a given entity into a list
@@ -88,18 +92,6 @@ class Animation(object):
                         image_names.append(filename)
                         
                 return image_names
-
-        ##      Loads all the images for a given array
-        #
-
-        def load_entity_images(self):
-
-                for image_names in self:
-                        sprite = load_image(image_names, (255, 0 ,255))
-
-                #Todo: Load images of entity at their given (x, y) locations
-                #       blit(sprite, (entity.x, entity.y))
-
         
 	##	Starts the animation at the given time (which should be measured in 
 	#	milliseconds since the game started up).
@@ -116,10 +108,8 @@ class Animation(object):
 	#		of milliseconds since the game started).
 	#	@return A reference to the image that represents the current frame for 
 	#		the animation.
-	def get_frame(self, game_time):
-		assert self.start_time >= 0, "Animation '%s' not started before frame retrieval." % self.sheet_path
-
-		frame_num = self._get_frame_number(game_time)
+	def get_frame(self, time_delta):
+		frame_num = self._get_frame_number(time_delta)
 		frame_rect = PG.Rect(frame_num * self.frame_width, 0, self.frame_width, self.frame_height)
 
 		return self.sprite_sheet.subsurface(frame_rect)
@@ -138,8 +128,8 @@ class Animation(object):
 	#		of milliseconds since the game started).
 	#	@return A number that uniquely identifies the current frame that will be
 	#		displayed in the animation.
-	def _get_frame_number(self, game_time):
-		frame_num = int((game_time - self.start_time) / self.frame_time)
+	def _get_frame_number(self, time_delta):
+		frame_num = int(time_delta / self.frame_time)
 
 		if self.is_looping:
 			frame_num = frame_num % self.frame_count

@@ -34,12 +34,14 @@ class Camera():
     #       NEEDS TO BE THE WIDTH OF THE GAME SCREEN FOR CLAMPING TO WORK PROPERLY
     #   @param shift_time The amount of time the camera takes to switch between targets.
     #   @param new_border The current border to which the camera is attached
-    def __init__(self, target=None, shift_time=1000, new_border=None, slack=SLACK):
+    def __init__(self, target=None, (width, height) = (640, 480), shift_time=1000, new_border=None, slack=SLACK):
         self.prev_focal_position = None
         self.focus = target
         self.offset = [0,0]
         self.border = new_border
         self.slack = slack
+        self.width = width
+        self.height = height
 
         self.shift_time = float(shift_time)
         self.shift_start_time = -1
@@ -56,6 +58,11 @@ class Camera():
     #   of the form (xPos, yPos).
     def get_position(self):
         return self.position
+
+    ##  Returns a rectangle that outlines the section of the world that is viewable
+    #   from the window
+    def get_viewport(self):
+        return PG.Rect(self.position[0] - self.width/2, self.position[1]-self.height/2, self.width, self.height)
 
     ##  Offsets the position of the camera by the given amount.  This offset will
     #   last until it is set back to (0, 0)
@@ -138,8 +145,8 @@ class Camera():
             # If the camera is attached to one target, simply follow that target
             # with the camera.
             else:
-                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.centerx) - self.focus.width/2,
-                    self.follow(self.fpos[1], self.focus.centery) - self.focus.height/2, self.focus.width, self.focus.height).clamp(self.border)
+                clamped = PG.Rect(self.follow(self.fpos[0], self.focus.centerx) - self.width/2,
+                    self.follow(self.fpos[1], self.focus.centery) - self.height/2, self.width, self.height).clamp(self.border)
                 self.fpos[0] = clamped.centerx
                 self.fpos[1] = clamped.centery
 

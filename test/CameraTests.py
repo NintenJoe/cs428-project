@@ -20,12 +20,13 @@ class CameraTests(unittest.TestCase):
 
     def setUp(self):
         self.move_tgt = PG.Rect(500, 500, 1, 1)
+        self.area = (1,1)
 
         self.border = PG.Rect(0, 0, 6400, 4800)
 
         self.shift_time = 3000
         accumulated_shift = 0
-        self.camera = Camera( self.move_tgt, self.shift_time, self.border, 4)
+        self.camera = Camera( self.move_tgt, self.area, self.shift_time, self.border, 4)
 
     def tearDown(self):
         pass
