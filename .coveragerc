@@ -11,6 +11,9 @@ timid = True
 exclude_lines = 
 	pragma: no cover
 	pass
+omit =
+	./src/main.py
+	./src/__init__.py
 
 [html]
 title = Zol's Coverage Report
