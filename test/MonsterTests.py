@@ -31,4 +31,5 @@ class MonsterTest( unittest.TestCase ):
 
     def test_monster_transition( self ):
         self.monster.update(self.monster.timeout)
+        self.monster.update(1)
         self.assertIsInstance(self.monster._mntl_state.get_current_state(), MoveState)
