@@ -45,7 +45,7 @@ class StateMachine():
     #   @param start_id The name identifier of the starting state for the
     #    state machine instance (defaults to the first item in the state list).
     def __init__( self, state_list, transition_list, start_id=None ):
-        self._machine = NX.DiGraph()
+        self._machine = NX.MultiDiGraph()
         self._curr_state_id = start_id if start_id else state_list[0].get_name()
 
         [ self._add_state( state ) for state in state_list ]
@@ -85,7 +85,6 @@ class StateMachine():
                 return src_state.simulate_departure() + dst_state.simulate_arrival()
 
         return SimulationDelta()
-
     ##  @return The string identifier for the current state of the instance
     #    state machine.
     def get_current_state( self ):

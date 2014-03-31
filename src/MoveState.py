@@ -22,8 +22,8 @@ class MoveState( State ):
     #   @param identifier A string identifier for that will represent the
     #    name of the instance state.
     #   @param (vx,vy) the x and y components of the velocity of movement
-    def __init__( self, identifier, (vx, vy) ):
-        super( MoveState, self ).__init__( "move_" + identifier )
+    def __init__( self, identifier, (vx, vy), timeout=float("inf") ):
+        super( MoveState, self ).__init__( "move_" + identifier, timeout )
         self._vx = vx
         self._vy = vy
 
@@ -42,7 +42,7 @@ class MoveState( State ):
     def _calc_step_changes( self, time_delta ):
         deltax = self._vx * time_delta;
         deltay = self._vy * time_delta;
-        phys_delta = PhysicalState( PG.Rect(0, 0, deltax, deltay), (0, 0), 0.0 )
+        phys_delta = PhysicalState( PG.Rect(deltax, deltay, 0, 0), (0, 0), 0.0 )
 
         return SimulationDelta( phys_delta )
 
@@ -50,11 +50,11 @@ class MoveState( State ):
     #
     #   @override
     def _calc_arrival_changes( self ):
-        return SimulationDelta()
+        return SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (self._vx, self._vy), 0.0))
 
     ##  Returns an empty set of physical changes.
     #
     #   @override
     def _calc_departure_changes( self ):
-        return SimulationDelta()
+        return SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (-self._vx, -self._vy), 0.0))
 
