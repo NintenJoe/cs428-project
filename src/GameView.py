@@ -33,13 +33,11 @@ class GameView():
 
     ##  Constructs a Game View that will set up the game screen
     def __init__( self ):
-        self._screen = PG.display.set_mode( (640, 480) )
-
-        PG.display.set_caption( GAME_NAME )
-        PG.mouse.set_visible( True )
-
         self._tile_graphics = {}
         self._entity_graphics = {}
+
+        self._screen = PG.display.set_mode( (640, 480) )
+        PG.display.set_caption( GAME_NAME )
 
     ### Methods ###
 
