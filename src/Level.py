@@ -62,7 +62,7 @@ class Level():
             divider = string.find(line,':')
             color_str = line[:divider]
             tile_file = line[divider+1:].rstrip() + '.bmp'
-            tile = load_image(join_paths("tiles", tile_file))
+            tile = load_image(os.path.join("tiles", tile_file))
             self.tiles[tuple(PG.Color(color_str))] = tile
 
         tiles_file.close()

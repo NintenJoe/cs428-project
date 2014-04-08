@@ -10,15 +10,10 @@
 #   - Move 'SLACK' to be a constant member of the camera type.
 
 import os
+import os.path
 import logging
 import pygame as PG
-
 from pygame.locals import *
-from os.path import dirname as get_path
-from os.path import basename as get_base
-from os.path import join as join_paths
-from os.path import isfile as is_file
-
 
 ### Global Variables ###
 
@@ -47,11 +42,15 @@ TILE_DIMS = ( 20, 20 )
 
 ##  The base path of the project expressed in terms of its absolute path
 #   information.
-PROJECT_PATH = get_path( get_path(__file__) )
+PROJECT_PATH = os.path.dirname( os.path.dirname(__file__) )
 
 ##  The path to the assets folder for the game, which contains all assets 
 #   associated with the game.
-ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
+ASSET_PATH = os.path.join( PROJECT_PATH, "assets" )
+
+##  The path to the graphical content used for the game, which contains all
+#   image assets for the game.
+GRAPHICS_PATH = os.path.join( ASSET_PATH, "graphics" )
 
 
 ### Global Functions ###
@@ -63,11 +62,11 @@ ASSET_PATH = join_paths( PROJECT_PATH, "assets" )
 #       This parameter is useful when parts of the rectangular image aren't needed.
 #   @return The image, which can be drawn to the screen.
 def load_image( file_name, color_key=None ):
-    file_path = join_paths( ASSET_PATH, "graphics", file_name )
+    file_path = os.path.join( ASSET_PATH, "graphics", file_name )
 
-    if not is_file( file_path ):
+    if not os.path.isfile( file_path ):
         logging.warning( "Image file '%s' does not exist." % file_name )
-        file_path = join_paths( ASSET_PATH, "graphics", "default.bmp" )
+        file_path = os.path.join( ASSET_PATH, "graphics", "default.bmp" )
 
     try:
         image = PG.image.load( file_path ).convert()
@@ -86,11 +85,11 @@ def load_image( file_name, color_key=None ):
 #   @param file_name The name of the audio file to be loaded.
 #   @return The audio, which can be played by the "pygame" library's audio player.
 def load_sound( file_name ):
-    file_path = join_paths( ASSET_PATH, "audio", file_name )
+    file_path = os.path.join( ASSET_PATH, "audio", file_name )
 
-    if not is_file( file_path ):
+    if not os.path.isfile( file_path ):
         logging.warning( "Audio file '%s' does not exist." % file_name )
-        file_path = join_paths( ASSET_PATH, "audio", "default.wav" )
+        file_path = os.path.join( ASSET_PATH, "audio", "default.wav" )
 
     try:
         sound = PG.mixer.Sound( file_path )
