@@ -19,7 +19,7 @@
 #   - Remove all 'NOTE' items within this file by fixing up the `GameWorld`
 #     type.
 #   Low Priority:
-#   - 
+#   -
 
 import pygame as PG
 from Globals import TILE_DIMS
@@ -74,6 +74,9 @@ class GameWorld():
             # NOTE: The events passed back by the entities should be handled
             # here in the future.
             entity.update( time_delta )
+
+        # Must be called to update the objects based on their new locations
+        self._collision_detector.update()
 
         for entity_collision in self._collision_detector.get_all_collisions():
             collision = []
@@ -147,7 +150,7 @@ class GameWorld():
     def _get_entity_from_collision_detector( self, cd_repr ):
         return self._cdrepr2entity_dict[ cd_repr ]
 
-    ##  Resolves a given collision between `Entity` objects given their 
+    ##  Resolves a given collision between `Entity` objects given their
     #   representations in the collision detector as a two-tuple.
     #
     #   @param collision The two-tuple (Rect, Rect) given by the collision system.
