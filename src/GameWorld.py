@@ -110,9 +110,10 @@ class GameWorld():
     def get_tilemap( self ):
         return self._tilemap
 
-    ##  @return The camera providing the view into the world (of type `Camera`).
-    def get_camera( self ):
-        return self._camera
+    ##  @return The rectangular view representing the player viewpoint of the
+    #    game world (of type `pygame.Rect`).
+    def get_viewport( self ):
+        return self._camera.get_viewport()
 
     ### Helper Functions ###
 

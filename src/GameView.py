@@ -8,6 +8,8 @@
 #   High Priority:
 #   - 
 #   Low Priority:
+#   - Make the references to the global functions shorter while maintaining
+#     the no 'from [module] import [item]' syntax.
 #   - Generalize the constructor function to allow for arbitrary screen
 #     dimensions input.
 #   - Implement an observer pattern where the `GameView` is the observer
@@ -20,10 +22,10 @@ import os.path
 import pygame as PG
 from pygame.locals import *
 
+import Globals
 from GameWorld import GameWorld
 from Animation import Animation
 from Event import Event
-from Globals import *
 
 ##  This class is a container and viewing methods for camera,
 #   world, and all entities. Its job is to load and construct the
@@ -37,7 +39,7 @@ class GameView():
         self._entity_graphics = {}
 
         self._screen = PG.display.set_mode( (640, 480) )
-        PG.display.set_caption( GAME_NAME )
+        PG.display.set_caption( Globals.GAME_NAME )
 
     ### Methods ###
 
@@ -48,7 +50,7 @@ class GameView():
     def render( self, game_world ):
         self._screen.fill( (0, 0, 0) )
 
-        viewport = game_world.get_camera().get_viewport()
+        viewport = game_world.get_viewport()
         tilemap = game_world.get_tilemap()
         entity_list = game_world.get_entities()
 
@@ -72,15 +74,15 @@ class GameView():
         num_tiles_x = len( tilemap )
         num_tiles_y = len( tilemap[0] )
 
-        start_idx_x = clamp( int(viewport.left / TILE_DIMS[0]), 0, num_tiles_x )
-        start_idx_y = clamp( int(viewport.top / TILE_DIMS[1]), 0, num_tiles_y )
-        final_idx_x = clamp( int(viewport.right / TILE_DIMS[0]) + 1, 0, num_tiles_x )
-        final_idx_y = clamp( int(viewport.bottom / TILE_DIMS[1]) + 1, 0, num_tiles_y )
+        start_idx_x = Globals.clamp( int(viewport.left / Globals.TILE_DIMS[0]), 0, num_tiles_x )
+        start_idx_y = Globals.clamp( int(viewport.top / Globals.TILE_DIMS[1]), 0, num_tiles_y )
+        final_idx_x = Globals.clamp( int(viewport.right / Globals.TILE_DIMS[0]) + 1, 0, num_tiles_x )
+        final_idx_y = Globals.clamp( int(viewport.bottom / Globals.TILE_DIMS[1]) + 1, 0, num_tiles_y )
 
         for idx_x in range( start_idx_x, final_idx_x ):
             for idx_y in range( start_idx_y, final_idx_y ):
-                tile_pos_x = idx_x * TILE_DIMS[0] - viewport.x
-                tile_pos_y = idx_y * TILE_DIMS[1] - viewport.y
+                tile_pos_x = idx_x * Globals.TILE_DIMS[0] - viewport.x
+                tile_pos_y = idx_y * Globals.TILE_DIMS[1] - viewport.y
                 tile = tilemap[ idx_x ][ idx_y ]
 
                 self._screen.blit(
@@ -142,7 +144,7 @@ class GameView():
                     tile_key = self._calc_tile_key( tile )
                     tile_path = self._calc_tile_path( tile )
 
-                    self._tile_graphics[ tile_key ] = load_image( tile_path )
+                    self._tile_graphics[ tile_key ] = Globals.load_image( tile_path )
 
     ##  Loads all the assets for the entities contained within the given entity
     #   list into the `self._tile_graphics` dictionary.

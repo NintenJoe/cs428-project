@@ -152,3 +152,4 @@ def ease( initial, final, delta ):
         return change/2.0*delta*delta + initial
     delta = delta-1
     return -change/2.0 * (delta*(delta-2) - 1) + initial
+
