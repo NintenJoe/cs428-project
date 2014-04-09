@@ -30,7 +30,11 @@ from Queue import Queue
 
 from PhysicalState import *
 from SimulationDelta import *
+from IdleState import *
+from MoveState import *
+from StateMachine import *
 import Queue
+import json
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
@@ -39,7 +43,7 @@ class Entity( object ):
     ### Class Setup ###
 
     ##  Identifies the class as an abstract base class.
-    __metaclass__ = ABCMeta
+    #__metaclass__ = ABCMeta
 
     ### Constructors ###
 
@@ -52,8 +56,10 @@ class Entity( object ):
         self._name = name
         self._event_queue = Queue.Queue()
 
-        self._phys_state = self._produce_physical()
-        self._mntl_state = self._produce_machine()
+        f = open('assets/data/entities/'+name+'.json', 'r')
+        data = json.load(f)
+        self._phys_state = self.produce_physical(data)
+        self._mntl_state = self.produce_machine(data)
 
         self._phys_state.add_delta( initial_delta )
 
@@ -120,15 +126,30 @@ class Entity( object ):
     #   a reference to this created state.
     #
     #   @return The "PhysicalState" instance constructed for the entity instance.
-    @abstractmethod
-    def _produce_physical( self ):
-        pass
+    def produce_physical( self, data ):
+        info = data['physical']
+        rect = info[0]
+        return PhysicalState(PG.Rect(rect[0], rect[1], rect[2], rect[3]), (info[1][0],info[1][1]), info[2])
 
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
     #   @return The "StateMachine" instance constructed for the entity instance.
-    @abstractmethod
-    def _produce_machine( self ):
-        pass
+    def produce_machine( self, data ):
+        states = []
+        for ele in data['states']:
+            if ele[0] == 'idle':
+                if len(ele) < 3:
+                    ele.append(float("inf"))
+                states.append(IdleState(ele[1], ele[2]))
+            elif ele[0] == 'move':
+                if len(ele) < 4:
+                    ele.append(float("inf"))
+                states.append(MoveState(ele[1], ele[2], ele[3]))
+        edges = []
+        for ele in data['edges']:
+            edges.append(Transition(ele[0], ele[1], ele[2]))
+        return StateMachine(states, edges, data['start'])
+
+
 

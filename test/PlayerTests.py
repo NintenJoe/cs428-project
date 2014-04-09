@@ -16,7 +16,7 @@ class PlayerTest( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self.player = Player("player")
+        self.player = Entity("player")
 
     def tearDown( self ):
         self.player = None
