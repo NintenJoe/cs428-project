@@ -183,11 +183,11 @@ class GameView():
     #    the given `Entity` object.
     def _calc_entity_path( self, entity ):
         entity_filename = self._calc_entity_key( entity ) + ".png"
-        return os.path.join( GRAPHICS_PATH, "entities", entity_filename )
+        return os.path.join( "entities", entity_filename )
 
     ##  @return The path to the sprite sheet image file associated with
     #    the given `Tile` object.
     def _calc_tile_path( self, tile ):
         tile_filename = self._calc_tile_key( tile ) + ".bmp"
-        return os.path.join( GRAPHICS_PATH, "tiles", tile_filename )
+        return os.path.join( "tiles", tile_filename )
 
