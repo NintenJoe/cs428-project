@@ -9,6 +9,8 @@
 #   - Determine whether relationships between `Hitbox` and `CompositeHitbox`
 #     instances should be maintained by these classes or computed manually
 #     elsewhere (e.g. `GameWorld`).
+#   - Add support in the equality operator to ensure that the types of the
+#     hitboxes are considered when checking equality.
 #   Low Priority:
 #   - Determine if there's a means better than typing to facilitate arbitrary
 #     behavioral mapping to hitboxes.
@@ -23,6 +25,8 @@
 #   - Remove assumption from `CompositeHitbox` constructor that all `Hitbox`
 #     instances have positive x and y position values (valid for now since
 #     composite hitboxes will be read in from file).
+#   - Make the implementation of the equality operator in the `CompositeHitbox`
+#     type more elegant.
 
 import itertools
 import pygame as PG
@@ -113,7 +117,8 @@ class CompositeHitbox( object ):
     #    of contained hitboxes, same positions) and false otherwise.
     def __eq__( self, other ):
         return self._container_box == other._container_box and \
-            set(self._inner_boxes) == set(other._inner_boxes)
+            len(self._inner_boxes) == len(other._inner_boxes) and \
+            all(self._inner_boxes.count(i) == other._inner_boxes.count(i) for i in self._inner_boxes)
 
     ### Methods ###
 
@@ -130,6 +135,20 @@ class CompositeHitbox( object ):
             inner_box.x += delta_x
             inner_box.y += delta_y
 
+    ##  @return A listing of all `Hitbox` objects that represents the inner hitboxes
+    #    of the composite relative to the composite origin.
+    def get_relative_hitboxes( self ):
+        comp_pos = self.get_position()
+
+        return [
+            Hitbox(hb.x - comp_pos[0], hb.y - comp_pos[1], hb.w, hb.h) \
+            for hb in self._inner_boxes
+        ]
+
+    ##  @return The position of the composite as a tuple of the form (x, y).
+    def get_position( self ):
+        return ( self._container_box.x, self._container_box.y )
+
     ##  @return A `Hitbox` container for all the hitboxes that compose the composite.
     def get_hitbox( self ):
         return self._container_box
@@ -137,4 +156,5 @@ class CompositeHitbox( object ):
     ##  @return A listing of all the `Hitbox` objects that compose the composite.
     def get_hitboxes( self ):
         return self._inner_boxes
+
 

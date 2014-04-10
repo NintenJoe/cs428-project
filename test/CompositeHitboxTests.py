@@ -84,7 +84,8 @@ class HitboxTests( unittest.TestCase ):
         self.assertEqual( hashtable[shallowcopy_hitbox], 10,
             "Hitbox hash function doesn't support shallow copy equivalence." )
         self.assertNotEqual( hashtable[deepcopy_hitbox], 10,
-            "Hitbox hash function doesn't guarantee proper collision resolution." )
+            "Hitbox hash function doesn't improperly map by object equality "
+            "and not object instance." )
 
 
 ##  Container class for the test suite that tests the functionality of the
@@ -174,16 +175,24 @@ class CompositeHitboxTests( unittest.TestCase ):
 
 
     def test_equality_operator( self ):
-        cbox1 = CompositeHitbox()
-        cbox2 = CompositeHitbox()
+        cbox_default = CompositeHitbox()
+        cbox_copy = CompositeHitbox(
+            CompositeHitboxTests.COMPOSITE_X,
+            CompositeHitboxTests.COMPOSITE_Y,
+            [ self._hbox1, self._hbox2 ]
+        )
 
-        self.assertTrue( cbox1 == cbox1,
+        self.assertTrue( cbox_default == cbox_default,
             "Equality operator doesn't return true for self equality in simple case." )
         self.assertTrue( self._cbox == self._cbox,
             "Equality operator doesn't return true for self equality in complex case." )
-        self.assertTrue( cbox1 == cbox2,
-            "Equality operator doesn't return true for two equivalent objects." )
-        self.assertTrue( cbox1 != self._cbox,
+
+        self.assertTrue( cbox_default == CompositeHitbox(),
+            "Equality operator doesn't return true for two simple equivalent objects." )
+        self.assertTrue( cbox_copy == self._cbox,
+            "Equality operator doesn't return true for two complex equivalent objects." )
+
+        self.assertFalse( cbox_default == cbox_copy,
             "Equality operator improperly returns true for two unequivalent objects." )
 
 
@@ -222,4 +231,22 @@ class CompositeHitboxTests( unittest.TestCase ):
             "Translation function doesn't properly offset all the hitboxes "
             "that comprise the composite."
         )
+
+
+    def test_relative_hitboxes( self ):
+        rel_boxes = self._cbox.get_relative_hitboxes()
+
+        self.assertEqual( rel_boxes, [self._hbox1, self._hbox2],
+            "Relative hitbox computation improperly offsets output hitboxes." )
+
+        initial_hbox = copy.deepcopy( self._cbox.get_hitbox() )
+        initial_hboxes = copy.deepcopy( self._cbox.get_hitboxes() )
+
+        rel_boxes[0].x += 5
+        rel_boxes[1].h -= 2
+
+        self.assertEqual( self._cbox.get_hitbox(), initial_hbox,
+            "Composite hitbox container volume is dependent on output relative volumes." )
+        self.assertEqual( self._cbox.get_hitboxes(), initial_hboxes,
+            "Composite hitbox inner hitboxes are depedent on output relative volumes." )
 
