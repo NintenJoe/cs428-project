@@ -42,9 +42,6 @@ import json
 class Entity( object ):
     ### Class Setup ###
 
-    ##  Identifies the class as an abstract base class.
-    #__metaclass__ = ABCMeta
-
     ### Constructors ###
 
     ##  Constructs an entity with the given initial physical state delta and the
@@ -62,6 +59,9 @@ class Entity( object ):
         self._mntl_state = self.produce_machine(data)
 
         self._phys_state.add_delta( initial_delta )
+
+        #Create a hitbox dict for every state
+        self._hitboxes = self.load_hitboxes(data)
 
     ### Methods ###
 
@@ -118,13 +118,18 @@ class Entity( object ):
     ##  @return The hitbox information associated with the instance "Entity"
     #    object (returned as a PyGame "Rect" object).
     def get_hitbox( self ):
-        return self.get_physical_state().get_volume()
+        state_name = self._mntl_state.get_current_state().get_name()
+        if state_name not in self._hitboxes:
+            return self.get_physical_state().get_volume()
+        else:
+            return self._hitboxes[state_name]
 
     ### Helper Methods ###
 
     ##  Produces the initial physical state for the entity instance, returning
     #   a reference to this created state.
     #
+    #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "PhysicalState" instance constructed for the entity instance.
     def produce_physical( self, data ):
         info = data['physical']
@@ -134,6 +139,7 @@ class Entity( object ):
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
+    #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "StateMachine" instance constructed for the entity instance.
     def produce_machine( self, data ):
         states = []
@@ -151,5 +157,11 @@ class Entity( object ):
             edges.append(Transition(ele[0], ele[1], ele[2]))
         return StateMachine(states, edges, data['start'])
 
-
-
+    ##  Load in the hitboxes from a file and return them in a dict
+    #   indexed by state.
+    #
+    #   @param data A dict containing all the initialization data for this type of Entity
+    #   @return A dict containing composite hitboxes indexed by state
+    def load_hitboxes(self, data):
+        #TODO: This function
+        return {}
