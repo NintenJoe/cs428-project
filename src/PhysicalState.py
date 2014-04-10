@@ -10,13 +10,14 @@
 #     duplicaton on updates.
 #       > If the current method isn't fast enough, remove the tuple dependence
 #         and replace it with a list or something similar.
-#   - Determine whether it's acceptable for the constructor to take a 
 #   Low Priority:
-#   - Refine the equality operator (the implementation is currently pretty 
-#     inelegant).
+#   - Rename the attributes associated with the `volume` to be more properly
+#     associated with the `hitbox` metaphor.
+#   - Refactor the constructor to more elegantly copy the contents of the given
+#     `CompositeHitbox`.
 
 import pygame as PG
-from HashableRect import *
+from CompositeHitbox import *
 
 ##  A representation of the tangible state of an object within the game world.
 #   This type describes all physical information associated with an object,
@@ -27,13 +28,15 @@ class PhysicalState( object ):
     ##  Initializes a physical state with the given collision volume, velocity,
     #   and mass values.
     #
-    #   @param volume The collision volume that will be instantiated to the state
-    #    (given as a Pygame Rect).
-    #   @param velocity The velocity that will be initialized to the state (as a
-    #    2-tuple).
+    #   @param volume The collision volume for the state (as a `CompositeHitbox`).
+    #   @param velocity The velocity for the state (as a 2-tuple).
     #   @param mass The floating-point value that will represent the state mass.
-    def __init__( self, volume=PG.Rect(0, 0, 0, 0), velocity=(0, 0), mass=0.0 ):
-        self._volume = HashableRect( volume.x, volume.y, volume.w, volume.h )
+    def __init__( self, volume=CompositeHitbox(), velocity=(0, 0), mass=0.0 ):
+        self._volume = CompositeHitbox(
+            volume.get_position()[0],
+            volume.get_position()[1],
+            volume.get_relative_hitboxes()
+        )
         self._velocity = velocity
         self._mass = mass
 
@@ -46,12 +49,8 @@ class PhysicalState( object ):
     #    false otherwise.
     def __eq__( self, other ):
         return self._mass == other._mass and \
-            self._velocity[0] == other._velocity[0] and \
-            self._velocity[1] == other._velocity[1] and \
-            self._volume.x == other._volume.x and \
-            self._volume.y == other._volume.y and \
-            self._volume.w == other._volume.w and \
-            self._volume.h == other._volume.h
+            self._velocity == other._velocity and \
+            self._volume == other._volume
 
     ### Methods ###
 
@@ -60,10 +59,10 @@ class PhysicalState( object ):
     #
     #   @param state_delta The physical state representing the changes in state.
     def add_delta( self, state_delta ):
-        self._volume.x += state_delta._volume.x
-        self._volume.y += state_delta._volume.y
-        self._volume.w += state_delta._volume.w
-        self._volume.h += state_delta._volume.h
+        self._volume.translate(
+            state_delta._volume.get_position()[ 0 ],
+            state_delta._volume.get_position()[ 1 ]
+        )
 
         self._velocity = (
             self._velocity[ 0 ] + state_delta._velocity[ 0 ],
@@ -78,8 +77,7 @@ class PhysicalState( object ):
     def update( self, time_delta ):
         position_delta = map( lambda v_i: time_delta * v_i, self._velocity )
 
-        self._volume.centerx += position_delta[ 0 ]
-        self._volume.centery += position_delta[ 1 ]
+        self._volume.translate( position_delta[0], position_delta[1] )
 
     ##  @return The collision volume associated with the instance state (of type
     #    "HashableRect").
