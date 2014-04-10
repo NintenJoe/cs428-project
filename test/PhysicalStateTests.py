@@ -11,7 +11,6 @@
 #     to `CompositeHitbox` (particularly in updating all contained hitboxes).
 
 import unittest
-import pygame as PG
 
 import src
 from src.CompositeHitbox import *

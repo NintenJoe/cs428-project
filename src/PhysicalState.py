@@ -21,7 +21,6 @@
 #   - Refactor the constructor to more elegantly copy the contents of the given
 #     `CompositeHitbox`.
 
-import pygame as PG
 from CompositeHitbox import *
 
 ##  A representation of the tangible state of an object within the game world.

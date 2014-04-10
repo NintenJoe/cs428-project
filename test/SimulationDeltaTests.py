@@ -11,7 +11,6 @@
 #     support changing the collision volume during updates.
 
 import unittest
-import pygame as PG
 
 import src
 from src.PhysicalState import *
