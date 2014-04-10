@@ -78,7 +78,7 @@ class GameView():
                 tile_pos_x = idx_x * TILE_DIMS[0] - viewport.x
                 tile_pos_y = idx_y * TILE_DIMS[1] - viewport.y
 
-                tile_id = tilemap[ idx_x ][ idx_y ]
+                tile_id = tilemap[ idx_x ][ idx_y ][0]
 
                 self._screen.blit( self._loaded_tiles[tile_id], (tile_pos_x, tile_pos_y) )
 
@@ -106,7 +106,7 @@ class GameView():
     def _load_tiles_for_tilemap( self, tilemap ):
         for idx_x in range( len(tilemap) ):
             for idx_y in range( len(tilemap[0]) ):
-                tile_id = tilemap[ idx_x ][ idx_y ]
+                tile_id = tilemap[ idx_x ][ idx_y ][0]
 
                 if tile_id not in self._loaded_tiles:
                       self._loaded_tiles[ tile_id ] = load_image( ASSET_PATH + "/graphics/tiles/" + tile_id + ".bmp")

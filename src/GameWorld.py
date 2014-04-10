@@ -188,14 +188,5 @@ class GameWorld():
 
     ##  TODO: Remove this function.
     def _setup_tilemap( self ):
-        self._tilemap = []
-
-        curr_segment = self._world.levels[ "1" ].segments[ "2" ]
-        collision_map = curr_segment.get_collisionmap()
-
-        for x in range( len(collision_map) ):
-            tilemap_column = []
-            for y in range( len(collision_map[0]) ):
-                tilemap_column.append( "6" if collision_map[x][y] else "4" )
-            self._tilemap.append( tilemap_column )
-
+        curr_segment = self._world.levels[ "1" ].segments[ "1.2" ]
+        self._tilemap = curr_segment.get_tiles()

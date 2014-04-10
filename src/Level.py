@@ -21,14 +21,8 @@ class Level():
     #   @param id A unique identifier for the level
     def __init__(self, id):
         self.id = id
-        # Segment with entry point
-        self.root = None
         # has the form { id => Segment }
         self.segments = {}
-        # has the form { Color => Surface }
-        self.tiles = {}
-        # has the form { id => Surface }
-        self.images = {}
 
     ### Methods ###
 
@@ -37,9 +31,6 @@ class Level():
     #   @param segment The segment object to be added to the level
     def add_segment(self, segment):
         self.segments[segment.id] = segment
-        # set root if segment has entry point
-        if (segment.entry_point != None):
-            self.root = segment
 
     ##  Creates transitions between segments in the level
     def connect(self):
@@ -51,31 +42,3 @@ class Level():
                             if (segment_i != segment_j or tti[0] != ttj[0]):
                                 segment_i.add_transition(tti[0],segment_j,ttj[0])
                                 segment_j.add_transition(ttj[0],segment_i,tti[0])
-
-    ## Loads tile images associated with colors from the segment files
-    def load_tiles(self):
-        # read level tiles file
-        tiles_filename = os.path.join('assets','data','segdata', self.id + '.tiles')
-        tiles_file = open(tiles_filename, 'r')
-
-        for line in tiles_file:
-            divider = string.find(line,':')
-            color_str = line[:divider]
-            tile_file = line[divider+1:].rstrip() + '.bmp'
-            tile = load_image(join_paths("tiles", tile_file))
-            self.tiles[tuple(PG.Color(color_str))] = tile
-
-        tiles_file.close()
-
-    ## Generates the background image for each segment in the level
-    def generate_images(self):
-        for segment in self.segments.values():
-            image = segment.get_image(self.tiles)
-            self.images[segment.id] = image
-
-    ## Returns the background image for a specific segment
-    #
-    #   @param seg_id The id of the segment whose image you want
-    #   @return A pygame surface with the image of the segment
-    def get_image(self, seg_id):
-        return self.images[seg_id]
