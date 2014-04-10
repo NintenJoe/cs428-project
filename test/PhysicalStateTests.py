@@ -8,7 +8,7 @@
 #   - Since the 'PhysicalState' is a fairly volatile module, this testing file
 #     may need to be changed fairly often.
 #   - Update these tests to more thoroughly test the change from `pygame.Rect`
-#     to `CompositeHitbox`.
+#     to `CompositeHitbox` (particularly in updating all contained hitboxes).
 
 import unittest
 import pygame as PG
@@ -117,8 +117,12 @@ class PhysicalStateTests( unittest.TestCase ):
 
 
     def test_add_complex_delta( self ):
-        simple_delta = PhysicalState( CompositeHitbox(1, 2), (-5.0, -3.0), 18.0 )
-        self._physstate.add_delta( simple_delta )
+        complex_delta = PhysicalState(
+            CompositeHitbox( 1, 2, [Hitbox(0, 0, 20, 20)] ),
+            ( -5.0, -3.0 ),
+            18.0
+        )
+        self._physstate.add_delta( complex_delta )
 
         self.assertEqual(
             self._physstate.get_volume().get_position()[0],

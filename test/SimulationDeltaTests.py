@@ -9,9 +9,9 @@
 #     "SimulationDelta" type.
 
 import unittest
-import src
 import pygame as PG
 
+import src
 from src.PhysicalState import *
 from src.Event import *
 from src.SimulationDelta import *
