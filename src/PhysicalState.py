@@ -10,6 +10,11 @@
 #     duplicaton on updates.
 #       > If the current method isn't fast enough, remove the tuple dependence
 #         and replace it with a list or something similar.
+#   - Note somewhere that physical deltas no longer support altering the
+#     dimensions of the collision volume.
+#       > This aspect was omitted from the current version because the
+#         functionality wasn't previously used and implementing it with
+#         `CompositeHitbox` instances is complex.
 #   Low Priority:
 #   - Rename the attributes associated with the `volume` to be more properly
 #     associated with the `hitbox` metaphor.
