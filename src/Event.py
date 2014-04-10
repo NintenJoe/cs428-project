@@ -35,6 +35,8 @@ class EventType():
     #   Parameters: { "objects": (Entity, Entity), "volumes": (Rect, Rect) }
     COLLISION = "collision"
 
+    ### Input-Related Events ###
+
     ##  Indicates that the event represents a the pressing of a key
     #   Parameters: { "key": Key }
     KEYDOWN = "keydown"

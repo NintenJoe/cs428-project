@@ -42,7 +42,7 @@ class PhysicalStateTests( unittest.TestCase ):
 
     ### Testing Functions ###
 
-    def test_default_constructor_initialization( self ):
+    def test_default_constructor( self ):
         default_physstate = PhysicalState()
 
         self.assertEqual( default_physstate.get_volume(), PG.Rect(0, 0, 0, 0),
@@ -53,7 +53,7 @@ class PhysicalStateTests( unittest.TestCase ):
             "Default physical state contructor doesn't initialize identity mass." )
 
 
-    def test_value_constructor_initialization( self ):
+    def test_value_constructor( self ):
         self.assertEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Value physical state contructor doesn't initialize with given volume." )
         self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
@@ -62,10 +62,19 @@ class PhysicalStateTests( unittest.TestCase ):
             "Value physical state contructor doesn't initialize with given mass." )
 
 
-    def test_value_constructor_independence( self ):
+    def test_constructor_independence( self ):
         self._physstate._volume.x += 1
         self.assertNotEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Value constructor for physical state doesn't deep copy parameter objects." )
+
+
+    def test_constructor_independence2( self ):
+        state1 = PhysicalState()
+        state1.add_delta(PhysicalState(PG.Rect(2,3,-1,5), (1,0), 1))
+        state2 = PhysicalState()
+        self.assertNotEqual(state1.get_volume(), state2.get_volume())
+        self.assertNotEqual(state1.get_velocity(), state2.get_velocity())
+        self.assertNotEqual(state1.get_mass(), state2.get_mass())
 
 
     def test_equality_operator( self ):
@@ -135,10 +144,3 @@ class PhysicalStateTests( unittest.TestCase ):
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Updating the physical state improperly updates the mass." )
 
-    def test_state_independence( self ):
-        state1 = PhysicalState()
-        state1.add_delta(PhysicalState(PG.Rect(2,3,-1,5), (1,0), 1))
-        state2 = PhysicalState()
-        self.assertNotEqual(state1.get_volume(), state2.get_volume())
-        self.assertNotEqual(state1.get_velocity(), state2.get_velocity())
-        self.assertNotEqual(state1.get_mass(), state2.get_mass())

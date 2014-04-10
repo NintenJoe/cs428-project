@@ -25,21 +25,17 @@
 #   - Consider converting the 'get_status' method to a 'str' or 'repr' method
 #     for the sake of consistency.
 
-from abc import ABCMeta, abstractmethod
-from Queue import Queue
+import abc
+import Queue
 
 from PhysicalState import *
 from SimulationDelta import *
-import Queue
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
 #   its own physical and mental state.
 class Entity( object ):
-    ### Class Setup ###
-
-    ##  Identifies the class as an abstract base class.
-    __metaclass__ = ABCMeta
+    __metaclass__ = abc.ABCMeta
 
     ### Constructors ###
 
@@ -120,7 +116,7 @@ class Entity( object ):
     #   a reference to this created state.
     #
     #   @return The "PhysicalState" instance constructed for the entity instance.
-    @abstractmethod
+    @abc.abstractmethod
     def _produce_physical( self ):
         pass
 
@@ -128,7 +124,7 @@ class Entity( object ):
     #   reference to this produced machine.
     #
     #   @return The "StateMachine" instance constructed for the entity instance.
-    @abstractmethod
+    @abc.abstractmethod
     def _produce_machine( self ):
         pass
 
