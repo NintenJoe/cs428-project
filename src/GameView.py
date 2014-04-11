@@ -138,7 +138,7 @@ class GameView():
     def _load_tilemap_graphics( self, tilemap ):
         for idx_x in range( len(tilemap) ):
             for idx_y in range( len(tilemap[0]) ):
-                tile_id = tilemap[ idx_x ][ idx_y ][ 0 ]
+                tile = tilemap[ idx_x ][ idx_y ][ 0 ]
 
                 if not self._is_tile_graphic_loaded( tile ):
                     tile_key = self._calc_tile_key( tile )
