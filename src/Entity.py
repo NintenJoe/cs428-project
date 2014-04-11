@@ -25,22 +25,20 @@
 #   - Consider converting the 'get_status' method to a 'str' or 'repr' method
 #     for the sake of consistency.
 
-from abc import ABCMeta, abstractmethod
-from Queue import Queue
+import Queue
+import json
+
+from xml.dom import minidom
 
 from PhysicalState import *
 from SimulationDelta import *
 from StateMachine import *
 from Globals import load_image
-import Queue
-import json
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
 #   its own physical and mental state.
 class Entity( object ):
-    ### Class Setup ###
-
     ### Constructors ###
 
     ##  Constructs an entity with the given initial physical state delta and the
@@ -54,13 +52,15 @@ class Entity( object ):
 
         f = open('assets/data/entities/'+name+'.json', 'r')
         data = json.load(f)
-        self._phys_state = self.produce_physical(data)
-        self._mntl_state = self.produce_machine(data)
-
-        self._phys_state.add_delta( initial_delta )
+        self._mntl_state = self._produce_machine(data)
 
         #Create a hitbox dict for every state
-        self._hitboxes = self.load_hitboxes(data)
+        states = self._mntl_state.get_states()
+        self._hitboxes = self._load_hitboxes(states)
+
+        self._phys_state = self._produce_physical(data)
+        self._phys_state.add_delta( initial_delta )
+        self._update_hitbox()
 
     ### Methods ###
 
@@ -79,6 +79,7 @@ class Entity( object ):
 
         self._phys_state.add_delta( sim_delta.get_entity_delta() )
         self._phys_state.update( time_delta )
+        self._update_hitbox()
 
         return sim_delta.get_events()
 
@@ -117,11 +118,36 @@ class Entity( object ):
     ##  @return The hitbox information associated with the instance "Entity"
     #    object (returned as a PyGame "Rect" object).
     def get_hitbox( self ):
+        return self.get_physical_state().get_volume()
+
+    # TODO: Remove this function in later versions.
+    def _update_hitbox( self ):
         state_name = self._mntl_state.get_current_state().get_name()
-        if state_name not in self._hitboxes:
-            return self.get_physical_state().get_volume()
-        else:
-            return self._hitboxes[state_name]
+
+        if state_name in self._hitboxes.keys():
+            chitbox = self.get_hitbox()
+            new_chitbox = self._hitboxes[state_name]
+
+            for idx in range( 0, len(new_chitbox.get_hitboxes()) ):
+                curr_hitbox = chitbox.get_hitboxes()[idx]
+                curr_new_hitbox = new_chitbox.get_hitboxes()[idx]
+
+                curr_hitbox.x = chitbox.get_position()[0] + curr_new_hitbox.x
+                curr_hitbox.y = chitbox.get_position()[1] + curr_new_hitbox.y
+                curr_hitbox.w = curr_new_hitbox.w
+                curr_hitbox.h = curr_new_hitbox.h
+                curr_hitbox._type = curr_new_hitbox._type
+
+            for idx in range( len(new_chitbox.get_hitboxes()), len(chitbox.get_hitboxes()) ):
+                curr_hitbox = chitbox.get_hitboxes()[idx]
+                curr_hitbox.x = chitbox.get_position()[0]
+                curr_hitbox.y = chitbox.get_position()[1]
+                curr_hitbox.w = 0
+                curr_hitbox.h = 0
+                curr_hitbox._type = HitboxType.DEFAULT
+
+            chitbox.get_hitbox().w = max( [hb.x + hb.w for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().x
+            chitbox.get_hitbox().h = max( [hb.y + hb.h for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().y
 
     ### Helper Methods ###
 
@@ -130,11 +156,18 @@ class Entity( object ):
     #
     #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "PhysicalState" instance constructed for the entity instance.
-    def produce_physical( self, data ):
+    def _produce_physical( self, data ):
         info = data['physical']
-        rect = info[0]
-        return PhysicalState(PG.Rect(rect[0], rect[1], rect[2], rect[3]), (info[1][0],info[1][1]), info[2])
 
+        rect = info[0]
+        velocity = ( info[1][0], info[1][1] )
+        mass = info[2]
+
+        max_hitbox_count = max( [len(chb.get_hitboxes()) for chb in self._hitboxes.values()] )
+        chitbox = CompositeHitbox( rect[0], rect[1],
+            [Hitbox(0,0,0,0) for i in range(max_hitbox_count) ] )
+
+        return PhysicalState(chitbox, velocity, mass)
 
 
     ##  Import class based on class path
@@ -142,12 +175,11 @@ class Entity( object ):
     #
     #   @param cl The complete path to the class from the src folder
     #   @return The loaded class ready to be instantiated
-    def import_class(self, cl):
+    def _import_class(self, cl):
         d = cl.rfind(".")
         classname = cl[d+1:len(cl)]
         m = __import__(cl[0:d], globals(), locals(), [classname])
         return getattr(m, classname)
-
 
 
     ##  Produces the state machine for the entity instance, returning a
@@ -155,10 +187,10 @@ class Entity( object ):
     #
     #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "StateMachine" instance constructed for the entity instance.
-    def produce_machine( self, data ):
+    def _produce_machine( self, data ):
         states = []
         for ele in data['states']:
-            state_class = self.import_class(ele[0])
+            state_class = self._import_class(ele[0])
             states.append(state_class(*ele[1:]))
         edges = []
         for ele in data['edges']:
@@ -170,8 +202,30 @@ class Entity( object ):
     ##  Load in the hitboxes from a file and return them in a dict
     #   indexed by state.
     #
-    #   @param data A dict containing all the initialization data for this type of Entity
+    #   @param states A list of all the states.
     #   @return A dict containing composite hitboxes indexed by state
-    def load_hitboxes(self, data):
-        #TODO: This function
-        return {}
+    def _load_hitboxes(self, states):
+        hitlist = {}
+
+        # Get states and entity names
+        for state in states:
+            hitboxes = []
+
+            state_name = state.get_name()
+            f = open('assets/data/hitbox/' + self._name + '/' + state_name + '.svg', 'r')
+            tree = minidom.parse(f)
+            rects = tree.getElementsByTagName('rect')
+
+            for rect in rects:
+                x = int( rect.getAttribute('x') )
+                y = int( rect.getAttribute('y') )
+                w = int( rect.getAttribute('width') )
+                h = int( rect.getAttribute('height') )
+                h_class = str( rect.getAttribute('class') )
+
+                hitboxes.append(Hitbox(x, y, w, h, h_class))
+
+            hitlist[state_name] = CompositeHitbox(0, 0, hitboxes)
+
+        return hitlist
+

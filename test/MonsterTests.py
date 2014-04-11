@@ -56,3 +56,4 @@ class MonsterTest( unittest.TestCase ):
         self.monster.update(1)
         self.monster.update(1)
         self.assertIsInstance(self.monster._mntl_state.get_current_state(), IdleState)
+
