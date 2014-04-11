@@ -21,15 +21,6 @@ from src.InputController import *
 class GameWorldTests(unittest.TestCase):
     ### Test Set Up/Tear Down ###
 
-    @classmethod
-    def setUpClass(cls):
-        pg.init()
-        pg.display.set_mode((640,480))
-
-    @classmethod
-    def tearDownClass(self):
-        pg.quit()
-
     def setUp(self):
         self._world = GameWorld()
 

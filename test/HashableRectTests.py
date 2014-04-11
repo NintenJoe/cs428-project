@@ -44,3 +44,4 @@ class HashableRectTests(unittest.TestCase):
         rect1 = HashableRect(1, 2, 3, 4)
         rect2 = HashableRect(1, 2, 3, 4)
         self.assertNotEqual(hash(rect1), hash(rect2), "Unexpected hash collision.")
+

@@ -1,23 +1,12 @@
 import unittest
 import src
-import pygame as pg
 
 from src.World import *
 from src.Level import *
 from src.Segment import *
 from src.Globals import *
 
-
 class SegmentTests(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        pg.init()
-        pg.display.set_mode((640,480))
-
-    @classmethod
-    def tearDownClass(self):
-        pg.quit()
 
     def setUp(self):
         self.world = World()
@@ -68,3 +57,4 @@ class SegmentTests(unittest.TestCase):
         self.assertTrue(entities[3] == ((22,25),'monster'), ("Entity was not loaded correctly."))
         self.assertTrue(entities[4] == ((31,42),'monster'), ("Entity was not loaded correctly."))
         self.assertTrue(entities[5] == ((38,24),'monster'), ("Entity was not loaded correctly."))
+

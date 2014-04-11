@@ -4,19 +4,8 @@ import pygame as pg
 
 from src.Globals import *
 from src.Camera import *
-from pygame.locals import *
-
 
 class CameraTests(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        pg.init()
-        pg.display.set_mode((640,480))
-
-    @classmethod
-    def tearDownClass(self):
-        pg.quit()
 
     def setUp(self):
         self.move_tgt = PG.Rect(500, 500, 1, 1)
@@ -99,3 +88,4 @@ class CameraTests(unittest.TestCase):
         self.camera.update(2)
         self.assertEquals(self.camera.position[0], 46)
         self.assertEquals(self.camera.position[1], 0)
+
