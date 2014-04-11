@@ -8,8 +8,10 @@
 #   - Cover at least 90% of code in Player and Entity
 import unittest
 import src
-from src.Player import *
 from src.InputController import *
+from src.Entity import *
+from src.IdleState import *
+from src.MoveState import *
 
 class PlayerTest( unittest.TestCase ):
 

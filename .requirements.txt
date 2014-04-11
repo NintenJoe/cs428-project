@@ -4,3 +4,4 @@ coveralls
 coverage
 pylint
 graphviz
+json

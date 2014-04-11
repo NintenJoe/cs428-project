@@ -8,7 +8,9 @@
 #   - Cover at least 90% of code in Monster
 import unittest
 import src
-from src.Monster import *
+from src.Entity import *
+from src.IdleState import *
+from src.MoveState import *
 
 class MonsterTest( unittest.TestCase ):
 
