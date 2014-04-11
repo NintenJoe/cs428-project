@@ -25,22 +25,19 @@
 #   - Consider converting the 'get_status' method to a 'str' or 'repr' method
 #     for the sake of consistency.
 
-from abc import ABCMeta, abstractmethod
-from Queue import Queue
+import abc
+import Queue
+import json
 
 from PhysicalState import *
 from SimulationDelta import *
 from StateMachine import *
 from Globals import load_image
-import Queue
-import json
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
 #   its own physical and mental state.
 class Entity( object ):
-    ### Class Setup ###
-
     ### Constructors ###
 
     ##  Constructs an entity with the given initial physical state delta and the
@@ -54,13 +51,13 @@ class Entity( object ):
 
         f = open('assets/data/entities/'+name+'.json', 'r')
         data = json.load(f)
-        self._phys_state = self.produce_physical(data)
-        self._mntl_state = self.produce_machine(data)
+        self._phys_state = self._produce_physical(data)
+        self._mntl_state = self._produce_machine(data)
 
         self._phys_state.add_delta( initial_delta )
 
         #Create a hitbox dict for every state
-        self._hitboxes = self.load_hitboxes(data)
+        self._hitboxes = self._load_hitboxes(data)
 
     ### Methods ###
 
@@ -130,7 +127,7 @@ class Entity( object ):
     #
     #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "PhysicalState" instance constructed for the entity instance.
-    def produce_physical( self, data ):
+    def _produce_physical( self, data ):
         info = data['physical']
         rect = info[0]
         return PhysicalState(PG.Rect(rect[0], rect[1], rect[2], rect[3]), (info[1][0],info[1][1]), info[2])
@@ -142,12 +139,11 @@ class Entity( object ):
     #
     #   @param cl The complete path to the class from the src folder
     #   @return The loaded class ready to be instantiated
-    def import_class(self, cl):
+    def _import_class(self, cl):
         d = cl.rfind(".")
         classname = cl[d+1:len(cl)]
         m = __import__(cl[0:d], globals(), locals(), [classname])
         return getattr(m, classname)
-
 
 
     ##  Produces the state machine for the entity instance, returning a
@@ -155,10 +151,10 @@ class Entity( object ):
     #
     #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "StateMachine" instance constructed for the entity instance.
-    def produce_machine( self, data ):
+    def _produce_machine( self, data ):
         states = []
         for ele in data['states']:
-            state_class = self.import_class(ele[0])
+            state_class = self._import_class(ele[0])
             states.append(state_class(*ele[1:]))
         edges = []
         for ele in data['edges']:
@@ -172,6 +168,6 @@ class Entity( object ):
     #
     #   @param data A dict containing all the initialization data for this type of Entity
     #   @return A dict containing composite hitboxes indexed by state
-    def load_hitboxes(self, data):
+    def _load_hitboxes(self, data):
         #TODO: This function
         return {}
