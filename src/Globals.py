@@ -69,7 +69,10 @@ def load_image( file_name, color_key=None ):
         file_path = os.path.join( ASSET_PATH, "graphics", "default.bmp" )
 
     try:
-        image = PG.image.load( file_path ).convert()
+        if (color_key != None and color_key.a == 0):
+            image = PG.image.load( file_path ).convert_alpha()
+        else:
+            image = PG.image.load( file_path ).convert()
     except PG.error, message:
         logging.error( "Could not load image file at '%s'... failed with error '%s'." %
             (file_path, message) )
