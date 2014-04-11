@@ -17,8 +17,8 @@
 #
 #   Assumption: Width is a multiple of cell_size.
 
-from src.CollisionDetector import *
-from src.HashableRect import *
+from CollisionDetector import *
+from HashableRect import *
 
 class SpatialDictionary( CollisionDetector ):
 
