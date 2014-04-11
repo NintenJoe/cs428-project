@@ -132,7 +132,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be added to the collision
     #    detection system for the game world.
     def _add_to_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox.get_hitboxes():
+        for hitbox in entity.get_hitbox().get_hitboxes():
             self._cdrepr2entity_dict[ hitbox ] = entity
             self._collision_detector.add( hitbox )
 
@@ -141,7 +141,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be removed from the
     #    collision detection system for the game world.
     def _remove_from_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox.get_hitboxes():
+        for hitbox in entity.get_hitbox().get_hitboxes():
             del self._cdrepr2entity_dict[ hitbox ]
             self._collision_detector.remove( hitbox )
 
@@ -167,7 +167,6 @@ class GameWorld():
             EventType.COLLISION,
             {
                 "objects": ( entity1, entity2 ),
-                # TODO: Update
                 "volumes": ( collision[0], collision[1] )
             }
         )
@@ -213,10 +212,10 @@ class GameWorld():
         res_vector = [ 0, 0 ]
 
         if collision_rect.w < collision_rect.h:
-            res_factor = -1 if hitbox1.x < collision_rect.x else 1
+            res_factor = -1 if hitbox1.get_hitbox().x < collision_rect.x else 1
             res_vector[ 0 ] = res_factor * collision_rect.w
         else:
-            res_factor = -1 if hitbox1.y < collision_rect.y else 1
+            res_factor = -1 if hitbox1.get_hitbox().y < collision_rect.y else 1
             res_vector[ 1 ] = res_factor * collision_rect.h
 
         hitbox1.translate( res_vector[0], res_vector[1] )

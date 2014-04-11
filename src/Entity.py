@@ -146,6 +146,9 @@ class Entity( object ):
                 curr_hitbox.h = 0
                 curr_hitbox._type = HitboxType.DEFAULT
 
+            chitbox.get_hitbox().w = max( [hb.x + hb.w for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().x
+            chitbox.get_hitbox().h = max( [hb.y + hb.h for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().y
+
     ### Helper Methods ###
 
     ##  Produces the initial physical state for the entity instance, returning
@@ -164,7 +167,7 @@ class Entity( object ):
         chitbox = CompositeHitbox( rect[0], rect[1],
             [Hitbox(0,0,0,0) for i in range(max_hitbox_count) ] )
 
-        return PhysicalState( chitbox, velocity, mass)
+        return PhysicalState(chitbox, velocity, mass)
 
 
     ##  Import class based on class path
