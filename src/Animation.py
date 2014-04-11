@@ -148,5 +148,7 @@ class Animation(object):
             color = sprite_sheet.get_at((x,0))
             if (color.a == 0):
                 return x
+            elif (color.r == 255 and color.g == 255 and color.b == 255):
+                return x
 
         return sprite_sheet.get_width()

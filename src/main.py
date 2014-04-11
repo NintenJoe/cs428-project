@@ -61,6 +61,8 @@ def main():
                     input_key = InputController.MOVE_LEFT
                 elif input_event.key == K_RIGHT:
                     input_key = InputController.MOVE_RIGHT
+                elif input_event.key == K_SPACE:
+                    input_key = InputController.SPACE
 
                 event_type = EventType.KEYDOWN if input_event.type == KEYDOWN \
                     else EventType.KEYUP
