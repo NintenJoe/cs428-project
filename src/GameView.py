@@ -156,18 +156,7 @@ class GameView():
                 entity_key = self._calc_entity_key( entity )
                 entity_path = self._calc_entity_path( entity )
 
-                # TODO: Remove this hack!
-                frame_count = 1
-                if entity_key == "player/idle_1":
-                    frame_count = 6
-                elif entity_key.find( "move" ) != -1:
-                    frame_count = 4
-                elif entity_key.find( "monster" ) !=-1:
-                    frame_count = 7
-
-                # TODO: Update this line based on refactorings made in the
-                # `Animation` class.
-                self._entity_graphics[ entity_key ] = Animation( entity_path, frame_count, 33, True )
+                self._entity_graphics[ entity_key ] = Animation( entity_path, 33, True )
 
     ##  @return The asset key string for the given `Entity` object, which
     #    identifies the object's associated rendering assets in the view.
