@@ -15,6 +15,7 @@ class InputController():
     MOVE_DOWN = PG.USEREVENT+1
     MOVE_RIGHT = PG.USEREVENT+2
     MOVE_LEFT = PG.USEREVENT+3
+    SPACE = PG.USEREVENT+4
 
     # Constructors #
 
