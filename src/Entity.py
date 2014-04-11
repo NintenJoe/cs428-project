@@ -57,7 +57,7 @@ class Entity( object ):
         #Create a hitbox dict for every state
         states = self._mntl_state.get_states()
         self._hitboxes = self._load_hitboxes(states)
-        
+
         self._phys_state = self._produce_physical(data)
         self._phys_state.add_delta( initial_delta )
         self._update_hitbox()
@@ -124,7 +124,7 @@ class Entity( object ):
     def _update_hitbox( self ):
         state_name = self._mntl_state.get_current_state().get_name()
 
-        if state_name in self._hitboxes:
+        if state_name in self._hitboxes.keys():
             chitbox = self.get_hitbox()
             new_chitbox = self._hitboxes[state_name]
 
@@ -138,14 +138,16 @@ class Entity( object ):
                 curr_hitbox.h = curr_new_hitbox.h
                 curr_hitbox._type = curr_new_hitbox._type
 
-            for idx in range( len(new_chitbox.get_hiboxes()), len(chitbox.get_hitboxes()) ):
+            for idx in range( len(new_chitbox.get_hitboxes()), len(chitbox.get_hitboxes()) ):
                 curr_hitbox = chitbox.get_hitboxes()[idx]
                 curr_hitbox.x = chitbox.get_position()[0]
                 curr_hitbox.y = chitbox.get_position()[1]
                 curr_hitbox.w = 0
                 curr_hitbox.h = 0
                 curr_hitbox._type = HitboxType.DEFAULT
-                
+
+            chitbox.get_hitbox().w = max( [hb.x + hb.w for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().x
+            chitbox.get_hitbox().h = max( [hb.y + hb.h for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().y
 
     ### Helper Methods ###
 
@@ -160,12 +162,12 @@ class Entity( object ):
         rect = info[0]
         velocity = ( info[1][0], info[1][1] )
         mass = info[2]
-        
-        max_hitbox_count = max( [len(chb.get_hitboxes()) for chb in self._hitboxes] )
+
+        max_hitbox_count = max( [len(chb.get_hitboxes()) for chb in self._hitboxes.values()] )
         chitbox = CompositeHitbox( rect[0], rect[1],
             [Hitbox(0,0,0,0) for i in range(max_hitbox_count) ] )
 
-        return PhysicalState( chitbox, velocity, mass)
+        return PhysicalState(chitbox, velocity, mass)
 
 
     ##  Import class based on class path
@@ -215,14 +217,15 @@ class Entity( object ):
             rects = tree.getElementsByTagName('rect')
 
             for rect in rects:
-                x = rect.getAttribute('x')
-                y = rect.getAttribute('y')
-                w = rect.getAttribute('width')
-                h = rect.getAttribute('height')
-                h_class = rect.getAttribute('class')
+                x = int( rect.getAttribute('x') )
+                y = int( rect.getAttribute('y') )
+                w = int( rect.getAttribute('width') )
+                h = int( rect.getAttribute('height') )
+                h_class = str( rect.getAttribute('class') )
 
                 hitboxes.append(Hitbox(x, y, w, h, h_class))
 
             hitlist[state_name] = CompositeHitbox(0, 0, hitboxes)
 
         return hitlist
+

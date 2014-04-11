@@ -29,6 +29,7 @@ from src.Transition import *
 from src.Event import *
 from src.PhysicalState import *
 from src.SimulationDelta import *
+from src.CompositeHitbox import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "Entity" type.
@@ -40,8 +41,7 @@ class EntityTests( unittest.TestCase ):
 
     ##  The physical delta used to initialize the test "Entity" in the value
     #   constructor based tests.
-    ENTITY_DELTA = PhysicalState( volume=PG.Rect(4, 3, 2, 1), velocity=(2, -1),
-        mass=2.0 )
+    ENTITY_DELTA = PhysicalState( CompositeHitbox(), (2, -1), 2.0 )
 
     ##  The time delta used for update testing on the test "Entity" objects.
     TIME_DELTA = 1.0
