@@ -15,9 +15,9 @@
 #   Low Priority:
 #   - Fix the problems associated with fixed to free camera transitioning.
 
+import Globals
 import pygame as PG
 from pygame.locals import *
-from Globals import lerp, ease, SLACK
 
 ##  Blueprint class for a camera that exists within a two-dimensional world.  
 #   The camera has the ability to target a particular entity within the game world 
@@ -34,7 +34,7 @@ class Camera():
     #       NEEDS TO BE THE WIDTH OF THE GAME SCREEN FOR CLAMPING TO WORK PROPERLY
     #   @param shift_time The amount of time the camera takes to switch between targets.
     #   @param new_border The current border to which the camera is attached
-    def __init__(self, target=None, (width, height) = (640, 480), shift_time=1000, new_border=None, slack=SLACK):
+    def __init__(self, target=None, (width, height) = (640, 480), shift_time=1000, new_border=None, slack=Globals.SLACK):
         self.prev_focal_position = None
         self.focus = target
         self.offset = [0,0]
@@ -129,9 +129,9 @@ class Camera():
                 # the camera position based on linear interpolation between 
                 # the targets.
                 if delta < 1:
-                    self.fpos[0] = ease(self.prev_focal_position[0],
+                    self.fpos[0] = Globals.ease(self.prev_focal_position[0],
                         self.focus.centerx, delta)
-                    self.fpos[1] = ease(self.prev_focal_position[1],
+                    self.fpos[1] = Globals.ease(self.prev_focal_position[1],
                         self.focus.centery, delta)
                 # Otherwise, if the delta indicates that the transition is over, 
                 # set the camera's position to the position of the current target
