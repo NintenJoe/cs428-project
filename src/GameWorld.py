@@ -29,10 +29,9 @@ from CollisionDetector import *
 from SpatialDictionary import *
 from Camera import *
 from World import *
+from Entity import *
 
 from PhysicalState import *
-from Player import *
-from Monster import *
 
 ##  The representation of a world inhabited by various entities, which exist
 #   within the realm of a world with particular rules and behaviors.  The
@@ -57,8 +56,7 @@ class GameWorld():
         for ( (x, y), entity_class ) in segment.get_entities():
             entity_pos = ( TILE_DIMS[0] * x, TILE_DIMS[1] * y )
             entity_phys = PhysicalState( PG.Rect(entity_pos[0], entity_pos[1], 0, 0) )
-            entity = Monster(entity_class, entity_phys) if entity_class=="monster" \
-                else Player(entity_class, entity_phys)
+            entity = Entity(entity_class, entity_phys)
 
             if entity_class == "player":
                 player_entity = entity
