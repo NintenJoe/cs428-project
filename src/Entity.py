@@ -30,16 +30,16 @@ from Queue import Queue
 
 from PhysicalState import *
 from SimulationDelta import *
+from StateMachine import *
+from Globals import load_image
 import Queue
+import json
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
 #   its own physical and mental state.
 class Entity( object ):
     ### Class Setup ###
-
-    ##  Identifies the class as an abstract base class.
-    __metaclass__ = ABCMeta
 
     ### Constructors ###
 
@@ -52,10 +52,15 @@ class Entity( object ):
         self._name = name
         self._event_queue = Queue.Queue()
 
-        self._phys_state = self._produce_physical()
-        self._mntl_state = self._produce_machine()
+        f = open('assets/data/entities/'+name+'.json', 'r')
+        data = json.load(f)
+        self._phys_state = self.produce_physical(data)
+        self._mntl_state = self.produce_machine(data)
 
         self._phys_state.add_delta( initial_delta )
+
+        #Create a hitbox dict for every state
+        self._hitboxes = self.load_hitboxes(data)
 
     ### Methods ###
 
@@ -112,23 +117,61 @@ class Entity( object ):
     ##  @return The hitbox information associated with the instance "Entity"
     #    object (returned as a PyGame "Rect" object).
     def get_hitbox( self ):
-        return self.get_physical_state().get_volume()
+        state_name = self._mntl_state.get_current_state().get_name()
+        if state_name not in self._hitboxes:
+            return self.get_physical_state().get_volume()
+        else:
+            return self._hitboxes[state_name]
 
     ### Helper Methods ###
 
     ##  Produces the initial physical state for the entity instance, returning
     #   a reference to this created state.
     #
+    #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "PhysicalState" instance constructed for the entity instance.
-    @abstractmethod
-    def _produce_physical( self ):
-        pass
+    def produce_physical( self, data ):
+        info = data['physical']
+        rect = info[0]
+        return PhysicalState(PG.Rect(rect[0], rect[1], rect[2], rect[3]), (info[1][0],info[1][1]), info[2])
+
+
+
+    ##  Import class based on class path
+    #   @see http://stackoverflow.com/a/8255024
+    #
+    #   @param cl The complete path to the class from the src folder
+    #   @return The loaded class ready to be instantiated
+    def import_class(self, cl):
+        d = cl.rfind(".")
+        classname = cl[d+1:len(cl)]
+        m = __import__(cl[0:d], globals(), locals(), [classname])
+        return getattr(m, classname)
+
+
 
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
+    #   @param data A dict containing all the initialization data for this type of Entity
     #   @return The "StateMachine" instance constructed for the entity instance.
-    @abstractmethod
-    def _produce_machine( self ):
-        pass
+    def produce_machine( self, data ):
+        states = []
+        for ele in data['states']:
+            state_class = self.import_class(ele[0])
+            states.append(state_class(*ele[1:]))
+        edges = []
+        for ele in data['edges']:
+            edges.append(Transition(*ele))
+        if 'start' in data:
+            return StateMachine(states, edges, data['start'])
+        return StateMachine(states, edges)
 
+    ##  Load in the hitboxes from a file and return them in a dict
+    #   indexed by state.
+    #
+    #   @param data A dict containing all the initialization data for this type of Entity
+    #   @return A dict containing composite hitboxes indexed by state
+    def load_hitboxes(self, data):
+        #TODO: This function
+        return {}

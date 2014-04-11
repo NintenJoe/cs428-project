@@ -49,7 +49,7 @@ class EntityTests( unittest.TestCase ):
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
-        self._entity = SimpleTestEntity(
+        self._entity = Entity(
             EntityTests.ENTITY_NAME,
             EntityTests.ENTITY_DELTA
         )
@@ -64,7 +64,7 @@ class EntityTests( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_default_constructor_initialization( self ):
-        default_entity = SimpleTestEntity( EntityTests.ENTITY_NAME )
+        default_entity = Entity( EntityTests.ENTITY_NAME )
 
         self.assertEqual(
             default_entity.get_name(),
@@ -72,13 +72,13 @@ class EntityTests( unittest.TestCase ):
             "Default entity constructor improperly initializes entity name."
         )
         self.assertEqual(
-            set( default_entity.get_mental_state().get_states() ),
-            set( SimpleTestEntity.MACHINE_STATES ),
+            repr( repr(s) for s in default_entity.get_mental_state().get_states() ),
+            repr( repr(s) for s in SimpleTestEntity.MACHINE_STATES ),
             "Default entity constructor improperly initializes machine states."
         )
         self.assertEqual(
-            set( default_entity.get_mental_state().get_transitions() ),
-            set( SimpleTestEntity.MACHINE_TRANS ),
+            repr( repr(s) for s in default_entity.get_mental_state().get_transitions() ),
+            repr( repr(s) for s in SimpleTestEntity.MACHINE_TRANS ),
             "Default entity constructor improperly initializes machine transitions."
         )
 
@@ -96,13 +96,13 @@ class EntityTests( unittest.TestCase ):
             "Value entity constructor improperly initializes entity name."
         )
         self.assertEqual(
-            set( self._entity.get_mental_state().get_states() ),
-            set( SimpleTestEntity.MACHINE_STATES ),
+            repr( repr(s) for s in self._entity.get_mental_state().get_states() ),
+            repr( repr(s) for s in SimpleTestEntity.MACHINE_STATES ),
             "Value entity constructor improperly initializes machine states."
         )
         self.assertEqual(
-            set( self._entity.get_mental_state().get_transitions() ),
-            set( SimpleTestEntity.MACHINE_TRANS ),
+            repr( repr(s) for s in self._entity.get_mental_state().get_transitions() ),
+            repr( repr(s) for s in SimpleTestEntity.MACHINE_TRANS ),
             "Value entity constructor improperly initializes machine transitions."
         )
 
@@ -121,7 +121,7 @@ class EntityTests( unittest.TestCase ):
         test_physstate = PhysicalState()
         test_physstate.add_delta( SimpleTestEntity.INITIAL_PHYSICAL )
 
-        value_entity = SimpleTestEntity( "name", test_physstate )
+        value_entity = Entity( "test", test_physstate )
         test_physstate.add_delta( SimpleTestEntity.INITIAL_PHYSICAL )
 
         self.assertNotEqual(

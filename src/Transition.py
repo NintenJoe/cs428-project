@@ -49,3 +49,7 @@ class Transition( object ):
     def get_destination( self ):
         return self._dst_state
 
+    ## @return a unique string for this object
+    def __repr__(self):
+        return self._source_state+"->"+self._dst_state+","+_event_class
+
