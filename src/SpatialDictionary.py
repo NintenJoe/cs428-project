@@ -122,6 +122,13 @@ class SpatialDictionary( CollisionDetector ):
         for cell in cells:
             self._remove(cell, obj)
 
+    ## Updates all the bounding volumes in the dictionary. If bounding volumes
+    #  have moved to new cells since the last time update was called, then it
+    #  must be called again before calling get_all_collisions.
+    def update(self):
+        self.table.clear()
+        self.add_multiple(self.objects)
+
     ## Determines all the collisions that are occuring given the current state
     #  of the spatial hashing dictionary.
     #

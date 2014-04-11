@@ -42,3 +42,4 @@ class Level():
                             if (segment_i != segment_j or tti[0] != ttj[0]):
                                 segment_i.add_transition(tti[0],segment_j,ttj[0])
                                 segment_j.add_transition(ttj[0],segment_i,tti[0])
+
