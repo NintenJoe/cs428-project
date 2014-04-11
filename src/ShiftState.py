@@ -7,6 +7,7 @@
 
 from State import *
 from SimulationDelta import *
+from CompositeHitbox import *
 
 ##  A type of state that represents a change in position at enter and exit of the state, but no other movement.
 class ShiftState( State ):
@@ -45,11 +46,12 @@ class ShiftState( State ):
     #
     #   @override
     def _calc_arrival_changes( self ):
-        return SimulationDelta(PhysicalState(PG.Rect(self._xchange, self._ychange, 0, 0), (0, 0), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(self._xchange, self._ychange), (0, 0), 0.0))
 
     ##  Returns a zero "SimulationDelta" as no changes occur when departing from
     #   an idle state.
     #
     #   @override
     def _calc_departure_changes( self ):
-        return SimulationDelta(PhysicalState(PG.Rect(-1 * self._xchange, -1 * self._ychange, 0, 0), (0, 0), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(-1 * self._xchange, -1 * self._ychange), (0, 0), 0.0))
+
