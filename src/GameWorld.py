@@ -46,7 +46,7 @@ class GameWorld():
     def __init__( self, world_name="" ):
         self._world = World()
 
-        segment = self._world.levels[ "1" ].segments[ "1.2" ]
+        segment = self._world.levels[ "2" ].segments[ "2.1" ]
         segment_dims = segment.get_pixel_dims()
 
         self._tilemap = segment.get_tiles()
