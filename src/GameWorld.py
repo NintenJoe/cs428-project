@@ -69,7 +69,6 @@ class GameWorld():
         # entity.  This entity's hitbox will be set as the camera's focus.
         self._camera = Camera( target=player_entity.get_hitbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
-        # NOTE: World must provide an interface to get level width/height in pixels.
         self._collision_detector = SpatialDictionary( segment_dims[0] / 4,
             segment_dims[0], segment_dims[1] )
 
@@ -175,19 +174,8 @@ class GameWorld():
         entity1.notify_of( collision_event )
         entity2.notify_of( collision_event )
 
-        # TODO: Clean up this last segment of the function!
-        collision_rect = entity1.get_hitbox().clip( entity2.get_hitbox() )
-        moving_volume = entity1.get_hitbox() if entity1.get_name().find( "player" ) != -1 \
-            else entity2.get_hitbox()
-
-        move_x = 0
-        move_y = 0
-        if collision_rect.w < collision_rect.h:
-            move_x = -collision_rect.w if moving_volume.x < collision_rect.x else collision_rect.w
-        else:
-            move_y = -collision_rect.h if moving_volume.y < collision_rect.y else collision_rect.h
-
-        moving_volume.move_ip( move_x, move_y )
+        # TODO: Determine the player entity and move that entity out.
+        self._resolve_collision( entity1.get_hitbox(), entity2.get_hitbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.
@@ -195,6 +183,7 @@ class GameWorld():
     #   @param entity The `Entity` object that will have its tile collisions resolved.
     def _resolve_tile_collisions( self, entity ):
         entity_hitbox = entity.get_hitbox()
+        tile_hitbox = PG.Rect( 0, 0, Globals.TILE_DIMS[0], Globals.TILE_DIMS[1] )
 
         start_idx_x = int( entity_hitbox.left / Globals.TILE_DIMS[0] )
         start_idx_y = int( entity_hitbox.top / Globals.TILE_DIMS[1] )
@@ -206,21 +195,30 @@ class GameWorld():
                 tile_is_tangible = self._tilemap[ idx_x ][ idx_y ][ 1 ]
 
                 if tile_is_tangible:
-                    tile_hitbox = PG.Rect(
+                    tile_hitbox.topleft = (
                         idx_x * Globals.TILE_DIMS[0],
-                        idx_y * Globals.TILE_DIMS[1],
-                        Globals.TILE_DIMS[0],
-                        Globals.TILE_DIMS[1]
+                        idx_y * Globals.TILE_DIMS[1]
                     )
-                    collision_rect = entity_hitbox.clip( tile_hitbox )
 
-                    move_x = 0
-                    move_y = 0
-                    if collision_rect.w < collision_rect.h:
-                        move_x = -collision_rect.w if entity_hitbox.x < collision_rect.x else collision_rect.w
-                    else:
-                        move_y = -collision_rect.h if entity_hitbox.y < collision_rect.y else collision_rect.h
+                    self._resolve_collision( entity_hitbox, tile_hitbox )
 
-                    # TODO: Update this for composite hitboxes.
-                    entity_hitbox.move_ip( move_x, move_y )
+    ##  Resolves a collision between two hitboxes, adjusting the them as
+    #   necessary so that they're no longer intersecting.
+    #
+    #   @param hitbox1 The first hitbox involved in a collision to be resolved.
+    #   @param hitbox2 The second hitbox involved in a collision to be resolved.
+    def _resolve_collision( self, hitbox1, hitbox2 ):
+        collision_rect = hitbox1.clip( hitbox2 )
+        res_vector = [ 0, 0 ]
+
+        if collision_rect.w < collision_rect.h:
+            res_factor = -1 if hitbox1.x < collision_rect.x else 1
+            res_vector[ 0 ] = res_factor * collision_rect.w
+        else:
+            res_factor = -1 if hitbox1.y < collision_rect.y else 1
+            res_vector[ 1 ] = res_factor * collision_rect.h
+
+        # TODO: Update this functionality once the `CompositeHitbox` structure
+        # is integrated.
+        hitbox1.move_ip( res_vector[0], res_vector[1] )
 
