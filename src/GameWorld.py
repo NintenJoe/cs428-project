@@ -67,7 +67,7 @@ class GameWorld():
 
         self._camera = Camera( target=player_entity.get_hitbox().get_hitbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
-        self._collision_detector = SpatialDictionary( segment_dims[0] / 4,
+        self._collision_detector = SpatialDictionary( segment_dims[0] / 16,
             segment_dims[0], segment_dims[1] )
 
         self._setup_collision_detector()
