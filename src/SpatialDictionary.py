@@ -50,7 +50,8 @@ class SpatialDictionary( CollisionDetector ):
         self.table = {}
 
         # Set of the objects (i.e. bounding volumes) being tracked
-        self.objects = set([])
+        self.dynamic_objects = set([])
+        self.static_objects = set([])
 
     ### Public methods ###
 
@@ -82,11 +83,10 @@ class SpatialDictionary( CollisionDetector ):
     #  Note: The bounding volumes MUST be hashable.
     #
     #  @param objs A list of _hashable_ bounding volumes
-    def add_multiple(self, objs):
-        self.objects.update(objs)
-
+    #  @param static A boolean signifying whether the objects are stationary
+    def add_multiple(self, objs, static=False):
         for obj in objs:
-            self.add(obj)
+            self.add(obj, static)
 
     ## Adds a single bounding volume to the dictionary. The bounding volume
     #  represents the hitbox of a game world entity.
@@ -94,9 +94,8 @@ class SpatialDictionary( CollisionDetector ):
     #  Note: The bounding volume MUST be hashable.
     #
     #  @param obj A single bounding volume.
-    def add(self, obj):
-        self.objects.add(obj)
-
+    #  @param static A boolean signifying whether the object is stationary
+    def add(self, obj, static=False):
         cells = self._get_covered_cells(obj)
         for cell in cells:
             self._add(cell, obj)
@@ -106,8 +105,6 @@ class SpatialDictionary( CollisionDetector ):
     #
     #  @param objs The list of bounding volumes to be removed.
     def remove_multiple(self, objs):
-        self.objects -= set(objs)
-
         for obj in objs:
             self.remove(obj)
 
@@ -116,30 +113,51 @@ class SpatialDictionary( CollisionDetector ):
     #
     #  @param objs The single bounding volumes to be removed.
     def remove(self, obj):
-        self.objects.discard(obj)
-
         cells = self._get_covered_cells(obj)
         for cell in cells:
             self._remove(cell, obj)
 
+    ## Updates all the bounding volumes in the dictionary. If bounding volumes
+    #  have moved to new cells since the last time update was called, then it
+    #  must be called again before calling get_all_collisions.
+    def update(self):
+        objects = self.dynamic_objects.copy()
+
+        self.remove_multiple(objects)
+        self.add_multiple(objects)
+
     ## Determines all the collisions that are occuring given the current state
     #  of the spatial hashing dictionary.
     #
-    #  @return A list of (Bounding Volume, Bounding Volume) pairs of colliding
-    #   game world entities.
+    #  @return A list of (Bounding Volume, Bounding Volume) frozensets of
+    #          colliding game world entities.
     def get_all_collisions(self):
+        static_collisions = self._get_collisions(self.static_objects)
+        dynamic_collisions = self._get_collisions(self.dynamic_objects)
+
+        static_collisions.update(dynamic_collisions)
+        return list(static_collisions)
+
+    ## Finds all the collisions between the given set of objects and all other
+    #  objects in the dictionary.
+    #
+    #  @param objs A set of objects to be checked for collisions
+    #  @return A set of (Bounding Volume, Bounding Volume) frozensets
+    #          representing the colliding objects.
+    def _get_collisions(self, objs):
         collisions = set([])
-        for obj in self.objects:
+
+        for obj in objs:
             nearby_objects = self._get_nearby_objects(obj)
             for nearby_object in nearby_objects:
                 if obj.colliderect(nearby_object):
                     collisions.add(frozenset([obj, nearby_object]))
 
-        return list(collisions)
+        return collisions
 
     ## @return A list of all the bounding volumes currently being tracked.
     def get_all_objects(self):
-        return list(self.objects)
+        return list(self.static_objects) + list(self.dynamic_objects)
 
     ## @return True if we're tracking the provided bounding volume and false
     #   otherwise.
@@ -153,11 +171,12 @@ class SpatialDictionary( CollisionDetector ):
 
     ## @return The number of objects in the dictionary.
     def size(self):
-        return len(self.objects)
+        return len(self.static_objects) + len(self.dynamic_objects)
 
     ## Resets the spatial hashing dictionary.
     def clear(self):
-        self.objects = set([])
+        self.static_objects = set([])
+        self.dynamic_objects = set([])
         self.table.clear()
 
     ### Private helper methods ###
@@ -166,7 +185,13 @@ class SpatialDictionary( CollisionDetector ):
     #
     #  @param cell The cell index that contains the bounding volume.
     #  @param obj The bounding volume that we're adding to the cell.
-    def _add(self, cell, obj):
+    #  @param static A boolean signifying whether the object is stationary.
+    def _add(self, cell, obj, static=False):
+        if static:
+            self.static_objects.add(obj)
+        else:
+            self.dynamic_objects.add(obj)
+
         if cell in self.table:
             self.table[cell].add(obj)
         else:
@@ -177,6 +202,11 @@ class SpatialDictionary( CollisionDetector ):
     #  @param cell The cell index that contains the bounding volume.
     #  @param obj The bounding volume that we're removing from the cell.
     def _remove(self, cell, obj):
+        if obj in self.static_objects:
+            self.static_objects.discard(obj)
+        else:
+            self.dynamic_objects.discard(obj)
+
         if cell in self.table:
             self.table[cell].discard(obj)
 

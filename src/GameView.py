@@ -83,7 +83,7 @@ class GameView():
             for idx_y in range( start_idx_y, final_idx_y ):
                 tile_pos_x = idx_x * Globals.TILE_DIMS[0] - viewport.x
                 tile_pos_y = idx_y * Globals.TILE_DIMS[1] - viewport.y
-                tile = tilemap[ idx_x ][ idx_y ]
+                tile = tilemap[ idx_x ][ idx_y ][ 0 ]
 
                 self._screen.blit(
                     self._get_tile_graphic(tile),
@@ -138,7 +138,7 @@ class GameView():
     def _load_tilemap_graphics( self, tilemap ):
         for idx_x in range( len(tilemap) ):
             for idx_y in range( len(tilemap[0]) ):
-                tile = tilemap[ idx_x ][ idx_y ]
+                tile = tilemap[ idx_x ][ idx_y ][ 0 ]
 
                 if not self._is_tile_graphic_loaded( tile ):
                     tile_key = self._calc_tile_key( tile )

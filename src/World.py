@@ -36,7 +36,7 @@ class World():
     #   Segment files are stored in ../assets/data/segdata as .gif files
     def load(self):
         # get list of segment files
-        seg_file_pattern = os.path.join('assets','data','segdata','*.gif')
+        seg_file_pattern = os.path.join('assets','data','segdata','*[0-9].gif')
         seg_files = glob.glob(seg_file_pattern)
 
         # load segments into pygame surfaces
@@ -45,11 +45,11 @@ class World():
         lvl_groups = {}
         for seg_file in seg_files:
             seg_id = string.split(os.path.basename(seg_file),'.')[1]
-            surface = PG.image.load(seg_file)
-            segment = Segment(seg_id,surface)
-
             filename = os.path.basename(seg_file)
             lvl_id = filename[:string.find(filename,'.')]
+
+            segment = Segment(lvl_id + '.' + seg_id)
+            
             if (lvl_id not in lvl_groups):
                 lvl_groups[lvl_id] = [segment]
             else:
@@ -62,7 +62,5 @@ class World():
             for segment in segments:
                 level.add_segment(segment)
             level.connect()
-            level.load_tiles()
-            level.generate_images()
             self.levels[lvl_id] = level
 
