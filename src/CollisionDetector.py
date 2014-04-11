@@ -16,11 +16,11 @@ class CollisionDetector( object ):
         pass
 
     @abstractmethod
-    def add_multiple(self, objs):
+    def add_multiple(self, objs, static=False):
         pass
 
     @abstractmethod
-    def add(self, obj):
+    def add(self, obj, static=False):
         pass
 
     @abstractmethod
