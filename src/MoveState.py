@@ -11,6 +11,7 @@
 from State import *
 from PhysicalState import *
 from SimulationDelta import *
+from CompositeHitbox import *
 
 ##  A type of state that represents an object that is currently moving
 #(or at least, attempting to move) in a given direction
@@ -42,7 +43,7 @@ class MoveState( State ):
     def _calc_step_changes( self, time_delta ):
         deltax = self._vx * time_delta;
         deltay = self._vy * time_delta;
-        phys_delta = PhysicalState( PG.Rect(deltax, deltay, 0, 0), (0, 0), 0.0 )
+        phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
 
         return SimulationDelta( phys_delta )
 
@@ -50,11 +51,11 @@ class MoveState( State ):
     #
     #   @override
     def _calc_arrival_changes( self ):
-        return SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (self._vx, self._vy), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(), (self._vx, self._vy), 0.0))
 
     ##  Returns an empty set of physical changes.
     #
     #   @override
     def _calc_departure_changes( self ):
-        return SimulationDelta(PhysicalState(PG.Rect(0, 0, 0, 0), (-self._vx, -self._vy), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(), (-self._vx, -self._vy), 0.0))
 
