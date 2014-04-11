@@ -18,6 +18,7 @@
 #     doesn't end up mattering.
 
 import copy
+
 from PhysicalState import *
 from Event import *
 

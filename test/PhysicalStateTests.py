@@ -7,11 +7,13 @@
 #   @TODO
 #   - Since the 'PhysicalState' is a fairly volatile module, this testing file
 #     may need to be changed fairly often.
+#   - Update these tests to more thoroughly test the change from `pygame.Rect`
+#     to `CompositeHitbox` (particularly in updating all contained hitboxes).
 
 import unittest
-import src
-import pygame as PG
 
+import src
+from src.CompositeHitbox import *
 from src.PhysicalState import *
 
 ##  Container class for the test suite that tests the functionality of the
@@ -20,7 +22,8 @@ class PhysicalStateTests( unittest.TestCase ):
     ### Testing Constants ###
 
     ##  The volume that will be initialized to the test physical state.
-    VOLUME = PG.Rect(10, 20, 30, 40)
+    VOLUME = CompositeHitbox( 10, 20,
+        [Hitbox(0, 0, 30, 40), Hitbox(0, 0, 10, 10)] )
 
     ##  The velocity vector that will be initialized to the test physical state.
     VELOCITY = (-5, 2)
@@ -42,10 +45,10 @@ class PhysicalStateTests( unittest.TestCase ):
 
     ### Testing Functions ###
 
-    def test_default_constructor_initialization( self ):
+    def test_default_constructor( self ):
         default_physstate = PhysicalState()
 
-        self.assertEqual( default_physstate.get_volume(), PG.Rect(0, 0, 0, 0),
+        self.assertEqual( default_physstate.get_volume(), CompositeHitbox(),
             "Default physical state contructor doesn't initialize identity volume." )
         self.assertEqual( default_physstate.get_velocity(), (0, 0),
             "Default physical state contructor doesn't initialize identity velocity." )
@@ -53,7 +56,7 @@ class PhysicalStateTests( unittest.TestCase ):
             "Default physical state contructor doesn't initialize identity mass." )
 
 
-    def test_value_constructor_initialization( self ):
+    def test_value_constructor( self ):
         self.assertEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Value physical state contructor doesn't initialize with given volume." )
         self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
@@ -62,23 +65,41 @@ class PhysicalStateTests( unittest.TestCase ):
             "Value physical state contructor doesn't initialize with given mass." )
 
 
-    def test_value_constructor_independence( self ):
-        self._physstate._volume.x += 1
+    def test_constructor_independence( self ):
+        self._physstate._volume.translate( 10, 10 )
         self.assertNotEqual( self._physstate.get_volume(), PhysicalStateTests.VOLUME,
             "Value constructor for physical state doesn't deep copy parameter objects." )
 
 
-    def test_equality_operator( self ):
-        physstate1 = PhysicalState()
-        physstate2 = PhysicalState()
+    def test_constructor_independence2( self ):
+        state1 = PhysicalState()
+        state1.add_delta( self._physstate )
+        state2 = PhysicalState()
 
-        self.assertTrue( physstate1 == physstate1,
+        self.assertNotEqual(state1.get_volume(), state2.get_volume())
+        self.assertNotEqual(state1.get_velocity(), state2.get_velocity())
+        self.assertNotEqual(state1.get_mass(), state2.get_mass())
+
+
+    def test_equality_operator( self ):
+        physstate_default = PhysicalState()
+        physstate_copy = PhysicalState(
+            PhysicalStateTests.VOLUME,
+            PhysicalStateTests.VELOCITY,
+            PhysicalStateTests.MASS
+        )
+
+        self.assertTrue( physstate_default == physstate_default,
             "Equality operator doesn't return true for self equality in simple case." )
         self.assertTrue( self._physstate == self._physstate,
             "Equality operator doesn't return true for self equality in complex case." )
-        self.assertTrue( physstate1 == physstate2,
-            "Equality operator doesn't return true for two equivalent objects." )
-        self.assertTrue( physstate1 != self._physstate,
+
+        self.assertTrue( physstate_default == PhysicalState(),
+            "Equality operator doesn't return true for two simple equivalent objects." )
+        self.assertTrue( physstate_copy == self._physstate,
+            "Equality operator doesn't return true for two complex equivalent objects." )
+
+        self.assertFalse( physstate_default == physstate_copy,
             "Equality operator improperly returns true for two unequivalent objects." )
 
 
@@ -95,50 +116,86 @@ class PhysicalStateTests( unittest.TestCase ):
 
 
     def test_add_complex_delta( self ):
-        simple_delta = PhysicalState( PG.Rect(1, 2, 3, 4), (-5.0, -3.0), 18.0 )
-        self._physstate.add_delta( simple_delta )
+        complex_delta = PhysicalState(
+            CompositeHitbox( 1, 2, [Hitbox(0, 0, 20, 20)] ),
+            ( -5.0, -3.0 ),
+            18.0
+        )
+        self._physstate.add_delta( complex_delta )
 
-        self.assertEqual( self._physstate.get_volume().x, PhysicalStateTests.VOLUME.x + 1,
-            "Adding a non-zero delta to a state doesn't properly alter volume X." )
-        self.assertEqual( self._physstate.get_volume().y, PhysicalStateTests.VOLUME.y + 2,
-            "Adding a non-zero delta to a state doesn't properly alter volume Y." )
-        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTests.VOLUME.w + 3,
-            "Adding a non-zero delta to a state doesn't properly alter volume W." )
-        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTests.VOLUME.h + 4,
-            "Adding a non-zero delta to a state doesn't properly alter volume H." )
+        self.assertEqual(
+            self._physstate.get_volume().get_position()[0],
+            PhysicalStateTests.VOLUME.get_position()[0] + 1,
+            "Adding a non-zero delta to a state doesn't properly alter volume X."
+        )
+        self.assertEqual(
+            self._physstate.get_volume().get_position()[1],
+            PhysicalStateTests.VOLUME.get_position()[1] + 2,
+            "Adding a non-zero delta to a state doesn't properly alter volume Y."
+        )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().w,
+            PhysicalStateTests.VOLUME.get_hitbox().w,
+            "Adding a non-zero delta to a state doesn't properly alter volume W."
+        )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().h,
+            PhysicalStateTests.VOLUME.get_hitbox().h,
+            "Adding a non-zero delta to a state doesn't properly alter volume H."
+        )
 
-        self.assertEqual( self._physstate.get_velocity()[0], PhysicalStateTests.VELOCITY[0] - 5.0,
-            "Adding a non-zero delta to a state doesn't properly alter velocity X." )
-        self.assertEqual( self._physstate.get_velocity()[1], PhysicalStateTests.VELOCITY[1] - 3.0,
-            "Adding a non-zero delta to a state doesn't properly alter velocity Y." )
+        self.assertEqual(
+            self._physstate.get_velocity()[0],
+            PhysicalStateTests.VELOCITY[0] - 5.0,
+            "Adding a non-zero delta to a state doesn't properly alter velocity X."
+        )
+        self.assertEqual(
+            self._physstate.get_velocity()[1],
+            PhysicalStateTests.VELOCITY[1] - 3.0,
+            "Adding a non-zero delta to a state doesn't properly alter velocity Y."
+        )
 
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS + 18.0,
-            "Adding a non-zero delta to a state doesn't properly alter its mass." )
+        self.assertEqual(
+            self._physstate.get_mass(),
+            PhysicalStateTests.MASS + 18.0,
+            "Adding a non-zero delta to a state doesn't properly alter its mass."
+        )
 
 
     def test_update( self ):
         self._physstate.update( PhysicalStateTests.TIME_DELTA )
 
-        self.assertEqual( self._physstate.get_volume().x,
-            PhysicalStateTests.VOLUME.x + PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[0],
-            "Updating the physical state properly updates the x-value of position." )
-        self.assertEqual( self._physstate.get_volume().y,
-            PhysicalStateTests.VOLUME.y + PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[1],
-            "Updating the physical state properly updates the y-value of position." )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().x,
+            PhysicalStateTests.VOLUME.get_hitbox().x + \
+                PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[0],
+            "Updating the physical state properly updates the x-value of position."
+        )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().y,
+            PhysicalStateTests.VOLUME.get_hitbox().y + \
+                PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[1],
+            "Updating the physical state properly updates the y-value of position."
+        )
 
-        self.assertEqual( self._physstate.get_volume().w, PhysicalStateTests.VOLUME.w,
-            "Updating the physical state improperly updates the volume." )
-        self.assertEqual( self._physstate.get_volume().h, PhysicalStateTests.VOLUME.h,
-            "Updating the physical state improperly updates the volume." )
-        self.assertEqual( self._physstate.get_velocity(), PhysicalStateTests.VELOCITY,
-            "Updating the physical state improperly updates the velocity." )
-        self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
-            "Updating the physical state improperly updates the mass." )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().w,
+            PhysicalStateTests.VOLUME.get_hitbox().w,
+            "Updating the physical state improperly updates the volume."
+        )
+        self.assertEqual(
+            self._physstate.get_volume().get_hitbox().h,
+            PhysicalStateTests.VOLUME.get_hitbox().h,
+            "Updating the physical state improperly updates the volume."
+        )
+        self.assertEqual(
+            self._physstate.get_velocity(),
+            PhysicalStateTests.VELOCITY,
+            "Updating the physical state improperly updates the velocity."
+        )
+        self.assertEqual(
+            self._physstate.get_mass(),
+            PhysicalStateTests.MASS,
+            "Updating the physical state improperly updates the mass."
+        )
 
-    def test_state_independence( self ):
-        state1 = PhysicalState()
-        state1.add_delta(PhysicalState(PG.Rect(2,3,-1,5), (1,0), 1))
-        state2 = PhysicalState()
-        self.assertNotEqual(state1.get_volume(), state2.get_volume())
-        self.assertNotEqual(state1.get_velocity(), state2.get_velocity())
-        self.assertNotEqual(state1.get_mass(), state2.get_mass())
