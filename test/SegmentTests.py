@@ -61,6 +61,7 @@ class SegmentTests(unittest.TestCase):
         self.assertTrue(entities[1] == ((7,32),'monster'), ("Entity was not loaded correctly."))
         self.assertTrue(entities[2] == ((22,5),'monster'), ("Entity was not loaded correctly."))
         self.assertTrue(entities[3] == ((22,25),'monster'), ("Entity was not loaded correctly."))
-        self.assertTrue(entities[4] == ((31,42),'monster'), ("Entity was not loaded correctly."))
+        self.assertTrue(entities[4] == ((31,42),'boss'), ("Entity was not loaded correctly."))
         self.assertTrue(entities[5] == ((38,24),'monster'), ("Entity was not loaded correctly."))
+        self.assertTrue(entities[6] == ((43,37),'monster'), ("Entity was not loaded correctly."))
 
