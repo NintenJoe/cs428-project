@@ -1,5 +1,5 @@
 ##  @file GameWorld.py
-#   @author Joseph Ciurej
+#   @author Josh Halstead, Joseph Ciurej
 #   @date Spring 2014
 #
 #   Source File for the "GameWorld" Type
@@ -24,13 +24,15 @@
 import pygame as PG
 from Globals import TILE_DIMS
 
-from Monster import *
-from Player import *
 from Event import *
 from CollisionDetector import *
 from SpatialDictionary import *
 from Camera import *
 from World import *
+
+from PhysicalState import *
+from Player import *
+from Monster import *
 
 ##  The representation of a world inhabited by various entities, which exist
 #   within the realm of a world with particular rules and behaviors.  The
@@ -43,23 +45,33 @@ class GameWorld():
     #
     #   @param world_name The identifier for the initial world to be loaded.
     def __init__( self, world_name="" ):
-        # NOTE: World needs to be able to load different configurations.
-        # NOTE: World must provide an interface to get the current level.
         self._world = World()
-        # NOTE: World must provide an interface to get the inhabiting entities
-        # by default (at least the names of these entities).
-        self._entities = [
-            Monster( "monster", PhysicalState(PG.Rect(400, 400, 0, 0)) ),
-            Player( "player", PhysicalState(PG.Rect(480, 480, 0, 0)) ),
-        ]
 
-        self._setup_tilemap()
+        segment = self._world.levels[ "1" ].segments[ "1.1" ]
+        segment_dims = segment.get_pixel_dims()
+
+        self._tilemap = segment.get_tiles()
+        # TODO: Update when integrated with the `Entity` updates.
+        self._entities = []
+        player_entity = None
+        for ( (x, y), entity_class ) in segment.get_entities():
+            entity_pos = ( TILE_DIMS[0] * x, TILE_DIMS[1] * y )
+            entity_phys = PhysicalState( PG.Rect(entity_pos[0], entity_pos[1], 0, 0) )
+            entity = Monster(entity_class, entity_phys) if entity_class=="monster" \
+                else Player(entity_class, entity_phys)
+
+            if entity_class == "player":
+                player_entity = entity
+
+            self._entities.append( entity )
 
         # NOTE: Must designate some entity within the entity list as the 'main'
         # entity.  This entity's hitbox will be set as the camera's focus.
-        self._camera = Camera( target=self._entities[1].get_hitbox(), new_border=PG.Rect(0, 0, 960, 960) )
+        self._camera = Camera( target=player_entity.get_hitbox(),
+            new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
         # NOTE: World must provide an interface to get level width/height in pixels.
-        self._collision_detector = SpatialDictionary( 240, 960, 960 )
+        self._collision_detector = SpatialDictionary( segment_dims[0] / 4,
+            segment_dims[0], segment_dims[1] )
 
         self._setup_collision_detector()
 
@@ -70,24 +82,16 @@ class GameWorld():
     #
     #   @param time_delta The amount of game time that has passed in the frame.
     def update( self, time_delta ):
+        # TODO: Handle the events passed back by the `Entity` updates.
         for entity in self._entities:
-            # NOTE: The events passed back by the entities should be handled
-            # here in the future.
             entity.update( time_delta )
-
-        # Must be called to update the objects based on their new locations
         self._collision_detector.update()
 
         for entity_collision in self._collision_detector.get_all_collisions():
-            collision = []
-            for entity in entity_collision:
-                collision.append( entity )
-            self._resolve_entity_collision( collision )
+            self._resolve_entity_collision( list(entity_collision) )
 
-        # NOTE: There should be some easy way to get the tiles with which an
-        # `Entity` in the game world collides.
-        #tile_collisions = self._get_tile_collisions()
-        #[ self._resolve_collision( collision ) for collision in tile_collisions ]
+        for entity in self._entities:
+            self._resolve_tile_collisions( entity )
 
         self._camera.update( time_delta )
 
@@ -185,12 +189,38 @@ class GameWorld():
 
         moving_volume.move_ip( move_x, move_y )
 
-    ##  Resolves a collision between an `Entity` object and a `Tile` object
-    #   TODO
-    def _resolve_tile_collision( self, collision ):
-        pass
+    ##  Resolves the collisions between an `Entity` and all the world tiles
+    #   with which it intersects.
+    #
+    #   @param entity The `Entity` object that will have its tile collisions resolved.
+    def _resolve_tile_collisions( self, entity ):
+        entity_hitbox = entity.get_hitbox()
 
-    ##  TODO: Remove this function.
-    def _setup_tilemap( self ):
-        curr_segment = self._world.levels[ "1" ].segments[ "1.2" ]
-        self._tilemap = curr_segment.get_tiles()
+        start_idx_x = int( entity_hitbox.left / Globals.TILE_DIMS[0] )
+        start_idx_y = int( entity_hitbox.top / Globals.TILE_DIMS[1] )
+        final_idx_x = int( entity_hitbox.right / Globals.TILE_DIMS[0] ) + 1
+        final_idx_y = int( entity_hitbox.bottom / Globals.TILE_DIMS[1] ) + 1
+
+        for idx_x in range( start_idx_x, final_idx_x ):
+            for idx_y in range( start_idx_y, final_idx_y ):
+                tile_is_tangible = self._tilemap[ idx_x ][ idx_y ][ 1 ]
+
+                if tile_is_tangible:
+                    tile_hitbox = PG.Rect(
+                        idx_x * Globals.TILE_DIMS[0],
+                        idx_y * Globals.TILE_DIMS[1],
+                        Globals.TILE_DIMS[0],
+                        Globals.TILE_DIMS[1]
+                    )
+                    collision_rect = entity_hitbox.clip( tile_hitbox )
+
+                    move_x = 0
+                    move_y = 0
+                    if collision_rect.w < collision_rect.h:
+                        move_x = -collision_rect.w if entity_hitbox.x < collision_rect.x else collision_rect.w
+                    else:
+                        move_y = -collision_rect.h if entity_hitbox.y < collision_rect.y else collision_rect.h
+
+                    # TODO: Update this for composite hitboxes.
+                    entity_hitbox.move_ip( move_x, move_y )
+

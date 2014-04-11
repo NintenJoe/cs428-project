@@ -40,10 +40,16 @@ class SegmentTests(unittest.TestCase):
         self.assertTrue(seg2.height == 48, ("Segment height not set correctly."))
         self.assertTrue(seg3.height == 20, ("Segment height not set correctly."))
 
-    def testSegmentGetSize(self):
+    def testSegmentGetDimensions(self):
         level1 = self.world.levels['1']
         seg1 = level1.segments['1.2']
-        self.assertTrue(seg1.get_size() == (48,48), ("Segment returns incorrect size."))
+        self.assertTrue(seg1.get_dims() == (48,48), ("Segment returns incorrect dims."))
+
+    def testSegmentGetPixelDimensions(self):
+        level1 = self.world.levels['1']
+        seg1 = level1.segments['1.2']
+        self.assertTrue(seg1.get_pixel_dims() == (TILE_DIMS[0]*48,TILE_DIMS[1]*48),
+            ("Segment returns incorrect pixel dims."))
 
     def testSegmentGetEntities(self):
         level1 = self.world.levels['1']

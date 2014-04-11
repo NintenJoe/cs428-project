@@ -91,8 +91,13 @@ class Segment():
     ##  Returns the segment size
     #
     #   @return A tuple of the level size. It is not multiplied by the tile size.
-    def get_size(self):
+    def get_dims(self):
         return (self.width, self.height)
+
+    ##  @return A tuple of the form (pw, ph) which contains the pixel dimensions
+    #           of the segment.
+    def get_pixel_dims(self):
+        return (TILE_DIMS[0]*self.width, TILE_DIMS[1]*self.height)
 
     # Helper Functions #
 

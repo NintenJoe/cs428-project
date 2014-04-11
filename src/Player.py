@@ -49,4 +49,4 @@ class Player( Entity ):
         return StateMachine(states, edges, "idle_1")
 
     def _produce_physical( self ):
-        return PhysicalState(PG.Rect(0, 0, 20, 20), (0,0), 1.0)
+        return PhysicalState(PG.Rect(0, 0, 20, 40), (0,0), 1.0)
