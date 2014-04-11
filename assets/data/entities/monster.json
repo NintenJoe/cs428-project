@@ -1,1 +1,14 @@
-{"states": [["IdleState.IdleState", "1", 100], ["IdleState.IdleState", "2", 100], ["IdleState.IdleState", "3", 100], ["IdleState.IdleState", "4", 100], ["MoveState.MoveState", "up", [0, -1], 100], ["MoveState.MoveState", "down", [0, 1], 100], ["MoveState.MoveState", "left", [-1, 0], 100], ["MoveState.MoveState", "right", [1, 0], 100]], "start": "idle_1", "edges": [["idle_1", "move_up", ".*timeout.*"], ["idle_2", "move_left", ".*timeout.*"], ["idle_4", "move_right", ".*timeout.*"], ["idle_3", "move_down", ".*timeout.*"], ["move_up", "idle_2", ".*timeout.*"], ["move_left", "idle_3", ".*timeout.*"], ["move_right", "idle_1", ".*timeout.*"], ["move_down", "idle_4", ".*timeout.*"], ["move_up", "idle_2", ".*collision.*"], ["move_left", "idle_3", ".*collision.*"], ["move_right", "idle_1", ".*collision.*"], ["move_down", "idle_4", ".*collision.*"]], "physical": [[0, 0, 20, 20], [0, 0], 1.0]}
+{"states": [["IdleState.IdleState", "1", 100], ["IdleState.IdleState", "2", 100], ["IdleState.IdleState", "3", 100], ["IdleState.IdleState", "4", 100], ["MoveState.MoveState", "up", [0, -1], 100], ["MoveState.MoveState", "down", [0, 1], 100], ["MoveState.MoveState", "left", [-1, 0], 100], ["MoveState.MoveState", "right", [1, 0], 100],
+["IdleState.IdleState", "death", 150], ["IdleState.IdleState", "respawn", 150]],
+ "start": "idle_1", "edges": [["idle_1", "move_up", ".*timeout.*"], ["idle_2", "move_left", ".*timeout.*"], ["idle_4", "move_right", ".*timeout.*"], ["idle_3", "move_down", ".*timeout.*"], ["move_up", "idle_2", ".*timeout.*"], ["move_left", "idle_3", ".*timeout.*"], ["move_right", "idle_1", ".*timeout.*"], ["move_down", "idle_4", ".*timeout.*"], ["move_up", "idle_2", ".*collision.*"], ["move_left", "idle_3", ".*collision.*"], ["move_right", "idle_1", ".*collision.*"], ["move_down", "idle_4", ".*collision.*"],
+["idle_death", "idle_respawn", ".*timeout.*"],
+["idle_respawn", "idle_1", ".*timeout.*"],
+["idle_1", "idle_death", ".*collision.*hurt.*"],
+["idle_2", "idle_death", ".*collision.*hurt.*"],
+["idle_3", "idle_death", ".*collision.*hurt.*"],
+["idle_4", "idle_death", ".*collision.*hurt.*"],
+["move_up", "idle_death", ".*collision.*hurt.*"],
+["move_left", "idle_death", ".*collision.*hurt.*"],
+["move_down", "idle_death", ".*collision.*hurt.*"],
+["move_right", "idle_death", ".*collision.*hurt.*"]],
+ "physical": [[0, 0, 20, 20], [0, 0], 1.0]}

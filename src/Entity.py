@@ -88,8 +88,6 @@ class Entity( object ):
     #
     #   @param event The event of which the instance "Entity" will be notified.
     def notify_of( self, event ):
-        if self.get_name() == "boss":
-            print repr(event)
         self._event_queue.put( event )
 
     ##  @return The status of the "Entity" instance as a string of the form
