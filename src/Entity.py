@@ -212,7 +212,7 @@ class Entity( object ):
             state_name = state.get_name()
             f = open('assets/data/hitbox/' + self._name + '/' + state_name + '.svg', 'r')
             tree = minidom.parse(f)
-            rects = tree.getElementByTagName('rect')
+            rects = tree.getElementsByTagName('rect')
 
             for rect in rects:
                 x = rect.getAttribute('x')
