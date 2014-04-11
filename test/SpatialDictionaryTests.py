@@ -174,6 +174,37 @@ class SpatialDictionaryTests(unittest.TestCase):
                                frozenset([self.entityE, self.entityH])]
         self._test_get_all_collisions(entities, expected_collisions)
 
+    def test_get_all_collisions_entity_not_in_orig_cell(self):
+        entities = [self.entityE, self.entityH]
+        self.dict_.remove_multiple(self.all_entities)
+        self.dict_.add_multiple(entities)
+
+        # Move the entities to a new cell. (Ugly)
+        e_x = e_y = 5
+        e_x, self.entityE.x = self.entityE.x, e_x
+        e_y, self.entityE.y = self.entityE.y, e_y
+
+        h_x = h_y = 1
+        h_x, self.entityH.x = self.entityH.x, h_x
+        h_y, self.entityH.y = self.entityH.y, h_y
+
+        # We cannot use the _test_get_all_collisions helper function because
+        # it effectively manually updates the spatial dictionary
+        expected_collisions = [frozenset([self.entityE, self.entityH])]
+        stale_collisions = self.dict_.get_all_collisions()
+        self.assertTrue(set(stale_collisions) != set(expected_collisions),
+                        "Expected the list of collisions to no match.")
+
+        self.dict_.update()
+        actual_collisions = self.dict_.get_all_collisions()
+        self.assertTrue(set(actual_collisions) == set(expected_collisions),
+                        "Incorrect set of collisions detected.")
+
+        self.entityE.x = e_x
+        self.entityE.y = e_y
+        self.entityH.x = h_x
+        self.entityH.y = h_y
+
     def test_get_all_collisions_universal(self):
         expected_collisions = [frozenset([self.entityC, self.entityG]),
                                frozenset([self.entityD, self.entityF]),
