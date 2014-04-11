@@ -30,9 +30,8 @@ from Queue import Queue
 
 from PhysicalState import *
 from SimulationDelta import *
-from IdleState import *
-from MoveState import *
 from StateMachine import *
+from Globals import load_image
 import Queue
 import json
 
@@ -136,6 +135,21 @@ class Entity( object ):
         rect = info[0]
         return PhysicalState(PG.Rect(rect[0], rect[1], rect[2], rect[3]), (info[1][0],info[1][1]), info[2])
 
+
+
+    ##  Import class based on class path
+    #   @see http://stackoverflow.com/a/8255024
+    #
+    #   @param cl The complete path to the class from the src folder
+    #   @return The loaded class ready to be instantiated
+    def import_class(self, cl):
+        d = cl.rfind(".")
+        classname = cl[d+1:len(cl)]
+        m = __import__(cl[0:d], globals(), locals(), [classname])
+        return getattr(m, classname)
+
+
+
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
@@ -144,18 +158,14 @@ class Entity( object ):
     def produce_machine( self, data ):
         states = []
         for ele in data['states']:
-            if ele[0] == 'idle':
-                if len(ele) < 3:
-                    ele.append(float("inf"))
-                states.append(IdleState(ele[1], ele[2]))
-            elif ele[0] == 'move':
-                if len(ele) < 4:
-                    ele.append(float("inf"))
-                states.append(MoveState(ele[1], ele[2], ele[3]))
+            state_class = self.import_class(ele[0])
+            states.append(state_class(*ele[1:]))
         edges = []
         for ele in data['edges']:
-            edges.append(Transition(ele[0], ele[1], ele[2]))
-        return StateMachine(states, edges, data['start'])
+            edges.append(Transition(*ele))
+        if 'start' in data:
+            return StateMachine(states, edges, data['start'])
+        return StateMachine(states, edges)
 
     ##  Load in the hitboxes from a file and return them in a dict
     #   indexed by state.
