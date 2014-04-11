@@ -72,6 +72,10 @@ class Hitbox( PG.Rect ):
     def __hash__( self ):
         return id( self )
 
+    ## @TODO: Add testing for this function.
+    def __repr__( self ):
+        return str(self.htype)
+
     ### Methods ###
 
     ##  @return The classification attributed to the hitbox (of type `HitboxType`).
