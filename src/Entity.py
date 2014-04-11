@@ -217,8 +217,8 @@ class Entity( object ):
             for rect in rects:
                 x = rect.getAttribute('x')
                 y = rect.getAttribute('y')
-                width = rect.getAttribute('width')
-                height = rect.getAttribute('height')
+                w = rect.getAttribute('width')
+                h = rect.getAttribute('height')
                 h_class = rect.getAttribute('class')
 
                 hitboxes.append(Hitbox(x, y, w, h, h_class))
