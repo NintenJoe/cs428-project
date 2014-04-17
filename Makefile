@@ -48,4 +48,4 @@ else
 endif
 
 clean :
-	-rm -rf $(SRC_DIR)/*.pyc $(LIB_DIR)/*.pyc $(TEST_DIR)/*.pyc ./classes_$(PROJECT_NAME).* ./packages_$(PROJECT_NAME).* .coverage
+	-rm -rf $(SRC_DIR)/*.pyc $(LIB_DIR)/*.pyc $(TEST_DIR)/*.pyc  .coverage
