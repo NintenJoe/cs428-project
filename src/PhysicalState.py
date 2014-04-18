@@ -41,8 +41,8 @@ class PhysicalState( object ):
                   volume=CompositeHitbox(),
                   velocity=(0, 0),
                   mass=0.0,
-                  max_health=0,
-                  curr_health=0 ):
+                  curr_health=0,
+                  max_health=0 ):
 
         self._volume = CompositeHitbox(
             volume.get_position()[0],
@@ -51,8 +51,8 @@ class PhysicalState( object ):
         )
         self._velocity = velocity
         self._mass = mass
-        self._max_health = max_health
         self._curr_health = curr_health
+        self._max_health = max_health
 
     ### Overloaded Operators ###
 
@@ -65,8 +65,8 @@ class PhysicalState( object ):
         return self._volume == other._volume and \
             self._velocity == other._velocity and \
             self._mass == other._mass and \
-            self._max_health == other._max_health and \
-            self._curr_health == other._curr_health
+            self._curr_health == other._curr_health and \
+            self._max_health == other._max_health
 
     ### Methods ###
 
@@ -86,8 +86,8 @@ class PhysicalState( object ):
         )
 
         self._mass += state_delta._mass
-        self._max_health += state_delta._max_health
         self._curr_health += state_delta._curr_health
+        self._max_health += state_delta._max_health
 
     ##  Updates the physical state based on the given time delta.
     #

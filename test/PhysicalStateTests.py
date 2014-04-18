@@ -45,7 +45,7 @@ class PhysicalStateTests( unittest.TestCase ):
     def setUp( self ):
         self._physstate = PhysicalState( PhysicalStateTests.VOLUME,
             PhysicalStateTests.VELOCITY, PhysicalStateTests.MASS,
-            PhysicalStateTests.MAX_HEALTH, PhysicalStateTests.CURR_HEALTH )
+            PhysicalStateTests.CURR_HEALTH, PhysicalStateTests.MAX_HEALTH )
 
     def tearDown( self ):
         self._physstate = None
@@ -106,8 +106,8 @@ class PhysicalStateTests( unittest.TestCase ):
             PhysicalStateTests.VOLUME,
             PhysicalStateTests.VELOCITY,
             PhysicalStateTests.MASS,
-            PhysicalStateTests.MAX_HEALTH,
-            PhysicalStateTests.CURR_HEALTH
+            PhysicalStateTests.CURR_HEALTH,
+            PhysicalStateTests.MAX_HEALTH
         )
 
         self.assertTrue( physstate_default == physstate_default,
@@ -156,8 +156,8 @@ class PhysicalStateTests( unittest.TestCase ):
             hitbox_delta,
             (vx_delta, vy_delta),
             mass_delta,
-            max_health_delta,
-            curr_health_delta
+            curr_health_delta,
+            max_health_delta
         )
         self._physstate.add_delta( complex_delta )
 
