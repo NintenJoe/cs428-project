@@ -66,8 +66,7 @@ class GameWorld():
             self._resolve_entity_collision( list(entity_collision) )
 
         for entity in self._entities:
-            isEntityPlayer = entity == self._player_entity
-            transition = self._resolve_tile_collisions( entity, isEntityPlayer )
+            transition = self._resolve_tile_collisions( entity )
             if (transition != None):
                 self._load_new_segment(transition[0], transition[1])
                 break
@@ -163,7 +162,7 @@ class GameWorld():
     #   with which it intersects.
     #
     #   @param entity The `Entity` object that will have its tile collisions resolved.
-    def _resolve_tile_collisions( self, entity, isEntityPlayer ):
+    def _resolve_tile_collisions( self, entity ):
         entity_hitbox = entity.get_hitbox().get_hitbox()
         tile_hitbox = Hitbox( 0, 0, Globals.TILE_DIMS[0], Globals.TILE_DIMS[1] )
 
@@ -172,16 +171,15 @@ class GameWorld():
         final_idx_x = int( entity_hitbox.right / Globals.TILE_DIMS[0] ) + 1
         final_idx_y = int( entity_hitbox.bottom / Globals.TILE_DIMS[1] ) + 1
 
-        for idx_x in range( start_idx_x, final_idx_x ):
-            for idx_y in range( start_idx_y, final_idx_y ):
-                if (idx_x >= len(self._tilemap) or idx_y >= len(self._tilemap[idx_x])):
-                    continue
+        seg_dims = self._segment.get_dims()
+        for idx_x in range( max(0, start_idx_x), min(final_idx_x, seg_dims[0]) ):
+            for idx_y in range( max(0, start_idx_y), min(final_idx_y, seg_dims[1]) ):
 
                 tile_is_tangible = self._tilemap[ idx_x ][ idx_y ][ 1 ]
 
-                if (isEntityPlayer): # check for transition
-                    if ((idx_x,idx_y) in self._segment.transitions):
-                        transition = self._segment.transitions[(idx_x,idx_y)]
+                if (entity == self._player_entity): # check for transition
+                    transition = self._segment.get_tile_transition(idx_x,idx_y)
+                    if (transition != None):
                         new_segment = transition[0]
                         new_pos = (transition[1][0] + 1, transition[1][1] + 1)
                         return (new_segment, new_pos)

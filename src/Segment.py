@@ -70,6 +70,19 @@ class Segment():
     def add_transition(self, src, dest_segment, dest):
         self.transitions[src] = (dest_segment, dest)
 
+    ##  Gets the transition if there is one at that tile
+    #
+    #   @param idx the x coordinate of the tile
+    #   @param idy the y coordinate of the tile
+    #
+    #   @return None if there is no transition
+    #           (dest_segment, (dest_x,dest_y)) if there is a transition
+    def get_tile_transition(self, idx, idy):
+        if ((idx,idy) in self.transitions):
+            return self.transitions[(idx,idy)]
+        else:
+            return None
+
     ##  Returns the tile information
     #
     #   @return A 2d array of tiles.

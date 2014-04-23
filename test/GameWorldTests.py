@@ -66,7 +66,7 @@ class GameWorldTests(unittest.TestCase):
         pass
 
     def test_notify_of(self):
-        player = self._world.player_entity
+        player = self._world._player_entity
         pre_player_status = player.get_status()
         event = Event(EventType.KEYDOWN, {"key": InputController.MOVE_UP})
         self._world.notify_of(event, [player])
