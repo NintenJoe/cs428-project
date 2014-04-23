@@ -34,11 +34,18 @@ class PhysicalStateTests( unittest.TestCase ):
     ##  The time delta that will be used to test physical state updating.
     TIME_DELTA = 1.0
 
+    ## The maximum health that will be used to test physical state updating.
+    MAX_HEALTH = 6
+
+    ## The current health that will be used to test physical state updating.
+    CURR_HEALTH = 6
+
     ### Test Set Up/Tear Down ###
 
     def setUp( self ):
         self._physstate = PhysicalState( PhysicalStateTests.VOLUME,
-            PhysicalStateTests.VELOCITY, PhysicalStateTests.MASS )
+            PhysicalStateTests.VELOCITY, PhysicalStateTests.MASS,
+            PhysicalStateTests.CURR_HEALTH, PhysicalStateTests.MAX_HEALTH )
 
     def tearDown( self ):
         self._physstate = None
@@ -54,6 +61,12 @@ class PhysicalStateTests( unittest.TestCase ):
             "Default physical state contructor doesn't initialize identity velocity." )
         self.assertEqual( default_physstate.get_mass(), 0.0,
             "Default physical state contructor doesn't initialize identity mass." )
+        self.assertEqual( default_physstate.get_max_health(), 0,
+            "Default physical state contructor doesn't initialize identity\
+             maximum health." )
+        self.assertEqual( default_physstate.get_curr_health(), 0,
+            "Default physical state contructor doesn't initialize identity\
+             current health." )
 
 
     def test_value_constructor( self ):
@@ -63,6 +76,10 @@ class PhysicalStateTests( unittest.TestCase ):
             "Value physical state contructor doesn't initialize with given velocity." )
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Value physical state contructor doesn't initialize with given mass." )
+        self.assertEqual( self._physstate.get_max_health(), PhysicalStateTests.MAX_HEALTH,
+            "Value physical state contructor doesn't initialize with given maximum health." )
+        self.assertEqual( self._physstate.get_curr_health(), PhysicalStateTests.CURR_HEALTH,
+            "Value physical state contructor doesn't initialize with given current health." )
 
 
     def test_constructor_independence( self ):
@@ -79,6 +96,8 @@ class PhysicalStateTests( unittest.TestCase ):
         self.assertNotEqual(state1.get_volume(), state2.get_volume())
         self.assertNotEqual(state1.get_velocity(), state2.get_velocity())
         self.assertNotEqual(state1.get_mass(), state2.get_mass())
+        self.assertNotEqual(state1.get_max_health(), state2.get_max_health())
+        self.assertNotEqual(state1.get_curr_health(), state2.get_curr_health())
 
 
     def test_equality_operator( self ):
@@ -86,7 +105,9 @@ class PhysicalStateTests( unittest.TestCase ):
         physstate_copy = PhysicalState(
             PhysicalStateTests.VOLUME,
             PhysicalStateTests.VELOCITY,
-            PhysicalStateTests.MASS
+            PhysicalStateTests.MASS,
+            PhysicalStateTests.CURR_HEALTH,
+            PhysicalStateTests.MAX_HEALTH
         )
 
         self.assertTrue( physstate_default == physstate_default,
@@ -113,24 +134,41 @@ class PhysicalStateTests( unittest.TestCase ):
             "Adding a zero delta to a state changes its velocity value." )
         self.assertEqual( self._physstate.get_mass(), PhysicalStateTests.MASS,
             "Adding a zero delta to a state changes its mass value." )
+        self.assertEqual( self._physstate.get_max_health(), PhysicalStateTests.MAX_HEALTH,
+            "Adding a zero delta to a state changes its maximum health value." )
+        self.assertEqual( self._physstate.get_curr_health(), PhysicalStateTests.CURR_HEALTH,
+            "Adding a zero delta to a state changes its current health value." )
 
 
     def test_add_complex_delta( self ):
+        pos_x_delta = 1
+        pos_y_delta = 2
+        hitbox_delta = CompositeHitbox( pos_x_delta, pos_y_delta, [Hitbox(0, 0, 20, 20)] )
+
+        vx_delta = -5.0
+        vy_delta = -3.0
+
+        mass_delta = 18.0
+        max_health_delta = 3
+        curr_health_delta = -4
+
         complex_delta = PhysicalState(
-            CompositeHitbox( 1, 2, [Hitbox(0, 0, 20, 20)] ),
-            ( -5.0, -3.0 ),
-            18.0
+            hitbox_delta,
+            (vx_delta, vy_delta),
+            mass_delta,
+            curr_health_delta,
+            max_health_delta
         )
         self._physstate.add_delta( complex_delta )
 
         self.assertEqual(
             self._physstate.get_volume().get_position()[0],
-            PhysicalStateTests.VOLUME.get_position()[0] + 1,
+            PhysicalStateTests.VOLUME.get_position()[0] + pos_x_delta,
             "Adding a non-zero delta to a state doesn't properly alter volume X."
         )
         self.assertEqual(
             self._physstate.get_volume().get_position()[1],
-            PhysicalStateTests.VOLUME.get_position()[1] + 2,
+            PhysicalStateTests.VOLUME.get_position()[1] + pos_y_delta,
             "Adding a non-zero delta to a state doesn't properly alter volume Y."
         )
         self.assertEqual(
@@ -146,21 +184,34 @@ class PhysicalStateTests( unittest.TestCase ):
 
         self.assertEqual(
             self._physstate.get_velocity()[0],
-            PhysicalStateTests.VELOCITY[0] - 5.0,
+            PhysicalStateTests.VELOCITY[0] + vx_delta,
             "Adding a non-zero delta to a state doesn't properly alter velocity X."
         )
         self.assertEqual(
             self._physstate.get_velocity()[1],
-            PhysicalStateTests.VELOCITY[1] - 3.0,
+            PhysicalStateTests.VELOCITY[1] + vy_delta,
             "Adding a non-zero delta to a state doesn't properly alter velocity Y."
         )
 
         self.assertEqual(
             self._physstate.get_mass(),
-            PhysicalStateTests.MASS + 18.0,
+            PhysicalStateTests.MASS + mass_delta,
             "Adding a non-zero delta to a state doesn't properly alter its mass."
         )
 
+        self.assertEqual(
+            self._physstate.get_max_health(),
+            PhysicalStateTests.MAX_HEALTH + max_health_delta,
+            "Adding a non-zero delta to a state doesn't properly alter its\
+             maximum health."
+        )
+
+        self.assertEqual(
+            self._physstate.get_curr_health(),
+            PhysicalStateTests.CURR_HEALTH + curr_health_delta,
+            "Adding a non-zero delta to a state doesn't properly alter its\
+             current health."
+        )
 
     def test_update( self ):
         self._physstate.update( PhysicalStateTests.TIME_DELTA )
@@ -197,5 +248,15 @@ class PhysicalStateTests( unittest.TestCase ):
             self._physstate.get_mass(),
             PhysicalStateTests.MASS,
             "Updating the physical state improperly updates the mass."
+        )
+        self.assertEqual(
+            self._physstate.get_max_health(),
+            PhysicalStateTests.MAX_HEALTH,
+            "Updating the physical state improperly updates the maximum health."
+        )
+        self.assertEqual(
+            self._physstate.get_curr_health(),
+            PhysicalStateTests.CURR_HEALTH,
+            "Updating the physical state improperly updates the current health."
         )
 

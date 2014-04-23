@@ -35,7 +35,15 @@ class PhysicalState( object ):
     #   @param volume The collision volume for the state (as a `CompositeHitbox`).
     #   @param velocity The velocity for the state (as a 2-tuple).
     #   @param mass The floating-point value that will represent the state mass.
-    def __init__( self, volume=CompositeHitbox(), velocity=(0, 0), mass=0.0 ):
+    #   @param max_health The maximum health value of the instance state.
+    #   @param curr_health The current health value of the instance state.
+    def __init__( self,
+                  volume=CompositeHitbox(),
+                  velocity=(0, 0),
+                  mass=0.0,
+                  curr_health=0,
+                  max_health=0 ):
+
         self._volume = CompositeHitbox(
             volume.get_position()[0],
             volume.get_position()[1],
@@ -43,6 +51,8 @@ class PhysicalState( object ):
         )
         self._velocity = velocity
         self._mass = mass
+        self._curr_health = curr_health
+        self._max_health = max_health
 
     ### Overloaded Operators ###
 
@@ -52,9 +62,11 @@ class PhysicalState( object ):
     #   @return True if the instance state is equivalent to the given state and
     #    false otherwise.
     def __eq__( self, other ):
-        return self._mass == other._mass and \
+        return self._volume == other._volume and \
             self._velocity == other._velocity and \
-            self._volume == other._volume
+            self._mass == other._mass and \
+            self._curr_health == other._curr_health and \
+            self._max_health == other._max_health
 
     ### Methods ###
 
@@ -74,17 +86,22 @@ class PhysicalState( object ):
         )
 
         self._mass += state_delta._mass
+        self._curr_health += state_delta._curr_health
+        self._max_health += state_delta._max_health
 
     ##  Updates the physical state based on the given time delta.
     #
     #   @param time_delta The amount of time between updates to the physical state.
+    # TODO: Verify whether health can be affected by passing time. e.g. If
+    #       within x meters of enemey type y, health is lost at the rate of 1/100
+    #       per clock tick.
     def update( self, time_delta ):
         position_delta = map( lambda v_i: time_delta * v_i, self._velocity )
 
         self._volume.translate( position_delta[0], position_delta[1] )
 
     ##  @return The collision volume associated with the instance state (of type
-    #    "HashableRect").
+    #    "CompositeHitbox").
     def get_volume( self ):
         return self._volume
 
@@ -96,4 +113,14 @@ class PhysicalState( object ):
     ##  @return The mass value associated with the instance state (of type float).
     def get_mass( self ):
         return self._mass
+
+    ##  @return The maximum health value associated with the instance state (of
+    #           type int).
+    def get_max_health( self ):
+        return self._max_health
+
+    ##  @return The current health value associated with the instance state (of
+    #           type int).
+    def get_curr_health( self ):
+        return self._curr_health
 
