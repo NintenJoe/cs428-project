@@ -65,7 +65,7 @@ class FollowState( State ):
             elif xdif == 0:
                 deltay = dist
             else:
-                xperc = float(xdif) / ydif
+                xperc = float(ydif) / xdif
                 deltax = math.sqrt(dist**2 / (1+xperc**2))
                 deltay = math.sqrt(dist**2 / (1+(1/xperc)**2))
                 if pos[0] > follow[0]:
