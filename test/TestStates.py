@@ -38,7 +38,7 @@ class SimpleTestState( State ):
         return SimulationDelta( PhysicalState(mass=1.0), [ Event() ] )
 
     ##  @override
-    def _calc_arrival_changes( self ):
+    def _calc_arrival_changes( self, event ):
         return SimulationDelta( PhysicalState(mass=2.0), [ Event() ] )
 
     ##  @override

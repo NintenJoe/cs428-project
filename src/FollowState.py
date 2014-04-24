@@ -1,12 +1,11 @@
-##  @file MoveState.py
+##  @file FollowState.py
 #   @author Eric Christianson, Joseph Ciurej
 #   @date Spring 2014
 #
-#   Source File for the "MoveState" Type
+#   Source File for the "FollowState" Type
 #
 #   @TODO
-#   - Determine whether it's better to utilize a velocity value in the "arrival"
-#     or to simply give position changes in the "step".
+#   - This class
 
 from State import *
 from PhysicalState import *
@@ -15,7 +14,7 @@ from CompositeHitbox import *
 
 ##  A type of state that represents an object that is currently moving
 #(or at least, attempting to move) in a given direction
-class MoveState( State ):
+class FollowState( State ):
     ### Constructors ###
 
     ##  Constructs a state instance with the given string identifier.
@@ -23,10 +22,9 @@ class MoveState( State ):
     #   @param identifier A string identifier for that will represent the
     #    name of the instance state.
     #   @param (vx,vy) the x and y components of the velocity of movement
-    def __init__( self, identifier, (vx, vy), timeout=float("inf") ):
-        super( MoveState, self ).__init__( "move_" + identifier, timeout )
-        self._vx = vx
-        self._vy = vy
+    def __init__( self, identifier, v, timeout=float("inf") ):
+        super( FollowState, self ).__init__( "follow_" + identifier, timeout )
+        self._v = v
 
     ### Methods ###
 
@@ -58,4 +56,3 @@ class MoveState( State ):
     #   @override
     def _calc_departure_changes( self ):
         return SimulationDelta(PhysicalState(CompositeHitbox(), (-self._vx, -self._vy), 0.0))
-
