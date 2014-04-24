@@ -45,6 +45,7 @@ class FollowState( State ):
             follow = self._follow.get_chitbox().get_position()
             if pos[0] == follow[0] and pos[1] == follow[1]:
                 return SimulationDelta()
+
             dist = self._v * time_delta
             xdif = 0
             if pos[0] >= follow[0]:
@@ -56,13 +57,21 @@ class FollowState( State ):
                 ydif = pos[1] - follow[1]
             else:
                 ydif = follow[1] - pos[1]
-            xperc = xdif / (xdif + ydif)
-            deltax = math.sqrt(dist**2 - (1+xperc)**2)
-            deltay = math.sqrt(dist**2 - (2-xperc)**2)
-            if pos[0] > follow[0]:
-                deltax = -1 * deltax
-            if pos[1] > follow[1]:
-                deltay = -1 * deltay
+
+            deltax = 0.0
+            deltay = 0.0
+            if ydif == 0:
+                deltax = dist
+            elif xdif == 0:
+                deltay = dist
+            else:
+                xperc = float(xdif) / ydif
+                deltax = math.sqrt(dist**2 / (1+xperc**2))
+                deltay = math.sqrt(dist**2 / (1+(1/xperc)**2))
+                if pos[0] > follow[0]:
+                    deltax = -1 * deltax
+                if pos[1] > follow[1]:
+                    deltay = -1 * deltay
             phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
             return SimulationDelta( phys_delta )
         return SimulationDelta()
@@ -71,8 +80,17 @@ class FollowState( State ):
     #   finds player and sets them to be followed
     #   Returns an empty set of physical changes.
     #
+    #   @param event A Collision type event between the player and this entity
     #   @override
     def _calc_arrival_changes( self, event ):
+        objs = event.get_parameters()["objects"]
+        if objs[0].get_name == "player":
+            self._follow = objs[0]
+            self._pos = objs[1]
+        else:
+            self._follow = objs[1]
+            self._pos = objs[0]
+
         return SimulationDelta(PhysicalState(CompositeHitbox(), (0, 0), 0.0))
 
     ##  Returns an empty set of physical changes.
