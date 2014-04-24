@@ -24,6 +24,8 @@ class FollowState( State ):
     def __init__( self, identifier, v, timeout=float("inf") ):
         super( FollowState, self ).__init__( "follow_" + identifier, timeout )
         self._v = v
+        self._follow = None
+        self._myPos = None
 
     ### Methods ###
 
@@ -38,12 +40,14 @@ class FollowState( State ):
     #
     #   @override
     def _calc_step_changes( self, time_delta ):
-        dist = self._v * time_delta
-        xperc = #Somemath
-        deltax = math.sqrt(dist**2 - (1+xperc)**2)
-        deltay = math.sqrt(dist**2 - (2-xperc)**2)
-        phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
-        return SimulationDelta( phys_delta )
+        if self._follow != None and self._myPos != None:
+            dist = self._v * time_delta
+            xperc = 0 #Somemath
+            deltax = math.sqrt(dist**2 - (1+xperc)**2)
+            deltay = math.sqrt(dist**2 - (2-xperc)**2)
+            phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
+            return SimulationDelta( phys_delta )
+        return SimulationDelta()
 
     ##  Player should be one of the collissions,
     #   finds player and sets them to be followed
@@ -51,10 +55,10 @@ class FollowState( State ):
     #
     #   @override
     def _calc_arrival_changes( self, event ):
-        return SimulationDelta(PhysicalState(CompositeHitbox(), (self._v/2, self._v/2), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(), (0, 0), 0.0))
 
     ##  Returns an empty set of physical changes.
     #
     #   @override
     def _calc_departure_changes( self ):
-        return SimulationDelta(PhysicalState(CompositeHitbox(), (-self._v/2, -self._v/2), 0.0))
+        return SimulationDelta(PhysicalState(CompositeHitbox(), (0, 0), 0.0))
