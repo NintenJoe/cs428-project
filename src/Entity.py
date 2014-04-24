@@ -120,6 +120,11 @@ class Entity( object ):
     def get_hitbox( self ):
         return self.get_physical_state().get_volume()
 
+    ##  @return The current health associated with the instance "Entity"
+    #   (returne as an integer)
+    def get_curr_health( self ):
+        return self.get_physical_state().get_curr_health()
+
     # TODO: Remove this function in later versions.
     def _update_hitbox( self ):
         state_name = self._mntl_state.get_current_state().get_name()
