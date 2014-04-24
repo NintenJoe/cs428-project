@@ -28,6 +28,7 @@
 #   - Make the implementation of the equality operator in the `CompositeHitbox`
 #     type more elegant.
 #   - Add testing for the `Hitbox` type's `__repr__` function.
+#   - Refactor the anchor functionality of the `CompositeHitbox` type.
 
 import itertools
 import pygame as PG
@@ -116,8 +117,9 @@ class CompositeHitbox( object ):
     #   @param pos_y The vertical game world position for the composite hitbox.
     #   @param hitbox_list A list of `Hitbox` objects that will compose the
     #    composite (positioned relative to the composite's origin).
-    def __init__( self, pos_x=0, pos_y=0, hitbox_list=[] ):
+    def __init__( self, pos_x=0, pos_y=0, hitbox_list=[], anchor_x=0, anchor_y=0 ):
         self._container_box = Hitbox( pos_x, pos_y, 0, 0 )
+        self._anchor_pos = ( anchor_x, anchor_y )
         self._inner_boxes = [ Hitbox(0, 0, 0, 0) for i in range(6) ]
 
         self._adjust_boxes_to( hitbox_list )
@@ -128,6 +130,7 @@ class CompositeHitbox( object ):
     #    of contained hitboxes, same positions) and false otherwise.
     def __eq__( self, other ):
         return self._container_box == other._container_box and \
+            self._anchor_pos == other._anchor_pos and \
             len(self._inner_boxes) == len(other._inner_boxes) and \
             all(self._inner_boxes.count(i) == other._inner_boxes.count(i) for i in self._inner_boxes)
 
@@ -139,6 +142,13 @@ class CompositeHitbox( object ):
     #   @param chitbox_template The template to be adopted by the instance.
     def adopt_template( self, chitbox_template ):
         self._adjust_boxes_to( chitbox_template.get_inner_boxes_relative() )
+
+        other_anchor_pos = chitbox_template.get_anchor()
+        anchor_shift = (
+            self._anchor_pos[ 0 ] - other_anchor_pos[ 0 ],
+            self._anchor_pos[ 1 ] - other_anchor_pos[ 1 ],
+        )
+        self.translate( anchor_shift[0], anchor_shift[1] )
 
     ##  Translates the composite hitbox by the given amount along the two
     #   cardinal axes.
@@ -156,6 +166,10 @@ class CompositeHitbox( object ):
     ##  @return The position of the composite as a tuple of the form (x, y).
     def get_position( self ):
         return ( self._container_box.x, self._container_box.y )
+
+    ##  @return The position of the anchor as a tuple of the form (x, y).
+    def get_anchor( self ):
+        return self._anchor_pos
 
     ##  @return A `Hitbox` container for all the hitboxes that compose the composite.
     def get_bounding_box( self ):

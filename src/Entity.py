@@ -136,7 +136,6 @@ class Entity( object ):
 
             entity_chitbox.adopt_template( chitbox_template )
 
-
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
@@ -181,6 +180,7 @@ class Entity( object ):
         for state in self._mntl_state.get_states():
             hitboxes = []
 
+            # TODO: Add functionality to specify an anchor for each chitbox.
             tree = minidom.parse( self._open_state_hbox_file(state) )
             rects = tree.getElementsByTagName('rect')
             for rect in rects:

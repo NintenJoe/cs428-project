@@ -10,6 +10,7 @@
 #   Low Priority:
 #   - Add more tests for the `CompositeHitbox` test for `adopt_template`
 #     function.
+#   - Add tests to assert the anchor adjustment occurs properly.
 
 import unittest
 import collections
