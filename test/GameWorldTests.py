@@ -66,7 +66,7 @@ class GameWorldTests(unittest.TestCase):
         pass
 
     def test_notify_of(self):
-        player = self._world.get_entities()[1]
+        player = self._world._player_entity
         pre_player_status = player.get_status()
         event = Event(EventType.KEYDOWN, {"key": InputController.MOVE_UP})
         self._world.notify_of(event, [player])
@@ -75,7 +75,7 @@ class GameWorldTests(unittest.TestCase):
         post_player_status = player.get_status()
 
         # TODO: Resolve this here.
-        self.assertFalse(
+        self.assertTrue(
             "move_up" in post_player_status,
             "Player didn't change states."
         )
