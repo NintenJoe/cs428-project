@@ -35,6 +35,10 @@ SLACK = 0
 
 ## Game View Variables ##
 
+##  The default dimensions of the screen to which the game will be rendered
+#   (given in number of pixels).
+SCREEN_DIMS = ( 640, 480 )
+
 ##  The dimensions of the tiles that comprise the game world in number of pixels.
 TILE_DIMS = ( 20, 20 )
 
@@ -66,7 +70,7 @@ def load_image( file_name, color_key=None ):
 
     if not os.path.isfile( file_path ):
         logging.warning( "Image file '%s' does not exist." % file_name )
-        file_path = os.path.join( ASSET_PATH, "graphics", "default.bmp" )
+        file_path = os.path.join( ASSET_PATH, "graphics", "default.png" )
 
     try:
         if (color_key != None and color_key.a == 0):
@@ -82,26 +86,6 @@ def load_image( file_name, color_key=None ):
         image.set_colorkey( color_key, RLEACCEL )
 
     return image
-
-##  Loads the sound specified by the file name in the method parameters.
-#   
-#   @param file_name The name of the audio file to be loaded.
-#   @return The audio, which can be played by the "pygame" library's audio player.
-def load_sound( file_name ):
-    file_path = os.path.join( ASSET_PATH, "audio", file_name )
-
-    if not os.path.isfile( file_path ):
-        logging.warning( "Audio file '%s' does not exist." % file_name )
-        file_path = os.path.join( ASSET_PATH, "audio", "default.wav" )
-
-    try:
-        sound = PG.mixer.Sound( file_path )
-    except PG.error, message:
-        logging.error( "Could not load sound file at '%s'... failed with error '%s'." %
-            (file_path, message) )
-        raise SystemExit
-
-    return sound
 
 ##  Restricts the given value to the range defined by the 2nd and 3rd method 
 #   parameters.  That is, the first parameter value will be restricted to the 2nd
