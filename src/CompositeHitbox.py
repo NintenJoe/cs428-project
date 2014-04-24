@@ -168,10 +168,10 @@ class CompositeHitbox( object ):
     ##  @return A listing of all `Hitbox` objects that represents the inner hitboxes
     #    of the composite relative to the composite origin.
     def get_inner_boxes_relative( self ):
-        chitbox_pos = self.get_position()
+        cbox_pos = self.get_position()
 
         return [
-            Hitbox(hb.x - chitbox_pos[0], hb.y - chitbox_pos[1], hb.w, hb.h) \
+            Hitbox(hb.x - cbox_pos[0], hb.y - cbox_pos[1], hb.w, hb.h, hb.htype) \
             for hb in self._inner_boxes
         ]
 

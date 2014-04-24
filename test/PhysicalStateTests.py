@@ -172,13 +172,13 @@ class PhysicalStateTests( unittest.TestCase ):
             "Adding a non-zero delta to a state doesn't properly alter volume Y."
         )
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().w,
-            PhysicalStateTests.VOLUME.get_hitbox().w,
+            self._physstate.get_volume().get_bounding_box().w,
+            PhysicalStateTests.VOLUME.get_bounding_box().w,
             "Adding a non-zero delta to a state doesn't properly alter volume W."
         )
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().h,
-            PhysicalStateTests.VOLUME.get_hitbox().h,
+            self._physstate.get_volume().get_bounding_box().h,
+            PhysicalStateTests.VOLUME.get_bounding_box().h,
             "Adding a non-zero delta to a state doesn't properly alter volume H."
         )
 
@@ -217,26 +217,26 @@ class PhysicalStateTests( unittest.TestCase ):
         self._physstate.update( PhysicalStateTests.TIME_DELTA )
 
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().x,
-            PhysicalStateTests.VOLUME.get_hitbox().x + \
+            self._physstate.get_volume().get_bounding_box().x,
+            PhysicalStateTests.VOLUME.get_bounding_box().x + \
                 PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[0],
             "Updating the physical state properly updates the x-value of position."
         )
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().y,
-            PhysicalStateTests.VOLUME.get_hitbox().y + \
+            self._physstate.get_volume().get_bounding_box().y,
+            PhysicalStateTests.VOLUME.get_bounding_box().y + \
                 PhysicalStateTests.TIME_DELTA * PhysicalStateTests.VELOCITY[1],
             "Updating the physical state properly updates the y-value of position."
         )
 
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().w,
-            PhysicalStateTests.VOLUME.get_hitbox().w,
+            self._physstate.get_volume().get_bounding_box().w,
+            PhysicalStateTests.VOLUME.get_bounding_box().w,
             "Updating the physical state improperly updates the volume."
         )
         self.assertEqual(
-            self._physstate.get_volume().get_hitbox().h,
-            PhysicalStateTests.VOLUME.get_hitbox().h,
+            self._physstate.get_volume().get_bounding_box().h,
+            PhysicalStateTests.VOLUME.get_bounding_box().h,
             "Updating the physical state improperly updates the volume."
         )
         self.assertEqual(
