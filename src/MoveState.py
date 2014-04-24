@@ -41,8 +41,8 @@ class MoveState( State ):
     #
     #   @override
     def _calc_step_changes( self, time_delta ):
-        deltax = self._vx * time_delta;
-        deltay = self._vy * time_delta;
+        deltax = self._vx * time_delta
+        deltay = self._vy * time_delta
         phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
 
         return SimulationDelta( phys_delta )
