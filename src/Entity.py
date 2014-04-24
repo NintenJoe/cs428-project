@@ -182,6 +182,7 @@ class Entity( object ):
 
             # TODO: Add functionality to specify an anchor for each chitbox.
             tree = minidom.parse( self._open_state_hbox_file(state) )
+
             rects = tree.getElementsByTagName('rect')
             for rect in rects:
                 x = int( rect.getAttribute('x') )
@@ -192,7 +193,14 @@ class Entity( object ):
 
                 hitboxes.append( Hitbox(x, y, w, h, h_class) )
 
-            hitlist[ state.get_name() ] = CompositeHitbox( 0, 0, hitboxes )
+            ax = 0
+            ay = 0
+            circles = tree.getElementsByTagName('circle')
+            for circle in circles:
+                ax = int( circle.getAttribute('cx') )
+                ay = int( circle.getAttribute('cy') )
+
+            hitlist[ state.get_name() ] = CompositeHitbox( 0, 0, hitboxes, ax, ay )
 
         return hitlist
 
