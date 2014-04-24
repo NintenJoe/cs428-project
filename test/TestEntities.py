@@ -29,7 +29,7 @@ from src.SimulationDelta import *
 #   functionality to facilitate testing.
 class SimpleTestEntity( Entity ):
     ##  The initial "PhysicalState" assigned to the entity.
-    INITIAL_PHYSICAL = PhysicalState( CompositeHitbox(1, 2), (5, 6), 7.0 )
+    INITIAL_PHYSICAL = PhysicalState( CompositeHitbox(1, 2), (5, 6), 7.0, 6, 6 )
 
     ## The set of "State" objects that comprise the entity's state machine.
     MACHINE_STATES = [
@@ -45,7 +45,7 @@ class SimpleTestEntity( Entity ):
 
     ##  @override
     def _produce_physical( self, data ):
-        return PhysicalState( CompositeHitbox( 1, 2 ), (5, 6), 7.0 )
+        return PhysicalState( CompositeHitbox( 1, 2 ), (5, 6), 7.0, 6, 6 )
 
     ##  @override
     def _produce_machine( self, data ):

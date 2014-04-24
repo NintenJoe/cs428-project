@@ -41,7 +41,7 @@ class EntityTests( unittest.TestCase ):
 
     ##  The physical delta used to initialize the test "Entity" in the value
     #   constructor based tests.
-    ENTITY_DELTA = PhysicalState( volume=CompositeHitbox(4, 3), velocity=(2, -1), mass=2.0 )
+    ENTITY_DELTA = PhysicalState( volume=CompositeHitbox(4, 3), velocity=(2, -1), mass=2.0, curr_health=-1 )
 
     ##  The time delta used for update testing on the test "Entity" objects.
     TIME_DELTA = 1.0
