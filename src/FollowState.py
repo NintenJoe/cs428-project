@@ -25,7 +25,7 @@ class FollowState( State ):
         super( FollowState, self ).__init__( "follow_" + identifier, timeout )
         self._v = v
         self._follow = None
-        self._myPos = None
+        self._pos = None
 
     ### Methods ###
 
@@ -40,11 +40,29 @@ class FollowState( State ):
     #
     #   @override
     def _calc_step_changes( self, time_delta ):
-        if self._follow != None and self._myPos != None:
+        if self._follow != None and self._pos != None:
+            pos = self._pos.get_chitbox().get_position()
+            follow = self._follow.get_chitbox().get_position()
+            if pos[0] == follow[0] and pos[1] == follow[1]:
+                return SimulationDelta()
             dist = self._v * time_delta
-            xperc = 0 #Somemath
+            xdif = 0
+            if pos[0] >= follow[0]:
+                xdif = pos[0] - follow[0]
+            else:
+                xdif = follow[0] - pos[0]
+            ydif = 0
+            if pos[1] >= follow[1]:
+                ydif = pos[1] - follow[1]
+            else:
+                ydif = follow[1] - pos[1]
+            xperc = xdif / (xdif + ydif)
             deltax = math.sqrt(dist**2 - (1+xperc)**2)
             deltay = math.sqrt(dist**2 - (2-xperc)**2)
+            if pos[0] > follow[0]:
+                deltax = -1 * deltax
+            if pos[1] > follow[1]:
+                deltay = -1 * deltay
             phys_delta = PhysicalState(CompositeHitbox(deltax, deltay), (0, 0), 0.0 )
             return SimulationDelta( phys_delta )
         return SimulationDelta()
