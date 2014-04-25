@@ -38,6 +38,7 @@ def main():
     game_view._screen.fill( (255, 255, 255) )
     image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'title_screen.png'))
     rect = image.get_rect()
+    gameover_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'gameover_screen.png'))
     pause_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'pause_screen.png'))
     game_view._screen.blit(image, rect)
     PG.display.flip()
@@ -107,7 +108,7 @@ def main():
             prev_game_time = game_time
             game_time = PG.time.get_ticks()
 
-            if pause_screen == False:
+            if gameover_screen == False and pause_screen == False:
                 # TODO: Adjust the frame time here in a more elegant fashion.
                 game_world.update( (game_time - prev_game_time) / 10 )
 
@@ -122,6 +123,7 @@ def main():
             PG.display.flip()
         if gameover_screen == True:
             game_view._screen.fill( (255, 0 , 0) )
+            game_view._screen.blit(gameover_image, rect)
             PG.display.flip()
     # Exit the game after the primary game loop has been terminated.
     PG.quit()
