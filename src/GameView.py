@@ -66,7 +66,7 @@ class GameView():
         self.render_environment( viewport, tilemap )
         self.render_entities( viewport, entity_list )
 
-        self._player_health_widget.render_to( self._screen, 3 )
+        #self._player_health_widget.render_to( self._screen, 3 )
 
         PG.display.flip()
 

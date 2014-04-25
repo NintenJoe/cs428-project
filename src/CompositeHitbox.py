@@ -120,7 +120,7 @@ class CompositeHitbox( object ):
     def __init__( self, pos_x=0, pos_y=0, hitbox_list=[], anchor_x=0, anchor_y=0 ):
         self._container_box = Hitbox( pos_x, pos_y, 0, 0 )
         self._anchor_pos = ( anchor_x, anchor_y )
-        self._inner_boxes = [ Hitbox(0, 0, 0, 0) for i in range(6) ]
+        self._inner_boxes = [ Hitbox(0, 0, 0, 0) for i in range(10) ]
 
         self._adjust_boxes_to( hitbox_list )
 

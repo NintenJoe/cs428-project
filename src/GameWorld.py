@@ -176,7 +176,7 @@ class GameWorld():
             entity1.notify_of( collision_event )
             entity2.notify_of( collision_event )
 
-            self._resolve_collision( entity1.get_chitbox(), entity2.get_bbox() )
+            self._resolve_collision( entity1.get_chitbox(), entity2.get_chitbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.
@@ -191,33 +191,49 @@ class GameWorld():
         final_idx_x = int( entity_hitbox.right / Globals.TILE_DIMS[0] ) + 1
         final_idx_y = int( entity_hitbox.bottom / Globals.TILE_DIMS[1] ) + 1
 
+        tile_hitbox_list = []
         for idx_x in range( start_idx_x, final_idx_x ):
             for idx_y in range( start_idx_y, final_idx_y ):
                 tile_is_tangible = self._tilemap[ idx_x ][ idx_y ][ 1 ]
+                tile_hitbox = Hitbox(
+                    idx_x * Globals.TILE_DIMS[0],
+                    idx_y * Globals.TILE_DIMS[1],
+                    Globals.TILE_DIMS[0],
+                    Globals.TILE_DIMS[1],
+                    HitboxType.DEFAULT if tile_is_tangible else HitboxType.INTANGIBLE
+                )
 
-                if tile_is_tangible:
-                    tile_hitbox.topleft = (
-                        idx_x * Globals.TILE_DIMS[0],
-                        idx_y * Globals.TILE_DIMS[1]
-                    )
+                tile_hitbox_list.append( tile_hitbox )
 
-                    self._resolve_collision( entity.get_chitbox(), tile_hitbox )
+        x_list = [h.x for h in tile_hitbox_list if h.htype != HitboxType.INTANGIBLE]
+        y_list = [h.y for h in tile_hitbox_list if h.htype != HitboxType.INTANGIBLE]
+        min_x = min( x_list if x_list else [start_idx_x * Globals.TILE_DIMS[0]] )
+        min_y = min( y_list if y_list else [start_idx_y * Globals.TILE_DIMS[1]] )
+        for hitbox in tile_hitbox_list:
+            hitbox.x -= min_x
+            hitbox.y -= min_y
 
-    ##  Resolves a collision between two hitboxes, adjusting the them as
-    #   necessary so that they're no longer intersecting.
+        tile_collection_chitbox = CompositeHitbox( min_x, min_y, tile_hitbox_list )
+        self._resolve_collision( entity.get_chitbox(), tile_collection_chitbox )
+
+    ##  Resolves a collision between two composite hitboxes, adjusting the first
+    #   so that it no longer intersects with the second.
     #
-    #   @param hitbox1 The first hitbox involved in a collision to be resolved.
-    #   @param hitbox2 The second hitbox involved in a collision to be resolved.
-    def _resolve_collision( self, hitbox1, hitbox2 ):
-        collision_rect = hitbox1.get_bounding_box().clip( hitbox2 )
+    #   @param chitbox_movable The composite to be resolved and moved in collision.
+    #   @param chitbox_fixed The composite to be resolved in the collision.
+    def _resolve_collision( self, chitbox_movable, chitbox_fixed ):
+        hitbox_movable = chitbox_movable.get_bounding_box()
+        hitbox_fixed = chitbox_fixed.get_bounding_box()
+
+        collision_rect = hitbox_movable.clip( hitbox_fixed )
         res_vector = [ 0, 0 ]
 
         if collision_rect.w < collision_rect.h:
-            res_factor = -1 if hitbox1.get_bounding_box().x < collision_rect.x else 1
-            res_vector[ 0 ] = res_factor * collision_rect.w
+            res_factor = -1 if hitbox_movable.x < collision_rect.x else 1
+            res_vector[ 0 ] = res_factor * ( collision_rect.w + 1 if collision_rect.w else 0 )
         else:
-            res_factor = -1 if hitbox1.get_bounding_box().y < collision_rect.y else 1
-            res_vector[ 1 ] = res_factor * collision_rect.h
+            res_factor = -1 if hitbox_movable.y < collision_rect.y else 1
+            res_vector[ 1 ] = res_factor * ( collision_rect.h + 1 if collision_rect.h else 0 )
 
-        hitbox1.translate( res_vector[0], res_vector[1] )
+        chitbox_movable.translate( res_vector[0], res_vector[1] )
 
