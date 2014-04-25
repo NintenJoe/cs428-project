@@ -66,7 +66,9 @@ class GameView():
         self.render_environment( viewport, tilemap )
         self.render_entities( viewport, entity_list )
 
-        self._player_health_widget.render_to( self._screen, 3 )
+        player = game_world._player_entity
+        health = 4 if player is None else player.get_curr_health()
+        self._player_health_widget.render_to( self._screen, health )
 
         PG.display.flip()
 

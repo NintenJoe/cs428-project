@@ -14,7 +14,7 @@ import src
 
 from src.GameWorld import *
 from src.Event import *
-from src.InputController import *
+from src.Globals import *
 
 ##  Container class for the test suite that tests the functionality of the
 #   "GameWorld" type.
@@ -68,7 +68,7 @@ class GameWorldTests(unittest.TestCase):
     def test_notify_of(self):
         player = self._world._player_entity
         pre_player_status = player.get_status()
-        event = Event(EventType.KEYDOWN, {"key": InputController.MOVE_UP})
+        event = Event(EventType.KEYDOWN, {"key": MOVE_UP})
         self._world.notify_of(event, [player])
 
         player.update(0.0001)
