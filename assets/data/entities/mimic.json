@@ -62,43 +62,23 @@
         ],
         [
             "move_right",
-            "idle_attack_right",
+            "idle_1",
             "^keydown,key:28$"
         ],
         [
             "move_down",
-            "idle_attack_down",
+            "idle_1",
             "^keydown,key:28$"
         ],
         [
             "move_up",
-            "idle_attack_up",
+            "idle_1",
             "^keydown,key:28$"
         ],
         [
             "move_left",
-            "idle_attack_left",
+            "idle_1",
             "^keydown,key:28$"
-        ],
-        [
-            "idle_attack_right",
-            "idle_1",
-            ".*timeout.*"
-        ],
-        [
-            "idle_attack_down",
-            "idle_1",
-            ".*timeout.*"
-        ],
-        [
-            "idle_attack_up",
-            "idle_1",
-            ".*timeout.*"
-        ],
-        [
-            "idle_attack_left",
-            "idle_1",
-            ".*timeout.*"
         ],
         [
             "move_down",
@@ -211,26 +191,6 @@
                 1,
                 0
             ]
-        ],
-        [
-            "IdleState.IdleState",
-            "attack_right",
-            25
-        ],
-        [
-            "IdleState.IdleState",
-            "attack_down",
-            25
-        ],
-        [
-            "IdleState.IdleState",
-            "attack_up",
-            25
-        ],
-        [
-            "IdleState.IdleState",
-            "attack_left",
-            25
         ]
     ]
 }

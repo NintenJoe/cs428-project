@@ -55,12 +55,8 @@ class Segment():
         self._setup_tiles()
         self._setup_entities()
 
-        # Find transition and entry point tiles
-        self.transition_tiles = []
-        special_tiles = self._find_special_tiles()
-        for tile in special_tiles:
-            if (tile[1][0] == tile[1][1] == tile[1][2]): # color is grayscale
-                self.transition_tiles.append(tile)
+        # Find transition tiles
+        self._set_transition_tiles()
 
     # Methods #
 
@@ -73,6 +69,19 @@ class Segment():
     #              transition in the destination segment.
     def add_transition(self, src, dest_segment, dest):
         self.transitions[src] = (dest_segment, dest)
+
+    ##  Gets the transition if there is one at that tile
+    #
+    #   @param idx the x coordinate of the tile
+    #   @param idy the y coordinate of the tile
+    #
+    #   @return None if there is no transition
+    #           (dest_segment, (dest_x,dest_y)) if there is a transition
+    def get_tile_transition(self, idx, idy):
+        if ((idx,idy) in self.transitions):
+            return self.transitions[(idx,idy)]
+        else:
+            return None
 
     ##  Returns the tile information
     #
@@ -105,9 +114,16 @@ class Segment():
     #
     #   @return A list of tuples of the form:
     #       ((x,y),pygame.Color)
-    def _find_special_tiles(self):
-        tiles = []
-        return tiles
+    def _set_transition_tiles(self):
+        self.transition_tiles = []
+
+        for x in range(0,len(self.tiles)):
+            for y in range(0,len(self.tiles[x])):
+                tile = self.tiles[x][y]
+                if (tile[2] != (0,0,0,255) and tile[2] != (255,255,255,255)):
+                    if (tile[2][0] == tile[2][1] == tile[2][2]): # color is grayscale
+                        self.transition_tiles.append(((x,y),tile[2]))
+        
 
     ##  Initializes the tile array
     #
@@ -159,7 +175,7 @@ class Segment():
             tangible = (line[d1+d2+2:].rstrip()) == 't'
 
             color = PG.Color(color_str)
-            tiles[tuple(color)] = (tile_id,tangible)
+            tiles[tuple(color)] = (tile_id,tangible,tuple(color))
 
         tiles_file.close()
 
