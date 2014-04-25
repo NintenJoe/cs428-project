@@ -2,12 +2,12 @@
     "edges": [
         [
             "idle_1",
-            "death",
+            "idle_death",
             ".*collision.*victim:'mega'.*"
         ],
         [
             "follow_player",
-            "death",
+            "idle_death",
             ".*collision.*victim:'mega'.*"
         ],
         [
