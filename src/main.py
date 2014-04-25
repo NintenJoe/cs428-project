@@ -95,6 +95,8 @@ def main():
                     game_view = GameView()
                     game_world = GameWorld()
                     gameover_screen = False
+                elif input_event.key == K_y:
+                    gameover_screen = True
 
                 event_type = EventType.KEYDOWN if input_event.type == KEYDOWN \
                     else EventType.KEYUP
@@ -110,7 +112,7 @@ def main():
             prev_game_time = game_time
             game_time = PG.time.get_ticks()
 
-            if pause_screen == False:
+            if gameover_screen == False and pause_screen == False:
                 # TODO: Adjust the frame time here in a more elegant fashion.
                 game_world.update( (game_time - prev_game_time) / 10 )
 
