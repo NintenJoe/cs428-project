@@ -44,7 +44,7 @@ class SimpleTestEntity( Entity ):
     ]
 
     ##  @override
-    def _produce_physical( self, data ):
+    def _produce_physical( self ):
         return PhysicalState( CompositeHitbox( 1, 2 ), (5, 6), 7.0, 6, 6 )
 
     def _update_hitbox( self ):
