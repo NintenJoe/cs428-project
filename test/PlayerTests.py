@@ -62,4 +62,4 @@ class PlayerTest( unittest.TestCase ):
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
         self.player.notify_of( Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)

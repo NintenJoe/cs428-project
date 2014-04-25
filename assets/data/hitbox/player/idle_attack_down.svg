@@ -4,6 +4,6 @@
 	<rect class="vulnerable" height="12" stroke="rgb(0%,0%,100%)" width="12" x="3" y="7"/>
 	<rect class="vulnerable" height="11" stroke="rgb(0%,0%,100%)" width="12" x="1" y="19"/>
 	<rect class="vulnerable" height="5" stroke="rgb(0%,0%,100%)" width="5" x="7" y="30"/>
-	<rect class="hurt" height="20" stroke="rgb(100%,0%,0%)" width="13" x="3" y="35"/>
+	<rect class="hurt" height="10" stroke="rgb(100%,0%,0%)" width="5" x="8" y="35"/>
 	<circle class="dot" cx="3" cy="7" r="1" stroke="rgb(0%,100%,100%)"/>
 </svg>

@@ -66,12 +66,14 @@ class State( object ):
     ##  Simulates an arrival at the instance state, returning the resultant
     #   changes as a "SimulationDelta" instance.
     #
+    #   @param event The event that triggered the arrival
+    #
     #   @return A "SimulationDelta" containing all the changes incurred by the
     #    arrival.
-    def simulate_arrival( self ):
+    def simulate_arrival( self, event=Event() ):
         self._active_time = 0.0
 
-        return self._calc_arrival_changes()
+        return self._calc_arrival_changes(event)
 
     ##  Simulates a departure from the instance state, returning the resultant
     #   changes as a "SimulationDelta" instance.
@@ -120,9 +122,11 @@ class State( object ):
     ##  Simulates an arrival at the instance state, returning the changes
     #   associated with this arrival.
     #
+    #   @param event The event that triggered the arrival
+    #
     #   @return The changes associated with the arrival as a "SimulationDelta".
     @abstractmethod
-    def _calc_arrival_changes( self ):
+    def _calc_arrival_changes( self, event ):
         pass
 
     ##  Simulates an arrival at the instance state, returning the changes
