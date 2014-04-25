@@ -149,6 +149,7 @@ class CompositeHitbox( object ):
             self._anchor_pos[ 1 ] - other_anchor_pos[ 1 ],
         )
         self.translate( anchor_shift[0], anchor_shift[1] )
+        self._anchor_pos = other_anchor_pos
 
     ##  Translates the composite hitbox by the given amount along the two
     #   cardinal axes.
@@ -162,6 +163,16 @@ class CompositeHitbox( object ):
         for inner_box in self._inner_boxes:
             inner_box.x += delta_x
             inner_box.y += delta_y
+
+    ##  Places the instance composite hitbox at the given location in the world.
+    #
+    #   @param pos_x The new location for the composite along the horizontal axis.
+    #   @param pos_y The new location for the composite along the vertical axis.
+    def place_at( self, pos_x, pos_y ):
+        cbox_pos = self.get_position()
+
+        self.translate( -cbox_pos[0], -cbox_pos[1] )
+        self.translate( pos_x, pos_y )
 
     ##  @return The position of the composite as a tuple of the form (x, y).
     def get_position( self ):
