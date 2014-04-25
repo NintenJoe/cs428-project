@@ -42,6 +42,6 @@ class SimpleTestState( State ):
         return SimulationDelta( PhysicalState(mass=2.0), [ Event() ] )
 
     ##  @override
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         return SimulationDelta( PhysicalState(mass=3.0) )
 

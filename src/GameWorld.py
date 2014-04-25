@@ -58,7 +58,6 @@ class GameWorld():
             entity_gen_events = entity.update(time_delta)
             for event in entity_gen_events:
                 if event.get_type() == EventType.DEAD:
-                    print "Entity: " + str(entity)
                     self._remove_entity(entity)
 
         self._collision_detector.update()

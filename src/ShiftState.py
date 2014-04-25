@@ -52,6 +52,6 @@ class ShiftState( State ):
     #   an idle state.
     #
     #   @override
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         return SimulationDelta(PhysicalState(CompositeHitbox(-1 * self._xchange, -1 * self._ychange), (0, 0), 0.0))
 

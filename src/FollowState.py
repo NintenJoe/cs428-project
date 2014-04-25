@@ -96,5 +96,5 @@ class FollowState( State ):
     ##  Returns an empty set of physical changes.
     #
     #   @override
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         return SimulationDelta(PhysicalState(CompositeHitbox(), (0, 0), 0.0))

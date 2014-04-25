@@ -129,6 +129,12 @@ class EntityTests( unittest.TestCase ):
             "Value entity constructor isn't independent of initial delta parameter."
         )
 
+
+    def test_repr_operator( self ):
+        self.assertEqual( repr(self._entity), EntityTests.ENTITY_NAME,
+            "Entity representation operator doesn't return the entity classifier." )
+
+
     def test_update_without_events( self ):
         pre_state = self._entity.get_mental_state().get_current_state()
         events = self._entity.update( EntityTests.TIME_DELTA )

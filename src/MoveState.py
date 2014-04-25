@@ -56,6 +56,6 @@ class MoveState( State ):
     ##  Returns an empty set of physical changes.
     #
     #   @override
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         return SimulationDelta(PhysicalState(CompositeHitbox(), (-self._vx, -self._vy), 0.0))
 

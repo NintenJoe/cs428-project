@@ -46,7 +46,6 @@ class State( object ):
     #    If no time is specified, there is no "time out" time for the state.
     def __init__( self, identifier, timeout=float("inf") ):
         self._name = identifier
-
         self._active_time = 0.0
         self._timeout_time = timeout
 
@@ -80,10 +79,10 @@ class State( object ):
     #
     #   @return A "SimulationDelta" containing all the changes incurred by the
     #    departure.
-    def simulate_departure( self ):
+    def simulate_departure( self, event=Event() ):
         self._active_time = 0.0
 
-        return self._calc_departure_changes()
+        return self._calc_departure_changes(event)
 
     ##  @return True if the state has exceeded its maximum "time out" time and
     #    false otherwise.
@@ -134,6 +133,6 @@ class State( object ):
     #
     #   @return The changes associated with the departure as a "SimulationDelta".
     @abstractmethod
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         pass
 

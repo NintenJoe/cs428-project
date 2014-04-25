@@ -69,6 +69,8 @@ class SimulationDelta( object ):
 
         return aggregate
 
+    def __str__( self ):
+        return "{PhysicalState: " + str(self._entity_delta) + ", events: " + str(self._events) + "}"
     ### Methods ###
 
     ##  @return The aggregate changes to the physical state of the "Entity"

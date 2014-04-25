@@ -68,6 +68,12 @@ class PhysicalState( object ):
             self._curr_health == other._curr_health and \
             self._max_health == other._max_health
 
+    def __str__( self ):
+        return "{volume: " + str(self._volume) + \
+                ", velocity: " + str(self._velocity) + \
+                ", mass: " + str(self._mass) + \
+                ", curr_health: " + str(self._curr_health) + \
+                ", max_health: " + str(self._max_health) + "}\n"
     ### Methods ###
 
     ##  Adds the change in physical state represented by the given state object

@@ -19,7 +19,7 @@ class HitState(State):
     #  @param damage An integer that represents how much health is lost when
     #  entering the state.
     def __init__(self, identifier, damage):
-        super(HitState, self).__init__(identifier, timeout=float(0))
+        super(HitState, self).__init__("hit_" + identifier, timeout=float(0))
         self._damage = damage
 
     ### Public Methods ###
@@ -52,5 +52,5 @@ class HitState(State):
     #  arrival.
     #
     #  @override
-    def _calc_departure_changes( self ):
+    def _calc_departure_changes( self, event ):
         return SimulationDelta()

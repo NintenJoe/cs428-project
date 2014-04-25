@@ -37,7 +37,7 @@ class HitStateTests(unittest.TestCase):
     ### Testing Functions ###
 
     def test_constructor(self):
-        self.assertEqual(self._state.get_name(), HitStateTests.STATE_NAME,
+        self.assertEqual(self._state.get_name(), "hit_" + HitStateTests.STATE_NAME,
             "HitState constructor improperly initializes name of the state.")
         self.assertEqual(self._state.get_damage(), HitStateTests.DAMAGE,
             "HitState constuctor improperly initializes the damage of the state.")

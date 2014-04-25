@@ -28,8 +28,8 @@
 import Globals
 import Queue
 import json
-import logging
 import os.path
+import logging
 from xml.dom import minidom
 
 from PhysicalState import *
@@ -58,6 +58,11 @@ class Entity( object ):
         self._phys_state.add_delta( initial_delta )
         self._update_chitbox()
 
+    ### Overloaded Operators ###
+
+    ##  @return The classification for the entity instance.
+    def __repr__( self ):
+        return self._name
 
     ### Methods ###
 
@@ -72,6 +77,10 @@ class Entity( object ):
         prev_state = self._mntl_state.get_current_state().get_name()
         while not self._event_queue.empty():
             next_event = self._event_queue.get()
+            if "victim" in next_event.get_parameters():
+                if repr(next_event.get_parameters()["victim"]) == self.get_name():
+                    self._phys_state._curr_health -= 1
+
             sim_delta += self._mntl_state.simulate_transition( next_event )
         sim_delta += self._mntl_state.simulate_step( time_delta )
         post_state = self._mntl_state.get_current_state().get_name()
@@ -156,6 +165,7 @@ class Entity( object ):
         states = []
         for ele in data[ "states" ]:
             state_class = Globals.load_class(ele[0])
+            state_class_test = state_class(*ele[1:])
             states.append(state_class(*ele[1:]))
 
         edges = []
@@ -222,7 +232,7 @@ class Entity( object ):
     def _notify_of_death( self ):
         death_event = Event( EventType.DEAD, {} )
         return SimulationDelta( PhysicalState(), [death_event] )
-
+    
     ## @return Whether the instance is dead.
     def _is_dead( self ):
         return self.get_physical_state().get_curr_health() < 1
@@ -237,7 +247,7 @@ class Entity( object ):
     def _open_state_hbox_file( self, state ):
         sfile = state.get_name() + ".svg"
         spath = os.path.join( Globals.DATA_PATH, "hitbox", self._name, sfile )
-        dpath = os.path.join( Globals.DATA_PATH, "hitbox", "test.svg" )
+        dpath = os.path.join( Globals.DATA_PATH, "hitbox", "default.svg" )
 
         if os.path.isfile( spath ):
             return open( spath, "r" )

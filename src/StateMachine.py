@@ -85,6 +85,7 @@ class StateMachine():
                 return src_state.simulate_departure() + dst_state.simulate_arrival(event)
 
         return SimulationDelta()
+
     ##  @return The string identifier for the current state of the instance
     #    state machine.
     def get_current_state( self ):
