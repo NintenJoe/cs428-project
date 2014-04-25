@@ -63,7 +63,7 @@ class Entity( object ):
     ##  @return The classification for the entity instance.
     def __repr__( self ):
         return self._name
-
+    
     ### Methods ###
 
     ##  Updates the state of the entity based on the given game time that has
