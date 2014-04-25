@@ -6,7 +6,6 @@
 #
 #   @TODO
 #   High Priority:
-#   - Write the implementation in this file!
 #   - Remove the `Camera` instance from the `GameWorld` type and export it
 #     to a different module.
 #       > The level of abstraction of the `Camera` doesn't match with the
@@ -14,8 +13,6 @@
 #         should exist one level above the `GameWorld` for the best abstraction.
 #   - Add support for actual world loading instead of just loading a default
 #     world.
-#   - Implement functionality associated with interpretting events sent back
-#     by `Entity` object instances on update.
 #   - Remove all 'NOTE' items within this file by fixing up the `GameWorld`
 #     type.
 #   Low Priority:
@@ -56,9 +53,14 @@ class GameWorld():
     #
     #   @param time_delta The amount of game time that has passed in the frame.
     def update( self, time_delta ):
-        # TODO: Handle the events passed back by the `Entity` updates.
+        entity_gen_events = []
         for entity in self._entities:
-            entity.update( time_delta )
+            entity_gen_events = entity.update(time_delta)
+            for event in entity_gen_events:
+                if event.get_type() == EventType.DEAD:
+                    print "Entity: " + str(entity)
+                    self._remove_entity(entity)
+
         self._collision_detector.update()
 
         for entity_collision in self._collision_detector.get_all_collisions():
@@ -227,6 +229,18 @@ class GameWorld():
 
         chitbox_movable.translate( res_vector[0], res_vector[1] )
 
+    ##  Removes an entity from the Game World.
+    #
+    #   @param entity The entity that needs to be removed
+    def _remove_entity( self, entity ):
+        # Remove from Collision Detector
+        hitboxes = entity.get_chitbox().get_inner_boxes()
+        self._collision_detector.remove_multiple(hitboxes)
+
+        # Remove from Game World entity list
+        if entity in self._entities:
+            self._entities.remove(entity)
+
     def _load_new_segment(self, segment, player_pos=None):
         self._segment = segment
         segment_dims = segment.get_pixel_dims()
@@ -240,18 +254,14 @@ class GameWorld():
         for ( (idx_x, idx_y), entity_class ) in segment.get_entities():
             entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y )
 
-            if player_pos != None:
-                if entity_class == "player":
-                    self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
-                    self._entities.append(self._player_entity)
-                else:
-                    entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-                    entity = Entity( entity_class, entity_delta )
-                    self._entities.append( entity )
+            if player_pos != None and entity_class == "player":
+                self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
+                self._entities.append(self._player_entity)
             else:
-                entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-                entity = Entity( entity_class, entity_delta )
+                entity = Entity( entity_class )
+                entity.get_chitbox().place_at( entity_pos[0], entity_pos[1] )
                 self._entities.append( entity )
+
                 if entity_class == "player":
                     self._player_entity = entity
 
