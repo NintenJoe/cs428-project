@@ -37,7 +37,7 @@ class HitState(State):
 
     ## @return A "SimulationDelta" where damage, in the form of a -1 reduction
     #  to current health.
-    def _calc_arrival_changes( self ):
+    def _calc_arrival_changes( self, event ):
         return SimulationDelta(
                 PhysicalState(
                     volume=CompositeHitbox(), 
