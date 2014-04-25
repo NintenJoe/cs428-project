@@ -99,7 +99,7 @@ class FollowStateTests( unittest.TestCase ):
 
     def test_step_right( self ):
         self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._pos, self._follow), "volumes": (None, None)}))
-        self._follow.get_chitbox().get_bounding_box().x += 2
+        self._follow.get_chitbox().place_at(2, 0)
         change = self._state.simulate_step( FollowStateTests.TIME_DELTA * 2 )
 
         self.assertEqual( change,
@@ -108,8 +108,8 @@ class FollowStateTests( unittest.TestCase ):
 
     def test_step_down_left( self ):
         self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._pos, self._follow), "volumes": (None, None)}))
-        self._follow.get_chitbox().get_bounding_box().x -= 8
-        self._pos.get_chitbox().get_bounding_box().y -= 6
+        self._follow.get_chitbox().place_at(-8, 0)
+        self._pos.get_chitbox().place_at(0, -6)
         first_change = self._state.simulate_step( FollowStateTests.TIME_DELTA * 5)
 
         self.assertEqual( first_change,
