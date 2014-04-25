@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<svg baseProfile="full" height="100%" version="1.1" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs/>
+	<rect class="vulnerable" height="12" stroke="rgb(0%,0%,100%)" width="12" x="5" y="7"/>
+	<rect class="vulnerable" height="10" stroke="rgb(0%,0%,100%)" width="9" x="8" y="19"/>
+	<rect class="vulnerable" height="6" stroke="rgb(0%,0%,100%)" width="4" x="9" y="29"/>
+	<rect class="vulnerable" height="14" stroke="rgb(0%,0%,100%)" width="5" x="2" y="10"/>
+	<circle class="dot" cx="5" cy="7" r="1" stroke="rgb(0%,100%,100%)"/>
+</svg>

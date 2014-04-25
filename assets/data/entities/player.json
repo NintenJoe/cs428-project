@@ -1,63 +1,123 @@
 {
     "edges": [
         [
-            "idle_1",
+            "idle_down",
             "move_up",
             "^keydown,key:24$"
         ],
         [
-            "idle_1",
+            "idle_down",
             "move_left",
             "^keydown,key:27$"
         ],
         [
-            "idle_1",
+            "idle_down",
             "move_right",
             "^keydown,key:26$"
         ],
         [
-            "idle_1",
+            "idle_down",
+            "move_down",
+            "^keydown,key:25$"
+        ],
+        [
+            "idle_right",
+            "move_up",
+            "^keydown,key:24$"
+        ],
+        [
+            "idle_right",
+            "move_left",
+            "^keydown,key:27$"
+        ],
+        [
+            "idle_right",
+            "move_right",
+            "^keydown,key:26$"
+        ],
+        [
+            "idle_right",
+            "move_down",
+            "^keydown,key:25$"
+        ],
+        [
+            "idle_left",
+            "move_up",
+            "^keydown,key:24$"
+        ],
+        [
+            "idle_left",
+            "move_left",
+            "^keydown,key:27$"
+        ],
+        [
+            "idle_left",
+            "move_right",
+            "^keydown,key:26$"
+        ],
+        [
+            "idle_left",
+            "move_down",
+            "^keydown,key:25$"
+        ],
+        [
+            "idle_up",
+            "move_up",
+            "^keydown,key:24$"
+        ],
+        [
+            "idle_up",
+            "move_left",
+            "^keydown,key:27$"
+        ],
+        [
+            "idle_up",
+            "move_right",
+            "^keydown,key:26$"
+        ],
+        [
+            "idle_up",
             "move_down",
             "^keydown,key:25$"
         ],
         [
             "move_up",
-            "idle_1",
+            "idle_up",
             "^keyup,key:24$"
         ],
         [
             "move_left",
-            "idle_1",
+            "idle_left",
             "^keyup,key:27$"
         ],
         [
             "move_right",
-            "idle_1",
+            "idle_right",
             "^keyup,key:26$"
         ],
         [
             "move_down",
-            "idle_1",
+            "idle_down",
             "^keyup,key:25$"
         ],
         [
             "move_up",
-            "idle_1",
+            "idle_up",
             ".*collision.*"
         ],
         [
             "move_left",
-            "idle_1",
+            "idle_left",
             ".*collision.*"
         ],
         [
             "move_right",
-            "idle_1",
+            "idle_right",
             ".*collision.*"
         ],
         [
             "move_down",
-            "idle_1",
+            "idle_down",
             ".*collision.*"
         ],
         [
@@ -81,23 +141,43 @@
             "^keydown,key:28$"
         ],
         [
+            "idle_right",
             "idle_attack_right",
-            "idle_1",
+            "^keydown,key:28$"
+        ],
+        [
+            "idle_down",
+            "idle_attack_down",
+            "^keydown,key:28$"
+        ],
+        [
+            "idle_up",
+            "idle_attack_up",
+            "^keydown,key:28$"
+        ],
+        [
+            "idle_left",
+            "idle_attack_left",
+            "^keydown,key:28$"
+        ],
+        [
+            "idle_attack_right",
+            "idle_right",
             ".*timeout.*"
         ],
         [
             "idle_attack_down",
-            "idle_1",
+            "idle_down",
             ".*timeout.*"
         ],
         [
             "idle_attack_up",
-            "idle_1",
+            "idle_up",
             ".*timeout.*"
         ],
         [
             "idle_attack_left",
-            "idle_1",
+            "idle_left",
             ".*timeout.*"
         ],
         [
@@ -172,13 +252,27 @@
             0,
             0
         ],
-        1.0
+        1.0,
+        4,
+        4
     ],
-    "start": "idle_1",
+    "start": "idle_down",
     "states": [
         [
             "IdleState.IdleState",
-            "1"
+            "down"
+        ],
+        [
+            "IdleState.IdleState",
+            "up"
+        ],
+        [
+            "IdleState.IdleState",
+            "left"
+        ],
+        [
+            "IdleState.IdleState",
+            "right"
         ],
         [
             "MoveState.MoveState",
