@@ -95,8 +95,6 @@ def main():
                     game_view = GameView()
                     game_world = GameWorld()
                     gameover_screen = False
-                elif input_event.key == K_y:
-                    gameover_screen = True
 
                 event_type = EventType.KEYDOWN if input_event.type == KEYDOWN \
                     else EventType.KEYUP
