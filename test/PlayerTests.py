@@ -8,7 +8,7 @@
 #   - Cover at least 90% of code in Player and Entity
 import unittest
 import src
-from src.InputController import *
+from src.Globals import *
 from src.Entity import *
 from src.IdleState import *
 from src.MoveState import *
@@ -33,12 +33,12 @@ class PlayerTest( unittest.TestCase ):
         self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_transition( self ):
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
 
     def test_player_collision( self ):
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
         self.player.notify_of( Event(EventType.COLLISION, {}) )
@@ -46,20 +46,20 @@ class PlayerTest( unittest.TestCase ):
         self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_stop( self ):
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
-        self.player.notify_of( Event(EventType.KEYUP, {"key" : InputController.MOVE_UP}) )
+        self.player.notify_of( Event(EventType.KEYUP, {"key" : MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
 
     def test_player_movement( self ):
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_RIGHT}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_RIGHT}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
-        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : InputController.MOVE_UP}) )
+        self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
-        self.player.notify_of( Event(EventType.KEYUP, {"key" : InputController.MOVE_RIGHT}) )
+        self.player.notify_of( Event(EventType.KEYUP, {"key" : MOVE_RIGHT}) )
         self.player.update(1)
         self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
