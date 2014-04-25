@@ -58,7 +58,6 @@ class Entity( object ):
         self._phys_state.add_delta( initial_delta )
         self._update_chitbox()
 
-
     ### Methods ###
 
     ##  Updates the state of the entity based on the given game time that has
