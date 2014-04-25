@@ -58,6 +58,7 @@ class GameWorld():
             entity_gen_events = entity.update(time_delta)
             for event in entity_gen_events:
                 if event.get_type() == EventType.DEAD:
+                    print "Entity: " + str(entity)
                     self._remove_entity(entity)
 
         self._collision_detector.update()
@@ -237,18 +238,14 @@ class GameWorld():
         for ( (idx_x, idx_y), entity_class ) in segment.get_entities():
             entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y ) 
                 
-            if player_pos != None:
-                if entity_class == "player":
-                    self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
-                    self._entities.append(self._player_entity)                    
-                else:
-                    entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-                    entity = Entity( entity_class, entity_delta )
-                    self._entities.append( entity )
+            if player_pos != None and entity_class == "player":
+                self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
+                self._entities.append(self._player_entity) 
             else:
-                entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-                entity = Entity( entity_class, entity_delta )
+                entity = Entity( entity_class )
+                entity.get_chitbox().place_at( entity_pos[0], entity_pos[1] )
                 self._entities.append( entity )
+
                 if entity_class == "player":
                     self._player_entity = entity
 
