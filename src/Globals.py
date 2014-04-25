@@ -60,6 +60,13 @@ DATA_PATH = os.path.join( ASSET_PATH, "data" )
 #   image assets for the game.
 GRAPHICS_PATH = os.path.join( ASSET_PATH, "graphics" )
 
+# Custom Events
+MOVE_UP = PG.USEREVENT
+MOVE_DOWN = PG.USEREVENT+1
+MOVE_RIGHT = PG.USEREVENT+2
+MOVE_LEFT = PG.USEREVENT+3
+SPACE = PG.USEREVENT+4
+
 
 ### Global Functions ###
 

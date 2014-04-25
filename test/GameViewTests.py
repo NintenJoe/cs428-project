@@ -60,6 +60,7 @@ class GameViewTests( unittest.TestCase ):
         self._world_mock.get_entities.return_value = GameViewTests.WORLD_ENTITIES
         self._world_mock.get_tilemap.return_value = GameViewTests.WORLD_TILES
         self._world_mock.get_viewport.return_value = GameViewTests.WORLD_VIEWPORT
+        self._world_mock._player_entity = None
 
         self._setmode_mock = GameViewTests.DISPLAY_PATCHERS[ "set_mode" ].start()
         self._setcapt_mock = GameViewTests.DISPLAY_PATCHERS[ "set_caption" ].start()
