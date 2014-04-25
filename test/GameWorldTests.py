@@ -75,7 +75,7 @@ class GameWorldTests(unittest.TestCase):
         post_player_status = player.get_status()
 
         # TODO: Resolve this here.
-        self.assertFalse(
+        self.assertTrue(
             "move_up" in post_player_status,
             "Player didn't change states."
         )
