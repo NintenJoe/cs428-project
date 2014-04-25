@@ -45,7 +45,7 @@ class GameWorld():
     #   @param world_name The identifier for the initial world to be loaded.
     def __init__( self, world_name="" ):
         self._world = World()
-
+        self._player_entity = None
         segment = self._world.levels[ "1" ].segments[ "1.1" ]
         self._load_new_segment(segment)
 
@@ -181,7 +181,7 @@ class GameWorld():
                     transition = self._segment.get_tile_transition(idx_x,idx_y)
                     if (transition != None):
                         new_segment = transition[0]
-                        new_pos = (transition[1][0] + 1, transition[1][1] + 1)
+                        new_pos = (transition[1][0] + 2, transition[1][1] + 1)
                         return (new_segment, new_pos)
 
                 if tile_is_tangible:
@@ -220,23 +220,26 @@ class GameWorld():
         self._entities = []
         # TODO: Update this logic to more elegantly designate the entity that
         # will be followed by the camera.
-        self._player_entity = None
+
         for ( (idx_x, idx_y), entity_class ) in segment.get_entities():
-            entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y )
+            entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y ) 
+                
+            if player_pos != None:
+                if entity_class == "player":
+                    self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
+                    self._entities.append(self._player_entity)                    
+                else:
+                    entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
+                    entity = Entity( entity_class, entity_delta )
+                    self._entities.append( entity )
+            else:
+                entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
+                entity = Entity( entity_class, entity_delta )
+                self._entities.append( entity )
+                if entity_class == "player":
+                    self._player_entity = entity
 
-            if entity_class == "player":
-                if player_pos != None:
-                    entity_pos = ( TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1] )
-
-            entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-            entity = Entity( entity_class, entity_delta )
-
-            if entity_class == "player":
-                self._player_entity = entity
-
-            self._entities.append( entity )
-
-        self._camera = Camera( target=self._player_entity.get_hitbox().get_hitbox(),
+        self._camera = Camera( target=self._player_entity.get_bbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
         self._collision_detector = SpatialDictionary( segment_dims[0] / 16,
             segment_dims[0], segment_dims[1] )
