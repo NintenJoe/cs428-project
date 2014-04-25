@@ -1,5 +1,5 @@
 {"states": [["IdleState.IdleState", "1"], ["MoveState.MoveState", "up", [0, -1]], ["MoveState.MoveState", "down", [0, 1]], ["MoveState.MoveState", "left", [-1, 0]], ["MoveState.MoveState", "right", [1, 0]],
-["ShiftState.ShiftState", "attack_right", 0, 0, 25], ["ShiftState.ShiftState", "attack_down", 0, 0, 25], ["ShiftState.ShiftState", "attack_up", 0, -20, 25], ["ShiftState.ShiftState", "attack_left", -20, 0, 25]],
+["IdleState.IdleState", "attack_right", 25], ["IdleState.IdleState", "attack_down", 25], ["IdleState.IdleState", "attack_up", 25], ["IdleState.IdleState", "attack_left", 25]],
  "start": "idle_1",
  "edges": [["idle_1", "move_up", "^keydown,key:24$"], ["idle_1", "move_left", "^keydown,key:27$"], ["idle_1", "move_right", "^keydown,key:26$"], ["idle_1", "move_down", "^keydown,key:25$"], ["move_up", "idle_1", "^keyup,key:24$"], ["move_left", "idle_1", "^keyup,key:27$"], ["move_right", "idle_1", "^keyup,key:26$"], ["move_down", "idle_1", "^keyup,key:25$"], ["move_up", "idle_1", ".*collision.*"], ["move_left", "idle_1", ".*collision.*"], ["move_right", "idle_1", ".*collision.*"], ["move_down", "idle_1", ".*collision.*"],
  ["move_right", "idle_attack_right", "^keydown,key:28$"], ["move_down", "idle_attack_down", "^keydown,key:28$"], ["move_up", "idle_attack_up", "^keydown,key:28$"], ["move_left", "idle_attack_left", "^keydown,key:28$"],
