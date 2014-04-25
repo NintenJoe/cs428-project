@@ -149,6 +149,7 @@ class CompositeHitbox( object ):
             self._anchor_pos[ 1 ] - other_anchor_pos[ 1 ],
         )
         self.translate( anchor_shift[0], anchor_shift[1] )
+        self._anchor_pos = other_anchor_pos
 
     ##  Translates the composite hitbox by the given amount along the two
     #   cardinal axes.
