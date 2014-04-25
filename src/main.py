@@ -51,7 +51,6 @@ def main():
     gameover_screen = False
 
     while title_screen:
-        print "title"
         # Retrieve/Handle User Inputs #
         for input_event in PG.event.get():
             if input_event.type == PG.QUIT:
@@ -62,8 +61,6 @@ def main():
                 elif input_event.key == K_SPACE:
                     game_running = True
                     title_screen = False
-
-    print "past title"
 
     game_clock = PG.time.Clock()
     prev_game_time = 0.0
