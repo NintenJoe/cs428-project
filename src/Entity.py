@@ -175,8 +175,10 @@ class Entity( object ):
         pos_y = info[0][1]
         velocity = ( info[1][0], info[1][1] )
         mass = info[2]
+        curr_health = info[3]
+        max_health = info[4]
 
-        return PhysicalState( CompositeHitbox(pos_x, pos_y), velocity, mass )
+        return PhysicalState( CompositeHitbox(pos_x, pos_y), velocity, mass, curr_health, max_health )
 
     ##  Produces the composite hitbox templates for the entity instance (based 
     #   on its state machine), returning a list of these templates.
