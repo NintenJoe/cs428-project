@@ -6,7 +6,6 @@
 #
 #   @TODO
 #   High Priority:
-#   - Write the implementation in this file!
 #   - Remove the `Camera` instance from the `GameWorld` type and export it
 #     to a different module.
 #       > The level of abstraction of the `Camera` doesn't match with the
@@ -14,8 +13,6 @@
 #         should exist one level above the `GameWorld` for the best abstraction.
 #   - Add support for actual world loading instead of just loading a default
 #     world.
-#   - Implement functionality associated with interpretting events sent back
-#     by `Entity` object instances on update.
 #   - Remove all 'NOTE' items within this file by fixing up the `GameWorld`
 #     type.
 #   Low Priority:
@@ -79,9 +76,13 @@ class GameWorld():
     #
     #   @param time_delta The amount of game time that has passed in the frame.
     def update( self, time_delta ):
-        # TODO: Handle the events passed back by the `Entity` updates.
+        entity_gen_events = []
         for entity in self._entities:
-            entity.update( time_delta )
+            entity_gen_events = entity.update(time_delta)
+            for event in entity_gen_events:
+                if event.get_type() == EventType.DEAD:
+                    self._remove_entity(entity)
+
         self._collision_detector.update()
 
         for entity_collision in self._collision_detector.get_all_collisions():
@@ -220,3 +221,15 @@ class GameWorld():
 
         hitbox1.translate( res_vector[0], res_vector[1] )
 
+    ##  Removes an entity from the Game World.
+    #
+    #   @param entity The entity that needs to be removed
+    def _remove_entity( self, entity ):
+        # Remove from Collision Detector
+        hitboxes = entity.get_hitbox().get_hitboxes()
+        self._collision_detector.remove_multiple(hitboxes)
+
+        # Remove from Game World entity list
+        if entity in self._entities:
+            self._entities.remove(entity)
+ 

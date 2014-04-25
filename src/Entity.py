@@ -81,6 +81,10 @@ class Entity( object ):
         self._phys_state.update( time_delta )
         self._update_hitbox()
 
+        # Death may be inevitable
+        if self._is_dead():
+            sim_delta += self._notify_of_death()
+
         return sim_delta.get_events()
 
     ##  Notifies an entity of an event relevant to that entity, which may cause
@@ -234,3 +238,13 @@ class Entity( object ):
 
         return hitlist
 
+    ##  Builds a simulation delta with a death event inside to notify the
+    #   GameWorld of the instance's death.
+    #   TODO: I don't really like this function name.
+    def _notify_of_death( self ):
+        death_event = Event( EventType.DEAD, {} )
+        return SimulationDelta( PhysicalState(), [death_event] )
+    
+    ## @return Whether the instance is dead.
+    def _is_dead( self ):
+        return self.get_physical_state().get_curr_health() < 1
