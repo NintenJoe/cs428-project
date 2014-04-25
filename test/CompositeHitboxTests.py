@@ -5,7 +5,12 @@
 #   Test File for the "CompositeHitbox" Type
 #
 #   @TODO
-#   - Write the implementation in this file!
+#   High Priority:
+#   - 
+#   Low Priority:
+#   - Add more tests for the `CompositeHitbox` test for `adopt_template`
+#     function.
+#   - Add tests to assert the anchor adjustment occurs properly.
 
 import unittest
 import collections
@@ -35,40 +40,54 @@ class HitboxTests( unittest.TestCase ):
     ##  The classification to be assigned to test `Hitbox` instance.
     BOX_TYPE = HitboxType.HURT
 
+    ### Test Set Up/Tear Down ###
+
+    def setUp( self ):
+        self._default_hbox = Hitbox( HitboxTests.BOX_X, HitboxTests.BOX_Y,
+            HitboxTests.BOX_W, HitboxTests.BOX_H )
+        self._value_hbox = Hitbox( HitboxTests.BOX_X, HitboxTests.BOX_Y,
+            HitboxTests.BOX_W, HitboxTests.BOX_H, HitboxTests.BOX_TYPE )
+
+    def tearDown( self ):
+        self._default_hbox = None
+        self._value_hbox = None
+
     ### Testing Functions ###
 
     def test_default_constructor( self ):
-        default_hitbox = Hitbox( HitboxTests.BOX_X, HitboxTests.BOX_Y,
-            HitboxTests.BOX_W, HitboxTests.BOX_H )
+        self.assertEqual( self._default_hbox.x, HitboxTests.BOX_X,
+            "Default constructor improperly initializes x-value." )
+        self.assertEqual( self._default_hbox.y, HitboxTests.BOX_Y,
+            "Default constructor improperly initializes y-value." )
+        self.assertEqual( self._default_hbox.w, HitboxTests.BOX_W,
+            "Default constructor improperly initializes width." )
+        self.assertEqual( self._default_hbox.h, HitboxTests.BOX_H,
+            "Default constructor improperly initializes height." )
 
-        self.assertEqual( default_hitbox.x, HitboxTests.BOX_X,
-            "Default hitbox constructor improperly initializes x-value." )
-        self.assertEqual( default_hitbox.y, HitboxTests.BOX_Y,
-            "Default hitbox constructor improperly initializes y-value." )
-        self.assertEqual( default_hitbox.w, HitboxTests.BOX_W,
-            "Default hitbox constructor improperly initializes width." )
-        self.assertEqual( default_hitbox.h, HitboxTests.BOX_H,
-            "Default hitbox constructor improperly initializes height." )
-
-        self.assertEqual( default_hitbox.htype, HitboxType.DEFAULT,
-            "Default hitbox constructor improperly initializes type." )
+        self.assertEqual( self._default_hbox.htype, HitboxType.DEFAULT,
+            "Default constructor improperly initializes type." )
 
 
     def test_value_constructor( self ):
-        hitbox = Hitbox( HitboxTests.BOX_X, HitboxTests.BOX_Y,
-            HitboxTests.BOX_W, HitboxTests.BOX_H, HitboxTests.BOX_TYPE )
+        self.assertEqual( self._value_hbox.x, HitboxTests.BOX_X,
+            "Value constructor improperly initializes x-value." )
+        self.assertEqual( self._value_hbox.y, HitboxTests.BOX_Y,
+            "Value constructor improperly initializes y-value." )
+        self.assertEqual( self._value_hbox.w, HitboxTests.BOX_W,
+            "Value constructor improperly initializes width." )
+        self.assertEqual( self._value_hbox.h, HitboxTests.BOX_H,
+            "Value constructor improperly initializes height." )
 
-        self.assertEqual( hitbox.x, HitboxTests.BOX_X,
-            "Value hitbox constructor improperly initializes x-value." )
-        self.assertEqual( hitbox.y, HitboxTests.BOX_Y,
-            "Value hitbox constructor improperly initializes y-value." )
-        self.assertEqual( hitbox.w, HitboxTests.BOX_W,
-            "Value hitbox constructor improperly initializes width." )
-        self.assertEqual( hitbox.h, HitboxTests.BOX_H,
-            "Value hitbox constructor improperly initializes height." )
+        self.assertEqual( self._value_hbox.htype, HitboxTests.BOX_TYPE,
+            "Value constructor improperly initializes type." )
 
-        self.assertEqual( hitbox.htype, HitboxTests.BOX_TYPE,
-            "Value hitbox constructor improperly initializes type." )
+
+    def test_repr_operator( self ):
+        self.assertEqual( repr(self._default_hbox), HitboxType.DEFAULT,
+            "Default hitbox doesn't have the correct representation string." )
+
+        self.assertEqual( repr(self._value_hbox), HitboxTests.BOX_TYPE,
+            "Value hitbox doesn't have the correct representation string." )
 
 
     def test_hash_operator( self ):
@@ -86,6 +105,25 @@ class HitboxTests( unittest.TestCase ):
         self.assertNotEqual( hashtable[deepcopy_hitbox], 10,
             "Hitbox hash function doesn't improperly map by object equality "
             "and not object instance." )
+
+
+    def test_copy_ip( self ):
+        copy_hbox = Hitbox( 0, 0, 0, 0 )
+        copy_hbox.copy_ip( self._value_hbox )
+        self._value_hbox.x = 0
+        self._value_hbox.y = -2
+
+        self.assertEqual( copy_hbox.x, HitboxTests.BOX_X,
+            "Copy in-place operation improperly initializes x-value." )
+        self.assertEqual( copy_hbox.y, HitboxTests.BOX_Y,
+            "Copy in-place operation improperly initializes y-value." )
+        self.assertEqual( copy_hbox.w, HitboxTests.BOX_W,
+            "Copy in-place operation improperly initializes width." )
+        self.assertEqual( copy_hbox.h, HitboxTests.BOX_H,
+            "Copy in-place operation improperly initializes height." )
+
+        self.assertEqual( copy_hbox.htype, HitboxTests.BOX_TYPE,
+            "Copy in-place operation improperly initializes type." )
 
 
 ##  Container class for the test suite that tests the functionality of the
@@ -114,6 +152,7 @@ class CompositeHitboxTests( unittest.TestCase ):
     def tearDown( self ):
         self._hbox1 = None
         self._hbox2 = None
+
         self._cbox = None
 
     ### Testing Functions ###
@@ -121,28 +160,33 @@ class CompositeHitboxTests( unittest.TestCase ):
     def test_default_constructor( self ):
         default_cbox = CompositeHitbox()
 
-        self.assertEqual( default_cbox.get_hitbox(), PG.Rect(0, 0, 0, 0),
-            "Default composite hitbox constructor improperly initializes "
-            "the container hitbox." )
-        self.assertEqual( default_cbox.get_hitboxes(), [],
-            "Default composite hitbox constructor contains inner hitboxes "
-            "when there should be none." )
+        self.assertEqual(
+            default_cbox.get_bounding_box(),
+            Hitbox( 0, 0, 0, 0 ),
+            "Default constructor improperly initializes the composite's bounding box."
+        )
+
+        self.assertEqual(
+            default_cbox.get_inner_boxes()[0:2],
+            [ Hitbox(0, 0, 0, 0, HitboxType.INTANGIBLE) for i in range(2) ],
+            "Default constructor improperly  initializes inner hitboxes."
+        )
 
 
     def test_value_constructor( self ):
         self.assertEqual(
-            self._cbox.get_hitbox(),
+            self._cbox.get_bounding_box(),
             PG.Rect(
                 CompositeHitboxTests.COMPOSITE_X,
                 CompositeHitboxTests.COMPOSITE_Y,
                 self._hbox1.x + self._hbox1.w,
                 self._hbox2.y + self._hbox2.h,
             ),
-            "Value composite hitbox constructor improperly initializes "
-            "the container hitbox."
+            "Value constructor improperly initializes the composite's bounding box."
         )
+
         self.assertEqual(
-            self._cbox.get_hitboxes(),
+            self._cbox.get_inner_boxes()[0:2],
             [
                 Hitbox(
                     CompositeHitboxTests.COMPOSITE_X + self._hbox1.x,
@@ -154,24 +198,29 @@ class CompositeHitboxTests( unittest.TestCase ):
                     CompositeHitboxTests.COMPOSITE_Y + self._hbox2.y,
                     self._hbox2.w,
                     self._hbox2.h
-                )
+                ),
             ],
-            "Value compsite hitbox constuctor improperly initializes inner "
-            "hitboxes."
+            "Value constuctor improperly initializes inner hitboxes."
         )
 
 
     def test_constructor_independence( self ):
-        initial_hbox = copy.deepcopy( self._cbox.get_hitbox() )
-        initial_hboxes = copy.deepcopy( self._cbox.get_hitboxes() )
+        initial_hbox = copy.deepcopy( self._cbox.get_bounding_box() )
+        initial_hboxes = copy.deepcopy( self._cbox.get_inner_boxes() )
 
         self._hbox1.x += 5
         self._hbox2.h -= 2
 
-        self.assertEqual( self._cbox.get_hitbox(), initial_hbox,
-            "Composite hitbox container volume is dependent on constructor inputs." )
-        self.assertEqual( self._cbox.get_hitboxes(), initial_hboxes,
-            "Composite hitbox inner hitboxes are depedent on constructor inputs." )
+        self.assertEqual(
+            self._cbox.get_bounding_box(),
+            initial_hbox,
+            "Composite bounding volume is dependent on constructor input values."
+        )
+        self.assertEqual(
+            self._cbox.get_inner_boxes(),
+            initial_hboxes,
+            "Composite inner hitboxes are dependent on constructor input values."
+        )
 
 
     def test_equality_operator( self ):
@@ -196,6 +245,22 @@ class CompositeHitboxTests( unittest.TestCase ):
             "Equality operator improperly returns true for two unequivalent objects." )
 
 
+    def test_adopt_template( self ):
+        default_cbox = CompositeHitbox()
+        default_cbox.adopt_template( self._cbox )
+
+        default_cbox.translate(
+            CompositeHitboxTests.COMPOSITE_X,
+            CompositeHitboxTests.COMPOSITE_Y
+        )
+
+        self.assertEqual(
+            default_cbox,
+            self._cbox,
+            "Template adoption operation improperly changes inner box values."
+        )
+
+
     def test_translation( self ):
         self._cbox.translate(
             CompositeHitboxTests.COMPOSITE_X,
@@ -203,18 +268,17 @@ class CompositeHitboxTests( unittest.TestCase ):
         )
 
         self.assertEqual(
-            self._cbox.get_hitbox(),
-            PG.Rect(
+            self._cbox.get_bounding_box(),
+            Hitbox(
                 2 * CompositeHitboxTests.COMPOSITE_X,
                 2 * CompositeHitboxTests.COMPOSITE_Y,
                 self._hbox1.x + self._hbox1.w,
                 self._hbox2.y + self._hbox2.h,
             ),
-            "Translation function doesn't properly offset the container "
-            "hitbox."
+            "Translation function doesn't properly offset the bounding hitbox."
         )
         self.assertEqual(
-            self._cbox.get_hitboxes(),
+            self._cbox.get_inner_boxes()[0:2],
             [
                 Hitbox(
                     2 * CompositeHitboxTests.COMPOSITE_X + self._hbox1.x,
@@ -228,25 +292,32 @@ class CompositeHitboxTests( unittest.TestCase ):
                     self._hbox2.h
                 )
             ],
-            "Translation function doesn't properly offset all the hitboxes "
-            "that comprise the composite."
+            "Translation function doesn't properly offset all the inner hitboxes."
         )
 
 
     def test_relative_hitboxes( self ):
-        rel_boxes = self._cbox.get_relative_hitboxes()
+        rel_boxes = self._cbox.get_inner_boxes_relative()[0:2]
 
-        self.assertEqual( rel_boxes, [self._hbox1, self._hbox2],
-            "Relative hitbox computation improperly offsets output hitboxes." )
+        self.assertEqual(
+            rel_boxes,
+            [self._hbox1, self._hbox2],
+            "Relative hitbox computation improperly offsets output hitboxes."
+        )
 
-        initial_hbox = copy.deepcopy( self._cbox.get_hitbox() )
-        initial_hboxes = copy.deepcopy( self._cbox.get_hitboxes() )
-
+        initial_hbox = copy.deepcopy( self._cbox.get_bounding_box() )
+        initial_hboxes = copy.deepcopy( self._cbox.get_inner_boxes() )
         rel_boxes[0].x += 5
         rel_boxes[1].h -= 2
 
-        self.assertEqual( self._cbox.get_hitbox(), initial_hbox,
-            "Composite hitbox container volume is dependent on output relative volumes." )
-        self.assertEqual( self._cbox.get_hitboxes(), initial_hboxes,
-            "Composite hitbox inner hitboxes are depedent on output relative volumes." )
+        self.assertEqual(
+            self._cbox.get_bounding_box(),
+            initial_hbox,
+            "Composite bounding volume is dependent on output relative volumes."
+        )
+        self.assertEqual(
+            self._cbox.get_inner_boxes(),
+            initial_hboxes,
+            "Composite inner hitboxes are depedent on output relative volumes."
+        )
 
