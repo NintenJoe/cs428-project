@@ -15,7 +15,8 @@ class CameraTests(unittest.TestCase):
 
         self.shift_time = 3000
         accumulated_shift = 0
-        self.camera = Camera( self.move_tgt, self.area, self.shift_time, self.border, 4)
+        self.camera = Camera( self.move_tgt, self.area, self.shift_time, PG.Rect(0,0,0,0), 4)
+        self.camera.set_border(self.border)
 
     def tearDown(self):
         pass
@@ -24,8 +25,8 @@ class CameraTests(unittest.TestCase):
         self.assertEquals(self.camera.focus, self.move_tgt)
         self.assertEquals(self.border, self.camera.border)
         self.assertEquals(self.camera.shift_time, self.shift_time)
-        self.assertEquals(self.camera.position[0], 500)
-        self.assertEquals(self.camera.position[1], 500)
+        self.assertEquals(self.camera.get_position()[0], 500)
+        self.assertEquals(self.camera.get_position()[1], 500)
 
     def testOffset(self):
         self.camera.set_offset(5, 6)
@@ -89,3 +90,8 @@ class CameraTests(unittest.TestCase):
         self.assertEquals(self.camera.position[0], 46)
         self.assertEquals(self.camera.position[1], 0)
 
+    def testViewPort(self):
+        self.assertEquals(self.camera.get_viewport().width, 1)
+        self.assertEquals(self.camera.get_viewport().height, 1)
+        self.assertEquals(self.camera.get_viewport().x, 500)
+        self.assertEquals(self.camera.get_viewport().y, 500)
