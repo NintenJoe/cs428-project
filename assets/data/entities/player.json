@@ -213,31 +213,23 @@
             ]
         ],
         [
-            "ShiftState.ShiftState",
+            "IdleState.IdleState",
             "attack_right",
-            0,
-            0,
             25
         ],
         [
-            "ShiftState.ShiftState",
+            "IdleState.IdleState",
             "attack_down",
-            0,
-            0,
             25
         ],
         [
-            "ShiftState.ShiftState",
+            "IdleState.IdleState",
             "attack_up",
-            0,
-            -20,
             25
         ],
         [
-            "ShiftState.ShiftState",
+            "IdleState.IdleState",
             "attack_left",
-            -20,
-            0,
             25
         ]
     ]
