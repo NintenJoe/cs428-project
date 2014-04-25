@@ -115,3 +115,24 @@ class FollowStateTests( unittest.TestCase ):
         self.assertEqual( first_change,
             SimulationDelta( PhysicalState(CompositeHitbox(-4.0, 3.0), (0,0), 0.0) ),
             str(first_change.get_entity_delta().get_volume().get_position()) + " != (-4, 3)" )
+
+
+    def test_step_same_pos( self ):
+        self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._pos, self._follow), "volumes": (None, None)}))
+        self._follow.get_chitbox().place_at(2, 2)
+        self._pos.get_chitbox().place_at(2, 2)
+        first_change = self._state.simulate_step( FollowStateTests.TIME_DELTA * 5)
+
+        self.assertEqual( first_change,
+            SimulationDelta( PhysicalState(CompositeHitbox(0.0, 0.0), (0,0), 0.0) ),
+            str(first_change.get_entity_delta().get_volume().get_position()) + " != (0, 0)" )
+
+    def test_step_down( self ):
+        self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._follow, self._pos), "volumes": (None, None)}))
+        self._follow.get_chitbox().place_at(0, 0)
+        self._pos.get_chitbox().place_at(0, 6)
+        first_change = self._state.simulate_step( FollowStateTests.TIME_DELTA * 6)
+
+        self.assertEqual( first_change,
+            SimulationDelta( PhysicalState(CompositeHitbox(0.0, 6.0), (0,0), 0.0) ),
+            str(first_change.get_entity_delta().get_volume().get_position()) + " != (0, 6)" )
