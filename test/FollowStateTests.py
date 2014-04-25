@@ -118,7 +118,7 @@ class FollowStateTests( unittest.TestCase ):
 
 
     def test_step_same_pos( self ):
-        self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._pos, self._follow), "volumes": (None, None)}))
+        self._state.simulate_arrival(Event(EventType.COLLISION, {"objects": (self._follow, self._pos), "volumes": (None, None)}))
         self._follow.get_chitbox().place_at(2, 2)
         self._pos.get_chitbox().place_at(2, 2)
         first_change = self._state.simulate_step( FollowStateTests.TIME_DELTA * 5)

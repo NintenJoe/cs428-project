@@ -43,6 +43,15 @@ class GraphTest( unittest.TestCase ):
         self.G.add_edge(idle1.get_name(), idle2.get_name(), Event(EventType.NOTIFY))
         self.assertEqual(idle2.get_name(), self.G.edges[idle1.get_name()][repr(Event(EventType.NOTIFY))])
 
+    def test_adding_edge_from_source( self ):
+        idle1 = IdleState("1")
+        idle2 = IdleState("2")
+        self.G.add_node(idle1)
+        self.G.add_node(idle2)
+        self.G.add_edges_from_source([(idle1.get_name(), idle2.get_name(), Event(EventType.NOTIFY))])
+        self.assertEqual(idle2, self.G.transition(idle1, Event(EventType.NOTIFY)))
+        self.assertEqual(idle2, self.G.transition(idle2, Event(EventType.NOTIFY)))
+
     def test_transition( self ):
         idle1 = IdleState("1")
         idle2 = IdleState("2")
