@@ -43,7 +43,7 @@ class GameWorld():
     def __init__( self, world_name="" ):
         self._world = World()
 
-        segment = self._world.levels[ "2" ].segments[ "2.1" ]
+        segment = self._world.levels[ "1" ].segments[ "1.1" ]
         segment_dims = segment.get_pixel_dims()
 
         self._tilemap = segment.get_tiles()
@@ -62,7 +62,7 @@ class GameWorld():
 
             self._entities.append( entity )
 
-        self._camera = Camera( target=player_entity.get_hitbox().get_hitbox(),
+        self._camera = Camera( target=player_entity.get_bbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
         self._collision_detector = SpatialDictionary( segment_dims[0] / 16,
             segment_dims[0], segment_dims[1] )
@@ -133,7 +133,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be added to the collision
     #    detection system for the game world.
     def _add_to_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox().get_hitboxes():
+        for hitbox in entity.get_chitbox().get_inner_boxes():
             self._cdrepr2entity_dict[ hitbox ] = entity
             self._collision_detector.add( hitbox )
 
@@ -142,7 +142,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be removed from the
     #    collision detection system for the game world.
     def _remove_from_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox().get_hitboxes():
+        for hitbox in entity.get_chitbox().get_inner_boxes():
             del self._cdrepr2entity_dict[ hitbox ]
             self._collision_detector.remove( hitbox )
 
@@ -172,18 +172,19 @@ class GameWorld():
             }
         )
 
+        # TODO: Update this to note resolve collisions for intangible rectangles.
         if entity1 != entity2:
             entity1.notify_of( collision_event )
             entity2.notify_of( collision_event )
 
-            self._resolve_collision( entity1.get_hitbox(), entity2.get_hitbox().get_hitbox() )
+            self._resolve_collision( entity1.get_chitbox(), entity2.get_bbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.
     #
     #   @param entity The `Entity` object that will have its tile collisions resolved.
     def _resolve_tile_collisions( self, entity ):
-        entity_hitbox = entity.get_hitbox().get_hitbox()
+        entity_hitbox = entity.get_bbox()
         tile_hitbox = Hitbox( 0, 0, Globals.TILE_DIMS[0], Globals.TILE_DIMS[1] )
 
         start_idx_x = int( entity_hitbox.left / Globals.TILE_DIMS[0] )
@@ -201,7 +202,7 @@ class GameWorld():
                         idx_y * Globals.TILE_DIMS[1]
                     )
 
-                    self._resolve_collision( entity.get_hitbox(), tile_hitbox )
+                    self._resolve_collision( entity.get_chitbox(), tile_hitbox )
 
     ##  Resolves a collision between two hitboxes, adjusting the them as
     #   necessary so that they're no longer intersecting.
@@ -209,14 +210,14 @@ class GameWorld():
     #   @param hitbox1 The first hitbox involved in a collision to be resolved.
     #   @param hitbox2 The second hitbox involved in a collision to be resolved.
     def _resolve_collision( self, hitbox1, hitbox2 ):
-        collision_rect = hitbox1.get_hitbox().clip( hitbox2 )
+        collision_rect = hitbox1.get_bounding_box().clip( hitbox2 )
         res_vector = [ 0, 0 ]
 
         if collision_rect.w < collision_rect.h:
-            res_factor = -1 if hitbox1.get_hitbox().x < collision_rect.x else 1
+            res_factor = -1 if hitbox1.get_bounding_box().x < collision_rect.x else 1
             res_vector[ 0 ] = res_factor * collision_rect.w
         else:
-            res_factor = -1 if hitbox1.get_hitbox().y < collision_rect.y else 1
+            res_factor = -1 if hitbox1.get_bounding_box().y < collision_rect.y else 1
             res_vector[ 1 ] = res_factor * collision_rect.h
 
         hitbox1.translate( res_vector[0], res_vector[1] )

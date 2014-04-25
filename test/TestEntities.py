@@ -47,18 +47,18 @@ class SimpleTestEntity( Entity ):
     def _produce_physical( self, data ):
         return PhysicalState( CompositeHitbox( 1, 2 ), (5, 6), 7.0, 6, 6 )
 
+    def _update_hitbox( self ):
+        pass
+
     ##  @override
-    def _produce_machine( self, data ):
+    def _produce_machine( self ):
         return StateMachine(
             SimpleTestEntity.MACHINE_STATES,
             SimpleTestEntity.MACHINE_TRANS
         )
 
     ##  @override
-    def _load_hitboxes( self, states ):
-        pass
+    def _produce_chitboxes( self ):
+        return {}
 
-    ##  @override
-    def _update_hitbox( self ):
-        pass
 

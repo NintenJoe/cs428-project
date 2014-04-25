@@ -48,6 +48,10 @@ PROJECT_PATH = os.path.dirname( os.path.dirname(__file__) )
 #   associated with the game.
 ASSET_PATH = os.path.join( PROJECT_PATH, "assets" )
 
+##  The path to the data content used for the game, which contains all
+#   game world entity information.
+DATA_PATH = os.path.join( ASSET_PATH, "data" )
+
 ##  The path to the graphical content used for the game, which contains all
 #   image assets for the game.
 GRAPHICS_PATH = os.path.join( ASSET_PATH, "graphics" )
@@ -102,6 +106,19 @@ def load_sound( file_name ):
         raise SystemExit
 
     return sound
+
+##  Given the name of a source class, returns a reference to the source class.
+#
+#   @see http://stackoverflow.com/a/8255024
+#
+#   @param class_name The name of the class to be loaded as a string value.
+#   @return A reference to the source class associated with the given class name.
+def load_class( class_name ):
+    d = class_name.rfind(".")
+    classname = class_name[d+1:len(class_name)]
+    m = __import__(class_name[0:d], globals(), locals(), [classname])
+
+    return getattr(m, classname)
 
 ##  Restricts the given value to the range defined by the 2nd and 3rd method 
 #   parameters.  That is, the first parameter value will be restricted to the 2nd

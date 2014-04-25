@@ -98,8 +98,8 @@ class GameView():
         self._load_entity_graphics( entity_list )
 
         for entity in entity_list:
-            entity_pos_x = entity.get_hitbox().get_hitbox().x - viewport.x
-            entity_pos_y = entity.get_hitbox().get_hitbox().y - viewport.y
+            entity_pos_x = entity.get_bbox().x - viewport.x
+            entity_pos_y = entity.get_bbox().y - viewport.y
 
             self._screen.blit(
                 self._get_entity_graphic(entity),
