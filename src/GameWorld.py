@@ -145,20 +145,45 @@ class GameWorld():
             self._get_entity_from_collision_detector( collision[0] ),
             self._get_entity_from_collision_detector( collision[1] ),
         )
-        collision_event = Event(
-            EventType.COLLISION,
-            {
-                "objects": ( entity1, entity2 ),
-                "volumes": ( collision[0], collision[1] )
-            }
-        )
 
-        # TODO: Update this to note resolve collisions for intangible rectangles.
+        collision_event = None
+        if collision[0].htype == HitboxType.VULNERABLE and collision[1].htype == HitboxType.HURT:
+            collision_event = Event(
+                EventType.COLLISION,
+                {
+                    "objects": ( entity1, entity2 ),
+                    "volumes": ( collision[0], collision[1] ),
+                    "attacker": entity2,
+                    "victim": entity1
+                }
+            )
+        elif collision[1].htype == HitboxType.VULNERABLE and collision[0].htype == HitboxType.HURT:
+            collision_event = Event(
+                EventType.COLLISION,
+                {
+                    "objects": ( entity1, entity2 ),
+                    "volumes": ( collision[0], collision[1] ),
+                    "attacker": entity1,
+                    "victim": entity2
+                }
+            )
+        else:
+            collision_event = Event(
+                EventType.COLLISION,
+                {
+                    "objects": ( entity1, entity2 ),
+                    "volumes": ( collision[0], collision[1] )
+                }
+            )
+
         if entity1 != entity2:
-            entity1.notify_of( collision_event )
-            entity2.notify_of( collision_event )
+            if collision[ 1 ].htype != HitboxType.INTANGIBLE:
+                entity1.notify_of( collision_event )
+            if collision[ 0 ].htype != HitboxType.INTANGIBLE:
+                entity2.notify_of( collision_event )
 
-            self._resolve_collision( entity1.get_chitbox(), entity2.get_chitbox() )
+            if ( collision[0].htype != HitboxType.INTANGIBLE and collision[1].htype != HitboxType.INTANGIBLE ):
+                self._resolve_collision( entity1.get_chitbox(), entity2.get_chitbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.

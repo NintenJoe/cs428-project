@@ -50,8 +50,11 @@ def main():
     pause_screen = False
     gameover_screen = False
 
+    game_clock = PG.time.Clock()
+    prev_game_time = 0.0
+    game_time = PG.time.get_ticks()
+
     while title_screen:
-        print "title"
         # Retrieve/Handle User Inputs #
         for input_event in PG.event.get():
             if input_event.type == PG.QUIT:
@@ -63,12 +66,7 @@ def main():
                     game_running = True
                     title_screen = False
 
-    print "past title"
-
-    game_clock = PG.time.Clock()
-    prev_game_time = 0.0
-    game_time = PG.time.get_ticks()
-
+        game_clock.tick( FRAMES_PER_SECOND )
 
     ## Primary Game Loop ##
     while game_running:

@@ -98,11 +98,6 @@ class Hitbox( PG.Rect ):
     def htype( self ):
         return self._type
 
-    ##  @return The identifier attributed to the hitbox (as an integer value).
-    @property
-    def hid( self ):
-        return id( self )
-
 
 ##  The representation of a collision volume composed of multiple sub-volumes
 #   within the game world.  Essentially, this type represents a collection
@@ -120,7 +115,7 @@ class CompositeHitbox( object ):
     def __init__( self, pos_x=0, pos_y=0, hitbox_list=[], anchor_x=0, anchor_y=0 ):
         self._container_box = Hitbox( pos_x, pos_y, 0, 0 )
         self._anchor_pos = ( anchor_x, anchor_y )
-        self._inner_boxes = [ Hitbox(0, 0, 0, 0) for i in range(10) ]
+        self._inner_boxes = [ Hitbox(0, 0, 0, 0) for i in range(16) ]
 
         self._adjust_boxes_to( hitbox_list )
 
