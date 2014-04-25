@@ -25,15 +25,15 @@
 #   - Consider converting the 'get_status' method to a 'str' or 'repr' method
 #     for the sake of consistency.
 
+import Globals
 import Queue
 import json
-
+import os.path
 from xml.dom import minidom
 
 from PhysicalState import *
 from SimulationDelta import *
 from StateMachine import *
-from Globals import load_image
 
 ##  The representation of a dynamic object within the scope of the world.  Each
 #   entity object is an independent and autonomous item within the game world with 
@@ -50,17 +50,13 @@ class Entity( object ):
         self._name = name
         self._event_queue = Queue.Queue()
 
-        f = open('assets/data/entities/'+name+'.json', 'r')
-        data = json.load(f)
-        self._mntl_state = self._produce_machine(data)
+        self._mntl_state = self._produce_machine()
+        self._phys_state = self._produce_physical()
+        self._chitbox_templates = self._produce_chitboxes()
 
-        #Create a hitbox dict for every state
-        states = self._mntl_state.get_states()
-        self._hitboxes = self._load_hitboxes(states)
-
-        self._phys_state = self._produce_physical(data)
         self._phys_state.add_delta( initial_delta )
-        self._update_hitbox()
+        self._update_chitbox()
+
 
     ### Methods ###
 
@@ -72,14 +68,21 @@ class Entity( object ):
     def update( self, time_delta ):
         sim_delta = SimulationDelta()
 
+        prev_state = self._mntl_state.get_current_state().get_name()
         while not self._event_queue.empty():
             next_event = self._event_queue.get()
             sim_delta += self._mntl_state.simulate_transition( next_event )
         sim_delta += self._mntl_state.simulate_step( time_delta )
+        post_state = self._mntl_state.get_current_state().get_name()
 
         self._phys_state.add_delta( sim_delta.get_entity_delta() )
         self._phys_state.update( time_delta )
-        self._update_hitbox()
+        if prev_state != post_state:
+            self._update_chitbox()
+
+        # Death may be inevitable
+        if self._is_dead():
+            sim_delta += self._notify_of_death()
 
         return sim_delta.get_events()
 
@@ -115,107 +118,83 @@ class Entity( object ):
     def get_mental_state( self ):
         return self._mntl_state
 
-    ##  @return The hitbox information associated with the instance "Entity"
-    #    object (returned as a PyGame "Rect" object).
-    def get_hitbox( self ):
+    ##  @return The composite hitbox descibing the collision volume information
+    #    for the "Entity" object instance.
+    def get_chitbox( self ):
         return self.get_physical_state().get_volume()
 
-    # TODO: Remove this function in later versions.
-    def _update_hitbox( self ):
-        state_name = self._mntl_state.get_current_state().get_name()
+    ##  @return The current health associated with the instance "Entity"
+    #   (returne as an integer)
+    def get_curr_health( self ):
+        return self.get_physical_state().get_curr_health()
 
-        if state_name in self._hitboxes.keys():
-            chitbox = self.get_hitbox()
-            new_chitbox = self._hitboxes[state_name]
-
-            for idx in range( 0, len(new_chitbox.get_hitboxes()) ):
-                curr_hitbox = chitbox.get_hitboxes()[idx]
-                curr_new_hitbox = new_chitbox.get_hitboxes()[idx]
-
-                curr_hitbox.x = chitbox.get_position()[0] + curr_new_hitbox.x
-                curr_hitbox.y = chitbox.get_position()[1] + curr_new_hitbox.y
-                curr_hitbox.w = curr_new_hitbox.w
-                curr_hitbox.h = curr_new_hitbox.h
-                curr_hitbox._type = curr_new_hitbox._type
-
-            for idx in range( len(new_chitbox.get_hitboxes()), len(chitbox.get_hitboxes()) ):
-                curr_hitbox = chitbox.get_hitboxes()[idx]
-                curr_hitbox.x = chitbox.get_position()[0]
-                curr_hitbox.y = chitbox.get_position()[1]
-                curr_hitbox.w = 0
-                curr_hitbox.h = 0
-                curr_hitbox._type = HitboxType.DEFAULT
-
-            chitbox.get_hitbox().w = max( [hb.x + hb.w for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().x
-            chitbox.get_hitbox().h = max( [hb.y + hb.h for hb in chitbox.get_hitboxes()] ) - chitbox.get_hitbox().y
+    ##  @return The hitbox describing the broadest collision volume for the
+    #    "Entity" object instance.
+    def get_bbox( self ):
+        return self.get_chitbox().get_bounding_box()
 
     ### Helper Methods ###
 
-    ##  Produces the initial physical state for the entity instance, returning
-    #   a reference to this created state.
-    #
-    #   @param data A dict containing all the initialization data for this type of Entity
-    #   @return The "PhysicalState" instance constructed for the entity instance.
-    def _produce_physical( self, data ):
-        info = data['physical']
+    ##  Updates the composite hitbox for the instance based on the current state.
+    def _update_chitbox( self ):
+        state_name = self._mntl_state.get_current_state().get_name()
 
-        rect = info[0]
-        velocity = ( info[1][0], info[1][1] )
-        mass = info[2]
+        if state_name in self._chitbox_templates.keys():
+            entity_chitbox = self.get_chitbox()
+            chitbox_template = self._chitbox_templates[ state_name ]
 
-        max_hitbox_count = max( [len(chb.get_hitboxes()) for chb in self._hitboxes.values()] )
-        chitbox = CompositeHitbox( rect[0], rect[1],
-            [Hitbox(0,0,0,0) for i in range(max_hitbox_count) ] )
-
-        return PhysicalState(chitbox, velocity, mass)
-
-
-    ##  Import class based on class path
-    #   @see http://stackoverflow.com/a/8255024
-    #
-    #   @param cl The complete path to the class from the src folder
-    #   @return The loaded class ready to be instantiated
-    def _import_class(self, cl):
-        d = cl.rfind(".")
-        classname = cl[d+1:len(cl)]
-        m = __import__(cl[0:d], globals(), locals(), [classname])
-        return getattr(m, classname)
-
+            entity_chitbox.adopt_template( chitbox_template )
 
     ##  Produces the state machine for the entity instance, returning a
     #   reference to this produced machine.
     #
-    #   @param data A dict containing all the initialization data for this type of Entity
-    #   @return The "StateMachine" instance constructed for the entity instance.
-    def _produce_machine( self, data ):
-        states = []
-        for ele in data['states']:
-            state_class = self._import_class(ele[0])
-            states.append(state_class(*ele[1:]))
-        edges = []
-        for ele in data['edges']:
-            edges.append(Transition(*ele))
-        if 'start' in data:
-            return StateMachine(states, edges, data['start'])
-        return StateMachine(states, edges)
+    #   @return The `StateMachine` instance constructed for the entity instance.
+    def _produce_machine( self ):
+        data = json.load( self._open_entity_file() )
 
-    ##  Load in the hitboxes from a file and return them in a dict
-    #   indexed by state.
+        states = []
+        for ele in data[ "states" ]:
+            state_class = Globals.load_class(ele[0])
+            states.append(state_class(*ele[1:]))
+
+        edges = []
+        for ele in data[ "edges" ]:
+            edges.append(Transition(*ele))
+
+        return StateMachine( states, edges, data["start"] if "start" in data else None )
+
+    ##  Produces the initial physical state for the entity instance, returning
+    #   a reference to this created state.
     #
-    #   @param states A list of all the states.
-    #   @return A dict containing composite hitboxes indexed by state
-    def _load_hitboxes(self, states):
+    #   @return The `PhysicalState` instance constructed for the entity instance.
+    def _produce_physical( self ):
+        data = json.load( self._open_entity_file() )
+        info = data[ "physical" ]
+
+        pos_x = info[0][0]
+        pos_y = info[0][1]
+        velocity = ( info[1][0], info[1][1] )
+        mass = info[2]
+        curr_health = info[3]
+        max_health = info[4]
+
+        return PhysicalState( CompositeHitbox(pos_x, pos_y), velocity, mass, curr_health, max_health )
+
+    ##  Produces the composite hitbox templates for the entity instance (based 
+    #   on its state machine), returning a list of these templates.
+    #
+    #   @return A list of `CompositeHitbox` instances constructed for the entity.
+    def _produce_chitboxes( self ):
         hitlist = {}
 
         # Get states and entity names
-        for state in states:
+        for state in self._mntl_state.get_states():
             hitboxes = []
 
-            state_name = state.get_name()
-            f = open('assets/data/hitbox/' + self._name + '/' + state_name + '.svg', 'r')
-            tree = minidom.parse(f)
-            rects = tree.getElementsByTagName('rect')
+            # TODO: Add functionality to specify an anchor for each chitbox.
+            tree = minidom.parse( self._open_state_hbox_file(state) )
 
+            rects = tree.getElementsByTagName('rect')
             for rect in rects:
                 x = int( rect.getAttribute('x') )
                 y = int( rect.getAttribute('y') )
@@ -223,9 +202,38 @@ class Entity( object ):
                 h = int( rect.getAttribute('height') )
                 h_class = str( rect.getAttribute('class') )
 
-                hitboxes.append(Hitbox(x, y, w, h, h_class))
+                hitboxes.append( Hitbox(x, y, w, h, h_class) )
 
-            hitlist[state_name] = CompositeHitbox(0, 0, hitboxes)
+            ax = 0
+            ay = 0
+            circles = tree.getElementsByTagName('circle')
+            for circle in circles:
+                ax = int( circle.getAttribute('cx') )
+                ay = int( circle.getAttribute('cy') )
+
+            hitlist[ state.get_name() ] = CompositeHitbox( 0, 0, hitboxes, ax, ay )
 
         return hitlist
+
+    ##  Builds a simulation delta with a death event inside to notify the
+    #   GameWorld of the instance's death.
+    #   TODO: I don't really like this function name.
+    def _notify_of_death( self ):
+        death_event = Event( EventType.DEAD, {} )
+        return SimulationDelta( PhysicalState(), [death_event] )
+    
+    ## @return Whether the instance is dead.
+    def _is_dead( self ):
+        return self.get_physical_state().get_curr_health() < 1
+
+    ##  @return An open file handle for the data file for the instance entity.
+    def _open_entity_file( self ):
+        efile = self._name + ".json"
+        return open( os.path.join(Globals.DATA_PATH, "entities", efile), "r" )
+
+    ##  @return An open file handle for the data file for the hitbox hile
+    #    associated with the given state of the instance entity.
+    def _open_state_hbox_file( self, state ):
+        sfile = state.get_name() + ".svg"
+        return open( os.path.join(Globals.DATA_PATH, "hitbox", self._name, sfile), "r" )
 

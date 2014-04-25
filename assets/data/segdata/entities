@@ -1,3 +1,5 @@
 #0000FFFF:player
 #FF0000FF:monster
 #00FF00FF:boss
+#FFFF00FF:mega
+#FF00FFFF:mimic

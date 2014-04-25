@@ -45,6 +45,9 @@ class EventType():
     #   Parameters: { "key": Key }
     KEYUP = "keyup"
 
+    ## Indicates that the event represents the death of an entity
+    #   Parameters: { "entity": Entity }
+    DEAD = "death"
 
 ##  A representation of a discrete event that has occured within the scope of the
 #   game world.  These events are used to encapsulate interactions between objects

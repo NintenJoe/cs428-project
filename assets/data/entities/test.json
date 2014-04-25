@@ -1,4 +1,39 @@
-{ "states": [["TestStates.SimpleTestState", "0", 3.0] ,
-        ["TestStates.SimpleTestState", "1", 2.0 ]], 
-"edges": [["0", "1"], ["1","0"]],
-"physical": [[1, 2, 3, 4], [5, 6], 7.0] }
+{
+    "edges": [
+        [
+            "0",
+            "1"
+        ],
+        [
+            "1",
+            "0"
+        ]
+    ],
+    "physical": [
+        [
+            1,
+            2,
+            3,
+            4
+        ],
+        [
+            5,
+            6
+        ],
+        7.0,
+        1,
+        1
+    ],
+    "states": [
+        [
+            "TestStates.SimpleTestState",
+            "0",
+            3.0
+        ],
+        [
+            "TestStates.SimpleTestState",
+            "1",
+            2.0
+        ]
+    ]
+}

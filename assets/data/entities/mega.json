@@ -1,0 +1,56 @@
+{
+    "edges": [
+        [
+            "idle_1",
+            "idle_death",
+            ".*collision.*victim:'mega'.*"
+        ],
+        [
+            "follow_player",
+            "idle_death",
+            ".*collision.*victim:'mega'.*"
+        ],
+        [
+            "idle_1",
+            "follow_player",
+            ".*collision.*player.*"
+        ],
+        [
+            "follow_player",
+            "idle_1",
+            ".*timeout.*"
+        ]
+    ],
+    "physical": [
+        [
+            0,
+            0,
+            20,
+            20
+        ],
+        [
+            0,
+            0
+        ],
+        1.0,
+        3,
+        3
+    ],
+    "start": "idle_1",
+    "states": [
+        [
+            "IdleState.IdleState",
+            "1"
+        ],
+        [
+            "FollowState.FollowState",
+            "player",
+            1.0,
+            30
+        ],
+        [
+            "IdleState.IdleState",
+            "death"
+        ]
+    ]
+}

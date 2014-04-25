@@ -6,7 +6,6 @@
 #
 #   @TODO
 #   High Priority:
-#   - Write the implementation in this file!
 #   - Remove the `Camera` instance from the `GameWorld` type and export it
 #     to a different module.
 #       > The level of abstraction of the `Camera` doesn't match with the
@@ -14,8 +13,6 @@
 #         should exist one level above the `GameWorld` for the best abstraction.
 #   - Add support for actual world loading instead of just loading a default
 #     world.
-#   - Implement functionality associated with interpretting events sent back
-#     by `Entity` object instances on update.
 #   - Remove all 'NOTE' items within this file by fixing up the `GameWorld`
 #     type.
 #   Low Priority:
@@ -45,10 +42,9 @@ class GameWorld():
     #   @param world_name The identifier for the initial world to be loaded.
     def __init__( self, world_name="" ):
         self._world = World()
-
+        self._player_entity = None
         segment = self._world.levels[ "1" ].segments[ "1.1" ]
         self._load_new_segment(segment)
-
 
     ### Methods ###
 
@@ -57,9 +53,14 @@ class GameWorld():
     #
     #   @param time_delta The amount of game time that has passed in the frame.
     def update( self, time_delta ):
-        # TODO: Handle the events passed back by the `Entity` updates.
+        entity_gen_events = []
         for entity in self._entities:
-            entity.update( time_delta )
+            entity_gen_events = entity.update(time_delta)
+            for event in entity_gen_events:
+                if event.get_type() == EventType.DEAD:
+                    print "Entity: " + str(entity)
+                    self._remove_entity(entity)
+
         self._collision_detector.update()
 
         for entity_collision in self._collision_detector.get_all_collisions():
@@ -113,7 +114,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be added to the collision
     #    detection system for the game world.
     def _add_to_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox().get_hitboxes():
+        for hitbox in entity.get_chitbox().get_inner_boxes():
             self._cdrepr2entity_dict[ hitbox ] = entity
             self._collision_detector.add( hitbox )
 
@@ -122,7 +123,7 @@ class GameWorld():
     #   @param entity The `Entity` object instance to be removed from the
     #    collision detection system for the game world.
     def _remove_from_collision_detector( self, entity ):
-        for hitbox in entity.get_hitbox().get_hitboxes():
+        for hitbox in entity.get_chitbox().get_inner_boxes():
             del self._cdrepr2entity_dict[ hitbox ]
             self._collision_detector.remove( hitbox )
 
@@ -152,18 +153,19 @@ class GameWorld():
             }
         )
 
+        # TODO: Update this to note resolve collisions for intangible rectangles.
         if entity1 != entity2:
             entity1.notify_of( collision_event )
             entity2.notify_of( collision_event )
 
-            self._resolve_collision( entity1.get_hitbox(), entity2.get_hitbox().get_hitbox() )
+            self._resolve_collision( entity1.get_chitbox(), entity2.get_bbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.
     #
     #   @param entity The `Entity` object that will have its tile collisions resolved.
     def _resolve_tile_collisions( self, entity ):
-        entity_hitbox = entity.get_hitbox().get_hitbox()
+        entity_hitbox = entity.get_bbox()
         tile_hitbox = Hitbox( 0, 0, Globals.TILE_DIMS[0], Globals.TILE_DIMS[1] )
 
         start_idx_x = int( entity_hitbox.left / Globals.TILE_DIMS[0] )
@@ -181,7 +183,7 @@ class GameWorld():
                     transition = self._segment.get_tile_transition(idx_x,idx_y)
                     if (transition != None):
                         new_segment = transition[0]
-                        new_pos = (transition[1][0] + 1, transition[1][1] + 1)
+                        new_pos = (transition[1][0] + 2, transition[1][1] + 1)
                         return (new_segment, new_pos)
 
                 if tile_is_tangible:
@@ -189,8 +191,8 @@ class GameWorld():
                         idx_x * Globals.TILE_DIMS[0],
                         idx_y * Globals.TILE_DIMS[1]
                     )
+                    self._resolve_collision( entity.get_chitbox(), tile_hitbox )
 
-                    self._resolve_collision( entity.get_hitbox(), tile_hitbox )
         return None
 
     ##  Resolves a collision between two hitboxes, adjusting the them as
@@ -199,18 +201,30 @@ class GameWorld():
     #   @param hitbox1 The first hitbox involved in a collision to be resolved.
     #   @param hitbox2 The second hitbox involved in a collision to be resolved.
     def _resolve_collision( self, hitbox1, hitbox2 ):
-        collision_rect = hitbox1.get_hitbox().clip( hitbox2 )
+        collision_rect = hitbox1.get_bounding_box().clip( hitbox2 )
         res_vector = [ 0, 0 ]
 
         if collision_rect.w < collision_rect.h:
-            res_factor = -1 if hitbox1.get_hitbox().x < collision_rect.x else 1
+            res_factor = -1 if hitbox1.get_bounding_box().x < collision_rect.x else 1
             res_vector[ 0 ] = res_factor * collision_rect.w
         else:
-            res_factor = -1 if hitbox1.get_hitbox().y < collision_rect.y else 1
+            res_factor = -1 if hitbox1.get_bounding_box().y < collision_rect.y else 1
             res_vector[ 1 ] = res_factor * collision_rect.h
 
         hitbox1.translate( res_vector[0], res_vector[1] )
 
+    ##  Removes an entity from the Game World.
+    #
+    #   @param entity The entity that needs to be removed
+    def _remove_entity( self, entity ):
+        # Remove from Collision Detector
+        hitboxes = entity.get_chitbox().get_inner_boxes()
+        self._collision_detector.remove_multiple(hitboxes)
+
+        # Remove from Game World entity list
+        if entity in self._entities:
+            self._entities.remove(entity)
+ 
     def _load_new_segment(self, segment, player_pos=None):
         self._segment = segment
         segment_dims = segment.get_pixel_dims()
@@ -220,23 +234,22 @@ class GameWorld():
         self._entities = []
         # TODO: Update this logic to more elegantly designate the entity that
         # will be followed by the camera.
-        self._player_entity = None
+
         for ( (idx_x, idx_y), entity_class ) in segment.get_entities():
-            entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y )
+            entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y ) 
+                
+            if player_pos != None and entity_class == "player":
+                self._player_entity.get_chitbox().place_at(TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1])
+                self._entities.append(self._player_entity) 
+            else:
+                entity = Entity( entity_class )
+                entity.get_chitbox().place_at( entity_pos[0], entity_pos[1] )
+                self._entities.append( entity )
 
-            if entity_class == "player":
-                if player_pos != None:
-                    entity_pos = ( TILE_DIMS[0] * player_pos[0], TILE_DIMS[1] * player_pos[1] )
+                if entity_class == "player":
+                    self._player_entity = entity
 
-            entity_delta = PhysicalState( CompositeHitbox(entity_pos[0], entity_pos[1]) )
-            entity = Entity( entity_class, entity_delta )
-
-            if entity_class == "player":
-                self._player_entity = entity
-
-            self._entities.append( entity )
-
-        self._camera = Camera( target=self._player_entity.get_hitbox().get_hitbox(),
+        self._camera = Camera( target=self._player_entity.get_bbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
         self._collision_detector = SpatialDictionary( segment_dims[0] / 16,
             segment_dims[0], segment_dims[1] )

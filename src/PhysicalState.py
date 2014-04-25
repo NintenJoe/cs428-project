@@ -47,7 +47,7 @@ class PhysicalState( object ):
         self._volume = CompositeHitbox(
             volume.get_position()[0],
             volume.get_position()[1],
-            volume.get_relative_hitboxes()
+            volume.get_inner_boxes_relative()
         )
         self._velocity = velocity
         self._mass = mass
