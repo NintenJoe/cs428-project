@@ -177,13 +177,10 @@ class GameWorld():
             )
 
         if entity1 != entity2:
-            if collision[ 1 ].htype != HitboxType.INTANGIBLE:
-                entity1.notify_of( collision_event )
-            if collision[ 0 ].htype != HitboxType.INTANGIBLE:
-                entity2.notify_of( collision_event )
+            entity1.notify_of( collision_event )
+            entity2.notify_of( collision_event )
 
-            if ( collision[0].htype != HitboxType.INTANGIBLE and collision[1].htype != HitboxType.INTANGIBLE ):
-                self._resolve_collision( entity1.get_chitbox(), entity2.get_chitbox() )
+            self._resolve_collision( entity1.get_chitbox(), entity2.get_chitbox() )
 
     ##  Resolves the collisions between an `Entity` and all the world tiles
     #   with which it intersects.

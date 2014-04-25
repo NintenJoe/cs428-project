@@ -36,10 +36,10 @@ def main():
     ## Game Variables ##
     game_view = GameView()
     game_view._screen.fill( (255, 255, 255) )
-    image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'title_screen.png'))
+    image = load_image( os.path.join('screens', 'title_screen.png') )
     rect = image.get_rect()
-    gameover_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'gameover_screen.png'))
-    pause_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'pause_screen.png'))
+    gameover_image = load_image( os.path.join('screens', 'gameover_screen.png') )
+    pause_image = load_image( os.path.join('screens', 'pause_screen.png') )
     game_view._screen.blit(image, rect)
     PG.display.flip()
     game_world = GameWorld()
