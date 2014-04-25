@@ -80,6 +80,10 @@ class Entity( object ):
         if prev_state != post_state:
             self._update_chitbox()
 
+        # Death may be inevitable
+        if self._is_dead():
+            sim_delta += self._notify_of_death()
+
         return sim_delta.get_events()
 
     ##  Notifies an entity of an event relevant to that entity, which may cause
@@ -118,6 +122,11 @@ class Entity( object ):
     #    for the "Entity" object instance.
     def get_chitbox( self ):
         return self.get_physical_state().get_volume()
+
+    ##  @return The current health associated with the instance "Entity"
+    #   (returne as an integer)
+    def get_curr_health( self ):
+        return self.get_physical_state().get_curr_health()
 
     ##  @return The hitbox describing the broadest collision volume for the
     #    "Entity" object instance.
@@ -203,6 +212,17 @@ class Entity( object ):
             hitlist[ state.get_name() ] = CompositeHitbox( 0, 0, hitboxes, ax, ay )
 
         return hitlist
+
+    ##  Builds a simulation delta with a death event inside to notify the
+    #   GameWorld of the instance's death.
+    #   TODO: I don't really like this function name.
+    def _notify_of_death( self ):
+        death_event = Event( EventType.DEAD, {} )
+        return SimulationDelta( PhysicalState(), [death_event] )
+    
+    ## @return Whether the instance is dead.
+    def _is_dead( self ):
+        return self.get_physical_state().get_curr_health() < 1
 
     ##  @return An open file handle for the data file for the instance entity.
     def _open_entity_file( self ):
