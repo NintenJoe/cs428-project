@@ -43,7 +43,7 @@ class IdleState( State ):
     #   an idle state.
     #
     #   @override
-    def _calc_arrival_changes( self ):
+    def _calc_arrival_changes( self, event ):
         return SimulationDelta()
 
     ##  Returns a zero "SimulationDelta" as no changes occur when departing from

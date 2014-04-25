@@ -82,7 +82,7 @@ class StateMachine():
                 dst_state = self._get_state( transition.get_destination() )
 
                 self._curr_state_id = dst_state.get_name()
-                return src_state.simulate_departure() + dst_state.simulate_arrival()
+                return src_state.simulate_departure() + dst_state.simulate_arrival(event)
 
         return SimulationDelta()
     ##  @return The string identifier for the current state of the instance

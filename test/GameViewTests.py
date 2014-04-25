@@ -18,6 +18,7 @@
 import unittest
 import mock
 import src.Globals
+import src.HealthWidget
 
 from src.GameView import GameView
 from src.GameWorld import GameWorld
@@ -36,6 +37,7 @@ class GameViewTests( unittest.TestCase ):
         "set_caption": mock.patch( "pygame.display.set_caption" ),
         "flip": mock.patch( "pygame.display.flip" ),
         "load_image": mock.patch( "src.Globals.load_image" ),
+        "hwidget": mock.patch( "src.HealthWidget.HealthWidget" )
     }
 
     ##  A matrix containing the `Tile` objects given by the mock `GameWorld`.
@@ -63,6 +65,7 @@ class GameViewTests( unittest.TestCase ):
         self._setcapt_mock = GameViewTests.DISPLAY_PATCHERS[ "set_caption" ].start()
         self._flip_mock = GameViewTests.DISPLAY_PATCHERS[ "flip" ].start()
         self._load_image_mock = GameViewTests.DISPLAY_PATCHERS[ "load_image" ].start()
+        self._hwidget_mock = GameViewTests.DISPLAY_PATCHERS[ "hwidget" ].start()
 
         self._display_mock = self._setmode_mock.return_value
 
