@@ -28,6 +28,7 @@
 import Globals
 import Queue
 import json
+import logging
 import os.path
 from xml.dom import minidom
 
@@ -221,7 +222,7 @@ class Entity( object ):
     def _notify_of_death( self ):
         death_event = Event( EventType.DEAD, {} )
         return SimulationDelta( PhysicalState(), [death_event] )
-    
+
     ## @return Whether the instance is dead.
     def _is_dead( self ):
         return self.get_physical_state().get_curr_health() < 1
@@ -235,5 +236,12 @@ class Entity( object ):
     #    associated with the given state of the instance entity.
     def _open_state_hbox_file( self, state ):
         sfile = state.get_name() + ".svg"
-        return open( os.path.join(Globals.DATA_PATH, "hitbox", self._name, sfile), "r" )
+        spath = os.path.join( Globals.DATA_PATH, "hitbox", self._name, sfile )
+        dpath = os.path.join( Globals.DATA_PATH, "hitbox", "test.svg" )
+
+        if os.path.isfile( spath ):
+            return open( spath, "r" )
+        else:
+            logging.error( "Could not load hitbox file at '%s'..." % (spath) )
+            return open( dpath, "r" )
 
