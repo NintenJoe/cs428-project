@@ -81,7 +81,6 @@ class EntityTests( unittest.TestCase ):
             set( SimpleTestEntity.MACHINE_TRANS ),
             "Default entity constructor improperly initializes machine transitions."
         )
-
         self.assertEqual(
             default_entity.get_physical_state(),
             SimpleTestEntity.INITIAL_PHYSICAL,
