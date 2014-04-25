@@ -39,6 +39,7 @@ def main():
     game_view._screen.fill( (255, 255, 255) )
     image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'title_screen.png'))
     rect = image.get_rect()
+    gameover_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'gameover_screen.png'))
     pause_image = PG.image.load(os.path.join('assets', 'graphics', 'screens', 'pause_screen.png'))
     game_view._screen.blit(image, rect)
     PG.display.flip()
@@ -51,7 +52,6 @@ def main():
     gameover_screen = False
 
     while title_screen:
-        print "title"
         # Retrieve/Handle User Inputs #
         for input_event in PG.event.get():
             if input_event.type == PG.QUIT:
@@ -62,8 +62,6 @@ def main():
                 elif input_event.key == K_SPACE:
                     game_running = True
                     title_screen = False
-
-    print "past title"
 
     game_clock = PG.time.Clock()
     prev_game_time = 0.0
@@ -127,6 +125,7 @@ def main():
             PG.display.flip()
         if gameover_screen == True:
             game_view._screen.fill( (255, 0 , 0) )
+            game_view._screen.blit(gameover_image, rect)
             PG.display.flip()
     # Exit the game after the primary game loop has been terminated.
     PG.quit()
