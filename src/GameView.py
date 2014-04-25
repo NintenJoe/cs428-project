@@ -17,12 +17,17 @@
 #   - Introduce a `Renderable` type from which the `Entity` and `Tile`
 #     types derive that identifies the asset paths for these items
 #     and loads the graphics for these items.
+#   - Add custimization for widgets to allow any widget to be rendered on top
+#     of the game view.
+#   - Make the `HealthWidget` a generalized widget and render all widgets
+#     at once in a similar fashion when more widgets are used.
 
 import os.path
 import pygame as PG
 from pygame.locals import *
 
 import Globals
+import HealthWidget
 from GameWorld import GameWorld
 from Animation import Animation
 from Event import Event
@@ -38,8 +43,12 @@ class GameView():
         self._tile_graphics = {}
         self._entity_graphics = {}
 
-        self._screen = PG.display.set_mode( (640, 480) )
+        self._screen = PG.display.set_mode( Globals.SCREEN_DIMS )
         PG.display.set_caption( Globals.GAME_NAME )
+
+        # NOTE: Module is initialized here so that it's constructed after the
+        # video mode is instantiated.
+        self._player_health_widget = HealthWidget.HealthWidget()
 
     ### Methods ###
 
@@ -56,6 +65,8 @@ class GameView():
 
         self.render_environment( viewport, tilemap )
         self.render_entities( viewport, entity_list )
+
+        self._player_health_widget.render_to( self._screen, 3 )
 
         PG.display.flip()
 
