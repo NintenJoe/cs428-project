@@ -69,7 +69,7 @@ def main():
     prev_game_time = 0.0
     game_time = PG.time.get_ticks()
 
-    
+
     ## Primary Game Loop ##
     while game_running:
         # Retrieve/Handle User Inputs #
@@ -105,22 +105,23 @@ def main():
                 if pause_screen == False:
                     game_world.notify_of( key_event )
 
-        if pause_screen == False:
-            if game_world._player_entity not in game_world._entities:
-                gameover_screen = True
-            else:
-                # Update Game World #
-                prev_game_time = game_time
-                game_time = PG.time.get_ticks()
+        if game_world._player_entity not in game_world._entities:
+            gameover_screen = True
+        else:
+            # Update Game World #
+            prev_game_time = game_time
+            game_time = PG.time.get_ticks()
+
+            if pause_screen == False:
                 # TODO: Adjust the frame time here in a more elegant fashion.
                 game_world.update( (game_time - prev_game_time) / 10 )
 
                 # Render Game World #
                 game_view.render( game_world )
 
-                # Frame Stall #
-                game_clock.tick( FRAMES_PER_SECOND )
-        else:
+            # Frame Stall #
+            game_clock.tick( FRAMES_PER_SECOND )
+        if pause_screen == True:
             game_view._screen.fill( (255, 255, 255) )
             game_view._screen.blit(pause_image, rect)
             PG.display.flip()
