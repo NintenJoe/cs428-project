@@ -1,29 +1,147 @@
-{"states": [["IdleState.IdleState", "1"], 
-["IdleState.IdleState", "2"],
-["IdleState.IdleState", "3"],
-["IdleState.IdleState", "4"],
-["IdleState.IdleState", "5"],
-["IdleState.IdleState", "6"],
-["IdleState.IdleState", "7"],
-["IdleState.IdleState", "death"],
-["IdleState.IdleState", "lose_limb_1", 25],
-["IdleState.IdleState", "lose_limb_2", 25],
-["IdleState.IdleState", "lose_limb_3", 25],
-["IdleState.IdleState", "lose_limb_4", 25],
-["IdleState.IdleState", "lose_limb_5", 25],
-["IdleState.IdleState", "lose_limb_6", 25]],
- "start": "idle_1",
- "edges": [["idle_1", "idle_lose_limb_1", ".*collision.*"], 
- ["idle_2", "idle_lose_limb_2", ".*collision.*"], 
- ["idle_3", "idle_lose_limb_3", ".*collision.*"], 
- ["idle_4", "idle_lose_limb_4", ".*collision.*"], 
- ["idle_5", "idle_lose_limb_5", ".*collision.*"], 
- ["idle_6", "idle_lose_limb_6", ".*collision.*"],
- ["idle_7", "idle_death", ".*collision.*"],
- ["idle_lose_limb_1", "idle_2", ".*timeout.*"],
- ["idle_lose_limb_2", "idle_3", ".*timeout.*"],
- ["idle_lose_limb_3", "idle_4", ".*timeout.*"],
- ["idle_lose_limb_4", "idle_5", ".*timeout.*"],
- ["idle_lose_limb_5", "idle_6", ".*timeout.*"],
- ["idle_lose_limb_6", "idle_7", ".*timeout.*"]],
- "physical": [[0, 0, 40, 40], [0, 0], 2.0]}
+{
+    "edges": [
+        [
+            "idle_1",
+            "idle_lose_limb_1",
+            ".*collision.*"
+        ],
+        [
+            "idle_2",
+            "idle_lose_limb_2",
+            ".*collision.*"
+        ],
+        [
+            "idle_3",
+            "idle_lose_limb_3",
+            ".*collision.*"
+        ],
+        [
+            "idle_4",
+            "idle_lose_limb_4",
+            ".*collision.*"
+        ],
+        [
+            "idle_5",
+            "idle_lose_limb_5",
+            ".*collision.*"
+        ],
+        [
+            "idle_6",
+            "idle_lose_limb_6",
+            ".*collision.*"
+        ],
+        [
+            "idle_7",
+            "idle_death",
+            ".*collision.*"
+        ],
+        [
+            "idle_lose_limb_1",
+            "idle_2",
+            ".*timeout.*"
+        ],
+        [
+            "idle_lose_limb_2",
+            "idle_3",
+            ".*timeout.*"
+        ],
+        [
+            "idle_lose_limb_3",
+            "idle_4",
+            ".*timeout.*"
+        ],
+        [
+            "idle_lose_limb_4",
+            "idle_5",
+            ".*timeout.*"
+        ],
+        [
+            "idle_lose_limb_5",
+            "idle_6",
+            ".*timeout.*"
+        ],
+        [
+            "idle_lose_limb_6",
+            "idle_7",
+            ".*timeout.*"
+        ]
+    ],
+    "physical": [
+        [
+            0,
+            0,
+            40,
+            40
+        ],
+        [
+            0,
+            0
+        ],
+        2.0
+    ],
+    "start": "idle_1",
+    "states": [
+        [
+            "IdleState.IdleState",
+            "1"
+        ],
+        [
+            "IdleState.IdleState",
+            "2"
+        ],
+        [
+            "IdleState.IdleState",
+            "3"
+        ],
+        [
+            "IdleState.IdleState",
+            "4"
+        ],
+        [
+            "IdleState.IdleState",
+            "5"
+        ],
+        [
+            "IdleState.IdleState",
+            "6"
+        ],
+        [
+            "IdleState.IdleState",
+            "7"
+        ],
+        [
+            "IdleState.IdleState",
+            "death"
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_1",
+            25
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_2",
+            25
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_3",
+            25
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_4",
+            25
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_5",
+            25
+        ],
+        [
+            "IdleState.IdleState",
+            "lose_limb_6",
+            25
+        ]
+    ]
+}
