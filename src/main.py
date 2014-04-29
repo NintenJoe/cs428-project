@@ -62,8 +62,10 @@ def main():
                 if input_event.key == K_SPACE:
                     game_running = True
                     title_screen = False
-
+        prev_game_time = game_time
+        game_time = PG.time.get_ticks()
         game_clock.tick( FRAMES_PER_SECOND )
+
 
     ## Primary Game Loop ##
     while game_running:
