@@ -59,9 +59,7 @@ def main():
             if input_event.type == PG.QUIT:
                 title_screen = False
             elif input_event.type == KEYDOWN or input_event.type == KEYUP:
-                if input_event.key == K_UP:
-                    title_screen = False
-                elif input_event.key == K_SPACE:
+                if input_event.key == K_SPACE:
                     game_running = True
                     title_screen = False
 
@@ -104,28 +102,26 @@ def main():
 
         if game_world._player_entity not in game_world._entities:
             gameover_screen = True
-        else:
-            # Update Game World #
-            prev_game_time = game_time
-            game_time = PG.time.get_ticks()
-
-            if gameover_screen == False and pause_screen == False:
-                # TODO: Adjust the frame time here in a more elegant fashion.
-                game_world.update( (game_time - prev_game_time) / 10 )
-
-                # Render Game World #
-                game_view.render( game_world )
-
-            # Frame Stall #
-            game_clock.tick( FRAMES_PER_SECOND )
+        # Update Game World #
+        prev_game_time = game_time
+        game_time = PG.time.get_ticks()
         if pause_screen == True:
             game_view._screen.fill( (255, 255, 255) )
             game_view._screen.blit(pause_image, rect)
             PG.display.flip()
-        if gameover_screen == True:
+        elif gameover_screen == True:
             game_view._screen.fill( (255, 0 , 0) )
             game_view._screen.blit(gameover_image, rect)
             PG.display.flip()
+        else:
+            # TODO: Adjust the frame time here in a more elegant fashion.
+            game_world.update( (game_time - prev_game_time) / 10 )
+
+            # Render Game World #
+            game_view.render( game_world )
+        # Frame Stall #
+        game_clock.tick( FRAMES_PER_SECOND )
+
     # Exit the game after the primary game loop has been terminated.
     PG.quit()
 
