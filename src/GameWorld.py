@@ -43,7 +43,7 @@ class GameWorld():
     def __init__( self, world_name="" ):
         self._world = World()
         self._player_entity = None
-        segment = self._world.levels[ "1" ].segments[ "1.1" ]
+        segment = self._world.levels[ "3" ].segments[ "3.1" ]
         self._load_new_segment(segment)
 
     ### Methods ###
