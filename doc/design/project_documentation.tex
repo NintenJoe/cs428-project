@@ -24,9 +24,15 @@
 
 % This command creates blue boxes around class names.
 % @see "http://tex.stackexchange.com/questions/36401/drawing-boxes-around-words"
-\newcommand{\classname}[1] {\texttt{#1}}
-\newcommand{\methodname}[1] {\texttt{#1}}
-\newcommand{\projectname}[0] {\texttt{Zol}}
+\newcommand{\classname}[1] {\texttt{#1} }
+\newcommand{\methodname}[1] {\texttt{#1} }
+\newcommand{\projectname}[0] {\texttt{Zol} }
+
+\newcommand{\hreffsm}[1] {\href{http://en.wikipedia.org/wiki/Finite-state\_ machine}{#1}}
+\newcommand{\hreftemplate}[1] {\href{http://en.wikipedia.org/wiki/Template\_ method\_ pattern}{#1}}
+\newcommand{\hrefmvc}[1] {\href{http://en.wikipedia.org/wiki/Model\%E2\%80\%93view\%E2\%80\%93controller}{#1}}
+\newcommand{\hrefloz}[0] {\href{http://en.wikipedia.org/wiki/The\_ Legend\_ of\_ Zelda\_ (video\_ game)}{The Legend of Zelda}}
+
 \newcommand{\insertdiagram}[2]
 {
 	\begin{figure}[H]
@@ -51,7 +57,51 @@
 
 	% Body %
 	\section[Overview]{Brief Overview of \projectname}
-	TODO
+	The primary motivation behind the initial conception and the continued
+	development of the \projectname project was a desire among the members
+	of the original development team to create a general and extensible game 
+	engine that could be used to facilitate rapid game development and game
+	prototyping.  That said, the objective of the \projectname project is 
+	to provide game designers and developers with an intuitive and robust game 
+	engine groundwork upon which they can quickly and easily develop video
+	games with a wide variety of different rules and behaviors.
+
+	While the project implementation has quite a way to go before it can be
+	used to easily generate completely general games\footnote{See the 
+	``Future Work'' section for more details}, the project in its current state 
+	supports a great assortment of tools for creating varied two-dimensional 
+	experiences.  In particular, \projectname provides the following utilities 
+	for two-dimensional games:
+
+	\begin{itemize}
+		\item General game entity construction and specification using the 
+		\hreffsm{finite state machine} behavior specification pattern.
+
+		\item General and overridable collision detection and collision
+		resolution infrastructures.
+
+		\item Composite hitbox support with abstracted SVG specification and 
+		arbitrary collision resolution behavior per hitbox.
+
+		\item Animation support with specification via the commonly used
+		\href{http://en.wikipedia.org/wiki/Sprite\_ (computer\_ graphics)#Sprites\_ by\_ CSS}
+		{sprite sheet technique}.
+
+		\item Tile-based game world construction and generation using adjustable 
+		input image maps.
+
+		\item Integrated support for in-game cameras with panning and easing
+		functionality.
+
+		\item Basic infrastructure for generalized game world rendering with 
+		support for user interface widgets and overlays.
+	\end{itemize}
+
+	In order to demonstrate these capabilities, we've included the implementation
+	of a basic game that mimics the classic title \hrefloz.  While this version
+	isn't nearly as fully featured as the original, we believe that this demo game
+	adequately demonstrates both the capabilities of our engine and how to properly
+	utilize these capabilities.
 
 	\section[Development]{\projectname Development Process}
 	TODO
@@ -87,6 +137,7 @@
 		TODO
 
 	\section[Future Plans]{The Future of \projectname}
+	\label{sec:future}
 	TODO
 
 		\subsection[Features]{Future Functions and Features}
