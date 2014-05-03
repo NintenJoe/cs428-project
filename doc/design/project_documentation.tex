@@ -1,0 +1,121 @@
+%	@file FinalDocumentation.tex
+%
+%	@author Josh Halstead, Joe Ciurej
+%	@date Spring 2014
+%	
+%   LaTeX source file for the design document for the CS428 project.  More 
+%   information about the requirements for this documentation file can be found
+%   here: "https://wiki.engr.illinois.edu/display/cs428sp14/Final+Documentation"
+
+\documentclass{article}
+\usepackage[parfill]{parskip}		% Package that improves paragraph formatting
+\usepackage[pdftex]{graphicx}		% Package that faciliates figure insertion
+\usepackage{float}					% Package that allows for arbitrary figure insertion
+\usepackage{hyperref}				% Package that allows for text hyperlinking
+\usepackage{tikz}					% Package that facilitates box rendering
+
+% The following code block changes a few parameters of the page to make the
+% text fill up more space on any given page.  For our liking, the default 'article'
+% template is too sparse.
+\addtolength{\voffset}{-2cm}
+\addtolength{\textheight}{4cm}
+\addtolength{\oddsidemargin}{-1.5cm}
+\addtolength{\textwidth}{2cm}
+
+% This command creates blue boxes around class names.
+% @see "http://tex.stackexchange.com/questions/36401/drawing-boxes-around-words"
+\newcommand{\classname}[1] {\texttt{#1}}
+\newcommand{\methodname}[1] {\texttt{#1}}
+\newcommand{\projectname}[0] {\texttt{Zol}}
+\newcommand{\insertdiagram}[2]
+{
+	\begin{figure}[H]
+		\centering
+		\fbox{\includegraphics[height=#2]{figures/#1}}
+		\caption{UML Diagram for the #1 Structure}
+	\end{figure}
+}
+
+\begin{document}
+
+	% Title Page %
+	\title{Zol: Design Document}
+	\author{Joshua Halstead and Joseph Ciurej \\
+		University of Illinois: Urbana-Champaign (CS428)}
+	\date{\today}
+	\maketitle
+
+	% Table of Contents %
+	\tableofcontents
+	\clearpage
+
+	% Body %
+	\section[Overview]{Brief Overview of \projectname}
+	TODO
+
+	\section[Development]{\projectname Development Process}
+	TODO
+
+		\subsection{Iterative Development}
+		TODO
+
+		\subsection{Refactoring}
+		TODO
+
+		\subsection{Testing}
+		TODO
+
+		\subsection{Collaborative Development}
+		TODO
+
+	\section[Requirements]{\projectname Project Requirements}
+	TODO
+
+	\section[Architecture and Design]{Implementation Design and Architecture}
+	TODO
+
+		\subsection[Primary Components]{Primary Implementation Components}
+		TODO
+
+			\subsubsection{TODO}
+			TODO
+
+			\subsubsection{TODO}
+			TODO
+
+		\subsection{Framework/Library Integration}
+		TODO
+
+	\section[Future Plans]{The Future of \projectname}
+	TODO
+
+		\subsection[Features]{Future Functions and Features}
+		TODO
+
+		\subsection[Deployment]{Future Deployment Details}
+		TODO
+
+		\subsection[Personal Reflections]{Team Reflections on the Project}
+		TODO
+
+		\begin{description}
+			\item[Josh's Reflection] \hfill \\
+			TODO
+
+			\item[Andrew's Reflection] \hfill \\
+			TODO
+
+			\item[Nick's Reflection] \hfill \\
+			TODO
+
+			\item[Edwin's Reflection] \hfill \\
+			TODO
+
+			\item[Eric's Reflection] \hfill \\
+			TODO
+
+			\item[Joe's Reflection] \hfill \\
+			TODO
+		\end{description}
+
+\end{document}

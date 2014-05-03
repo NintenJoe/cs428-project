@@ -1,6 +1,13 @@
 *.pyc
 *.swp
 *.swo
+
+*.aux
+*.toc
+*.dvi
+*.log
+*.out
+
 htmlcov/*
 classes_Zol.*
 packages_Zol.*
