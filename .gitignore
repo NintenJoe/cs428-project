@@ -1,4 +1,11 @@
 *.pyc
 *.swp
 *.swo
+
+*.aux
+*.toc
+*.dvi
+*.log
+*.out
+
 htmlcov/*
