@@ -26,40 +26,50 @@ class PlayerTest( unittest.TestCase ):
     ### Testing Functions ###
 
     def test_player_constructor( self ):
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState,
+            "Player does not begin in correct state")
 
     def test_player_update( self ):
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState,
+            "Player transitions when it should not")
 
     def test_player_transition( self ):
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from idle into move on key up pressed")
 
     def test_player_collision( self ):
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from idle into move on key up pressed")
         self.player.notify_of( Event(EventType.COLLISION, {}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState,
+            "Player does not transition from move into idle on collision")
 
     def test_player_stop( self ):
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from idle into move on key up pressed")
         self.player.notify_of( Event(EventType.KEYUP, {"key" : MOVE_UP}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), IdleState,
+            "Player does not transition from move into idle on key up released")
 
     def test_player_movement( self ):
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_RIGHT}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from idle into move on key right pressed")
         self.player.notify_of( Event(EventType.KEYDOWN, {"key" : MOVE_UP}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from move into move on key up pressed")
         self.player.notify_of( Event(EventType.KEYUP, {"key" : MOVE_RIGHT}) )
         self.player.update(1)
-        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState)
+        self.assertIsInstance(self.player._mntl_state.get_current_state(), MoveState,
+            "Player does not transition from move into move on key right pressed")
