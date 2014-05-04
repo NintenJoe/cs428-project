@@ -78,8 +78,6 @@ class Segment():
     #   @return None if there is no transition
     #           (dest_segment, (dest_x,dest_y)) if there is a transition
     def get_tile_transition(self, idx, idy):
-        print "Passed in values:"
-        print "(" + str(idx) + ", " + str(idy) + ")"
         if ((idx,idy) in self.transitions):
             return self.transitions[(idx,idy)]
         else:
