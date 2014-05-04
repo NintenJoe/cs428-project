@@ -206,16 +206,41 @@
 
 	The following is a listing of important requirement specification documents
 	found on the main project wiki:
+
 	\begin{itemize}
 		\item \href{https://github.com/NintenJoe/zol/wiki#project-requirements-user-stories}{User Stories}
 		\item \href{https://wiki.engr.illinois.edu/download/attachments/233410967/use-cases.pdf}{Use Cases}
 	\end{itemize}
 
+
 	\section[Architecture and Design]{Implementation Design and Architecture}
-	TODO
+	At a high level, the \projectname game engine is an implementation of the
+	\hrefmvc{model-view-controller design pattern} with the following components:
+
+	\begin{description}
+		\item[Model:] All the logic and data associated with the implementation
+		of the underlying game world, including the logic for updating entities,
+		loading new worlds, detecting entity collisions, resolving entity 
+		collisions, etc.
+		\item[View:] All the logic and data associated with the rendering and displaying
+		of the contents of the underlying game world, including the logic for
+		displaying world entities, displaying world tiles, and rendering user
+		interface modules and overlays.
+		\item[Controller:] All the logic and data associated with updating the
+		model and view components based on user input.  In constrast to the
+		previous two components, this component is quite sparse, encapsulating
+		only the user key input capture and broadcast logic.
+	\end{description}
+
+	TODO: More description of the overall architecture here.
 
 		\subsection[Primary Components]{Primary Implementation Components}
-		TODO
+		The core of the \projectname project implementation consists of the 
+		higher-level types used to implement the model and view components within
+		the overall architecture.  For each of these primary components, the listing 
+		below describes the major functionality encapsulated by that primary component 
+		and provides a visual aid for its role in the \projectname architecture through a 
+		\href{http://www.csci.csusb.edu/dick/samples/uml0.html}{UML diagram}.
 
 			\subsubsection[\classname{Event}]{The \classname{Event} Component}
 			TODO
