@@ -27,7 +27,7 @@ import pygame as PG
 from pygame.locals import *
 
 import Globals
-from Globals import *
+from Globals import load_image
 import HealthWidget
 from GameWorld import GameWorld
 from Animation import Animation
