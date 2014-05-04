@@ -1,4 +1,5 @@
 ##  @file Entity.py
+
 #   @author Josh Halstead, Joseph Ciurej
 #   @date Spring 2014
 #
@@ -79,7 +80,11 @@ class Entity( object ):
             next_event = self._event_queue.get()
             if "victim" in next_event.get_parameters():
                 if repr(next_event.get_parameters()["victim"]) == self.get_name():
-                    self._phys_state._curr_health -= 1
+                    if repr(next_event.get_parameters()["attacker"]) == "player":
+                        self._phys_state._curr_health -= 1
+                    if repr(next_event.get_parameters()["victim"]) == "player":
+                        self._phys_state._curr_health -= 1
+
 
             sim_delta += self._mntl_state.simulate_transition( next_event )
         sim_delta += self._mntl_state.simulate_step( time_delta )
