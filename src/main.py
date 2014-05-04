@@ -35,16 +35,9 @@ def main():
 
     ## Game Variables ##
     game_view = GameView()
-    game_view._screen.fill( (255, 255, 255) )
-    image = load_image( os.path.join('screens', 'title_screen.png') )
-    rect = image.get_rect()
-    gameover_image = load_image( os.path.join('screens', 'gameover_screen.png') )
-    pause_image = load_image( os.path.join('screens', 'pause_screen.png') )
-    game_view._screen.blit(image, rect)
-    PG.display.flip()
     game_world = GameWorld()
 
-    game_running = False
+    game_running = True
     title_screen = True
     pause_screen = False
     gameover_screen = False
@@ -53,19 +46,9 @@ def main():
     prev_game_time = 0.0
     game_time = PG.time.get_ticks()
 
-    while title_screen:
-        # Retrieve/Handle User Inputs #
-        for input_event in PG.event.get():
-            if input_event.type == PG.QUIT:
-                title_screen = False
-            elif input_event.type == KEYDOWN or input_event.type == KEYUP:
-                if input_event.key == K_UP:
-                    title_screen = False
-                elif input_event.key == K_SPACE:
-                    game_running = True
-                    title_screen = False
 
-        game_clock.tick( FRAMES_PER_SECOND )
+
+    game_clock.tick( FRAMES_PER_SECOND )
 
     ## Primary Game Loop ##
     while game_running:
@@ -84,6 +67,8 @@ def main():
                     input_key = MOVE_LEFT
                 elif input_event.key == K_RIGHT:
                     input_key = MOVE_RIGHT
+                elif input_event.key == K_SPACE and title_screen == True:
+                    title_screen = False
                 elif input_event.key == K_SPACE:
                     input_key = SPACE
                 elif input_event.key == K_p and input_event.type == KEYDOWN:
@@ -109,7 +94,7 @@ def main():
             prev_game_time = game_time
             game_time = PG.time.get_ticks()
 
-            if gameover_screen == False and pause_screen == False:
+            if title_screen == False and gameover_screen == False and pause_screen == False:
                 # TODO: Adjust the frame time here in a more elegant fashion.
                 game_world.update( (game_time - prev_game_time) / 10 )
 
@@ -118,14 +103,19 @@ def main():
 
             # Frame Stall #
             game_clock.tick( FRAMES_PER_SECOND )
+        if title_screen == True:
+            game_view._screen.fill( (255, 255, 255) )
+            game_view._screen.blit(game_view.TITLE_IMAGE, game_view.IMAGE_RECT)
+
         if pause_screen == True:
             game_view._screen.fill( (255, 255, 255) )
-            game_view._screen.blit(pause_image, rect)
-            PG.display.flip()
+            game_view._screen.blit(game_view.PAUSE_IMAGE, game_view.IMAGE_RECT)
+
         if gameover_screen == True:
             game_view._screen.fill( (255, 0 , 0) )
-            game_view._screen.blit(gameover_image, rect)
-            PG.display.flip()
+            game_view._screen.blit(game_view.GAMEOVER_IMAGE, game_view.IMAGE_RECT)
+
+        PG.display.flip()
     # Exit the game after the primary game loop has been terminated.
     PG.quit()
 

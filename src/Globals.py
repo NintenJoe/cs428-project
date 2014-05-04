@@ -67,7 +67,6 @@ MOVE_RIGHT = PG.USEREVENT+2
 MOVE_LEFT = PG.USEREVENT+3
 SPACE = PG.USEREVENT+4
 
-
 ### Global Functions ###
 
 ##  Loads the image specified by the file name in the first parameter.
