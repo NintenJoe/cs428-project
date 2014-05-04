@@ -32,6 +32,7 @@
 \newcommand{\hreftemplate}[1] {\href{http://en.wikipedia.org/wiki/Template\_ method\_ pattern}{#1}}
 \newcommand{\hrefmvc}[1] {\href{http://en.wikipedia.org/wiki/Model\%E2\%80\%93view\%E2\%80\%93controller}{#1}}
 \newcommand{\hrefloz}[0] {\href{http://en.wikipedia.org/wiki/The\_ Legend\_ of\_ Zelda\_ (video\_ game)}{The Legend of Zelda}}
+\newcommand{\hrefxp}[0] {\href{http://www.extremeprogramming.org/}{Extreme Programming} }
 
 \newcommand{\insertdiagram}[2]
 {
@@ -104,19 +105,90 @@
 	utilize these capabilities.
 
 	\section[Development]{\projectname Development Process}
-	TODO
+	The development process followed by the development team while developing
+	\projectname was a variant of the \hrefxp process (as it was presented in
+	CS427: Software Engineering I) adapted for use in an academic setting.  
+	The adaptions made (which are expounded upon in more explicit detail below) 
+	were made primarily in order to better suit the development process to a group 
+	developers with highly variate schedules and (consequently) limited availability 
+	to meet.
 
 		\subsection{Iterative Development}
-		TODO
+		As far as iterative development is concerned, our process doesn't deviate
+		much from its base Extreme Programming model.  Each development iteration
+		spans two weeks, beginning with a planning game (involving the resolution 
+		and refinement of user stories) and ending with an iteration product.
+
+		In order to stress Extreme Programming's core principle of communication,
+		our process also requires that each iteration contain four group meetings:
+		two group requirement/review meetings (one at the beginning of each week
+		to iron out requirements and design), one preparation meeting (the day 
+		before the end of the iteration to polish the iteration product), and
+		one presentation meeting (the final day of the iteration to demonstrate
+		the product).
 
 		\subsection{Refactoring}
-		TODO
+		The process we used for the \projectname project is identical to Extreme
+		Programming process with respect to its approach to refactoring, requiring 
+		that development follow a test-code-refactor cycle and that code be 
+		refactored whenever and wherever necessary.  This requirement led the
+		development cycle of each team member during each iteration to adhere 
+		to a schedule similar to the following:
+
+		\begin{itemize}
+			\item Refactor the implementation code associated with one's currently
+			assigned task, updating test methods wherever necessary.
+
+			\item Write the implementation and associated testing code to
+			accomplish one's currently assigned task.
+
+			\item Perform first-pass refactorings to the previously written code
+			to improve its quality (time-permitting).
+		\end{itemize}
 
 		\subsection{Testing}
-		TODO
+		While our process for \projectname values and upholds the core Extreme 
+		Programming rules related to software testing, it includes one slight
+		modification: \href{http://en.wikipedia.org/wiki/Test-driven\_ development}
+		{test-driven development} practices are replaced with
+		\href{http://treyhunner.com/2013/07/test-inspired-development/}
+		{test-inspired development} practices.  Put another way, our process
+		removes the requirement imposed by Extreme Programming for tests to be
+		written before implementation code and instead allows developers to
+		choose on a case-by-case basis on which segment of code should be
+		written first.
+		
+		The primary reason that our process was adapted in this way was to
+		reduce the volatility of testing code.  Many of us found that, unlike
+		advocates of the test-first methodology claim, writing test code first
+		doesn't adequately elucidate implementation design requirements, which
+		often causes tests to be rewritten or overhauled after such requirements
+		are discovered (often by means of writing the implementation code itself).
+		As such, we adopted the more flexible approach of test-inspired
+		development over test-first development to eliminate the amount of time
+		wasted on this unecessay rehashing, which expedites project development
+		in most cases.
 
 		\subsection{Collaborative Development}
-		TODO
+		Perhaps the most prominent deviation of our process from its Extreme
+		Programming base is its replacement of the centralized code review
+		technique \href{http://www.extremeprogramming.org/rules/pair.html}
+		{pair-programming} with the distributed code review scheme afforded
+		by \href{https://www.atlassian.com/git/workflows#!pull-request}
+		{pull requests} and the \href{https://help.github.com/articles/using-pull-requests#shared-repository-model}
+		{shared-repository model}.  This change shifts collaborative
+		development to become asynchronous and spatially independent, supporting
+		code reviews in a much more flexible and accessible way.
+
+		While retaining the pair programming requirement in our process would
+		have certainly been possible, it would have introduced a lot of
+		scheduling overhead.  Since the pair programming technique assumes that 
+		the members of each development pair have similar schedules, it's far
+		too cumbersome to be useful in an academic project involving multiple,
+		diverse student members (e.g. the \projectname project).  Hosting the
+		reviews through a distributed version control system (i.e. GitHub) 
+		eliminates this need for scheduling while retaining all the benefits 
+		of code reviews, providing the optimal collaboration management solution.
 
 	\section[Requirements]{\projectname Project Requirements}
 	TODO
@@ -137,7 +209,6 @@
 		TODO
 
 	\section[Future Plans]{The Future of \projectname}
-	\label{sec:future}
 	TODO
 
 		\subsection[Features]{Future Functions and Features}
