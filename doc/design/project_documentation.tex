@@ -104,6 +104,7 @@
 	adequately demonstrates both the capabilities of our engine and how to properly
 	utilize these capabilities.
 
+
 	\section[Development]{\projectname Development Process}
 	The development process followed by the development team while developing
 	\projectname was a variant of the \hrefxp process (as it was presented in
@@ -190,8 +191,25 @@
 		eliminates this need for scheduling while retaining all the benefits 
 		of code reviews, providing the optimal collaboration management solution.
 
+
 	\section[Requirements]{\projectname Project Requirements}
-	TODO
+	The requirements for the \projectname project can be found on 
+	\href{https://github.com/NintenJoe/zol/wiki}{the project's main wiki page}.
+	It's important to note that these requirements are directed towards a game
+	designer client as opposed to a game player client.  As such, these
+	requirements detail the required capabilities of general game engine that
+	a designer may use to create a game (and not any particular game created
+	through this means).  In contrast, the given use case document outlines 
+	the potential user actions for the given \projectname example game.  This
+	choice was made in order to cut down on the amount of abstraction and to
+	present a more cohesive use case to potential designer users.
+
+	The following is a listing of important requirement specification documents
+	found on the main project wiki:
+	\begin{itemize}
+		\item \href{https://github.com/NintenJoe/zol/wiki#project-requirements-user-stories}{User Stories}
+		\item \href{https://wiki.engr.illinois.edu/download/attachments/233410967/use-cases.pdf}{Use Cases}
+	\end{itemize}
 
 	\section[Architecture and Design]{Implementation Design and Architecture}
 	TODO
@@ -199,14 +217,40 @@
 		\subsection[Primary Components]{Primary Implementation Components}
 		TODO
 
-			\subsubsection{TODO}
+			\subsubsection[\classname{Event}]{The \classname{Event} Component}
 			TODO
 
-			\subsubsection{TODO}
+			\subsubsection[\classname{StateMachine}]{The \classname{StateMachine} Component}
+			TODO
+
+			\subsubsection[\classname{PhysicalState}]{The \classname{PhysicalState} Component}
+			TODO
+
+			\subsubsection[\classname{Entity}]{The \classname{Entity} Component}
+			TODO
+
+			\subsubsection[\classname{World}]{The \classname{World} Component}
+			TODO
+
+			\subsubsection[\classname{GameWorld}]{The \classname{GameWorld} Component}
+			TODO
+
+			\subsubsection[\classname{GameView}]{The \classname{GameView} Component}
 			TODO
 
 		\subsection{Framework/Library Integration}
-		TODO
+		For the implementation of our project, we consciously avoided using any
+		existing game development frameworks in order to maintain complete
+		implementation freedom.  One of the primary goals of our project was
+		to implement a generalized game engine, and using an existing game
+		framework would only serve to complicate and limit this task.  Instead, 
+		we decided to implement the entirety of our system without a framework, 
+		only using supplementary libraries such as 
+		\href{http://www.pygame.org/news.html}{pygame} to help with lower-level 
+		operations (e.g. image loading, image rendering, etc.).  Thus, the
+		\projectname project's design is completely independent of any existing 
+		game framework's design/architecture.
+
 
 	\section[Future Plans]{The Future of \projectname}
 	During our initial development period, we found that we were not able to
@@ -296,14 +340,16 @@
 			project.  While there were certainly a few high points and low points
 			during development, I'm happy with the experience overall because it
 			taught me a lot about collaborative software development and game 
-			development technologies.  In particular, I learned that the shared repository
-			model is extremely effective in facilitating distributed collaborative
-			development and that test-inspired development serves as a great
-			testing technique alternative to test-driven development when dealing
-			with unfamiliar designs and technologies.  Additionally, I thought that 
-			the adapted development process that our group used for this project 
-			worked really well, and I hope that I can utilize similar processes 
-			effectively in my future projects.  		
+			development technologies.  
+			
+			In particular, I learned that the shared repository model is extremely 
+			effective in facilitating distributed collaborative development and 
+			that test-inspired development serves as a great testing technique 
+			alternative to test-driven development when dealing with unfamiliar 
+			designs and technologies.  Additionally, I thought that the adapted 
+			development process that our group used for this project worked really 
+			well, and I hope that I can utilize similar processes effectively 
+			in my future projects.  		
 	\end{description}
 
 \end{document}
