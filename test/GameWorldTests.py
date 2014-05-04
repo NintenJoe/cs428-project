@@ -53,10 +53,6 @@ class GameWorldTests(unittest.TestCase):
         except NameError:
             self.assertTrue(False, "Game world didn't define entities.")
 
-    # TODO: Re-implement this properly.
-    def test_get_tilemap(self):
-        pass
-
     def test_update_no_events(self):
         pre_entities = self._world.get_entities()
         self._world.update(1)
@@ -85,7 +81,25 @@ class GameWorldTests(unittest.TestCase):
         self.assertTrue(len(entities) > 0, "Game world didn't define entities.")
         pass
 
-    def test_get_camera(self):
-        #TODO
-        pass
+    def test_get_viewport(self):
+        curr_view = self._world.get_viewport()
+        soln_view = self._world._camera.get_viewport()
+
+        self.assertTrue(curr_view == soln_view,
+                "Game world does not define the correct viewport.")
+
+        self._world.update(0.1)
+        self.assertTrue(curr_view == soln_view,
+                "Game world does not update the viewport correctly.")
+
+    def test_entity_death(self):
+        entities = self._world.get_entities()
+        entity = entities[0]
+        phys_state = entity.get_physical_state()
+
+        phys_state._curr_health = 0
+        self._world.update(0.1)
+
+        self.assertTrue(entity not in entities,
+                "Game world did not delete entity.")
 

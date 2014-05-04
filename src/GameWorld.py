@@ -255,8 +255,7 @@ class GameWorld():
     #   @param entity The entity that needs to be removed
     def _remove_entity( self, entity ):
         # Remove from Collision Detector
-        hitboxes = entity.get_chitbox().get_inner_boxes()
-        self._collision_detector.remove_multiple(hitboxes)
+        self._remove_from_collision_detector(entity)
 
         # Remove from Game World entity list
         if entity in self._entities:
