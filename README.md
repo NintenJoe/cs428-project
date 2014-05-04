@@ -3,6 +3,7 @@
 ## Required Software ##
 - [Python v2.7.6][py]
 - [PyGame v1.9.1][pygame]
+- [Doxygen v1.8.6][doxygen] (Documentation generation only)
 
 ## Software Resources ##
 - [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
@@ -36,3 +37,4 @@ the University of Illinois Urbana-Champaign.
 [travis]: https://travis-ci.org/NintenJoe/zol
 [coveralls]: https://coveralls.io/r/NintenJoe/zol
 [cs428-wiki]: https://wiki.engr.illinois.edu/display/cs428sp14/Zol+(Video+Game)
+[doxygen]: http://www.stack.nl/~dimitri/doxygen/
