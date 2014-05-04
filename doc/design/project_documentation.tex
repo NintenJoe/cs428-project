@@ -32,6 +32,7 @@
 \newcommand{\hreftemplate}[1] {\href{http://en.wikipedia.org/wiki/Template\_ method\_ pattern}{#1}}
 \newcommand{\hrefmvc}[1] {\href{http://en.wikipedia.org/wiki/Model\%E2\%80\%93view\%E2\%80\%93controller}{#1}}
 \newcommand{\hrefloz}[0] {\href{http://en.wikipedia.org/wiki/The\_ Legend\_ of\_ Zelda\_ (video\_ game)}{The Legend of Zelda}}
+\newcommand{\hrefxp}[0] {\href{http://www.extremeprogramming.org/}{Extreme Programming} }
 
 \newcommand{\insertdiagram}[2]
 {
@@ -103,51 +104,245 @@
 	adequately demonstrates both the capabilities of our engine and how to properly
 	utilize these capabilities.
 
+
 	\section[Development]{\projectname Development Process}
-	TODO
+	The development process followed by the development team while developing
+	\projectname was a variant of the \hrefxp process (as it was presented in
+	CS427: Software Engineering I) adapted for use in an academic setting.  
+	The adaptions made (which are expounded upon in more explicit detail below) 
+	were made primarily in order to better suit the development process to a group 
+	developers with highly variate schedules and (consequently) limited availability 
+	to meet.
 
 		\subsection{Iterative Development}
-		TODO
+		As far as iterative development is concerned, our process doesn't deviate
+		much from its base Extreme Programming model.  Each development iteration
+		spans two weeks, beginning with a planning game (involving the resolution 
+		and refinement of user stories) and ending with an iteration product.
+
+		In order to stress Extreme Programming's core principle of communication,
+		our process also requires that each iteration contain four group meetings:
+		two group requirement/review meetings (one at the beginning of each week
+		to iron out requirements and design), one preparation meeting (the day 
+		before the end of the iteration to polish the iteration product), and
+		one presentation meeting (the final day of the iteration to demonstrate
+		the product).
 
 		\subsection{Refactoring}
-		TODO
+		The process we used for the \projectname project is identical to Extreme
+		Programming process with respect to its approach to refactoring, requiring 
+		that development follow a test-code-refactor cycle and that code be 
+		refactored whenever and wherever necessary.  This requirement led the
+		development cycle of each team member during each iteration to adhere 
+		to a schedule similar to the following:
+
+		\begin{itemize}
+			\item Refactor the implementation code associated with one's currently
+			assigned task, updating test methods wherever necessary.
+
+			\item Write the implementation and associated testing code to
+			accomplish one's currently assigned task.
+
+			\item Perform first-pass refactorings to the previously written code
+			to improve its quality (time-permitting).
+		\end{itemize}
 
 		\subsection{Testing}
-		TODO
+		While our process for \projectname values and upholds the core Extreme 
+		Programming rules related to software testing, it includes one slight
+		modification: \href{http://en.wikipedia.org/wiki/Test-driven\_ development}
+		{test-driven development} practices are replaced with
+		\href{http://treyhunner.com/2013/07/test-inspired-development/}
+		{test-inspired development} practices.  Put another way, our process
+		removes the requirement imposed by Extreme Programming for tests to be
+		written before implementation code and instead allows developers to
+		choose on a case-by-case basis on which segment of code should be
+		written first.
+		
+		The primary reason that our process was adapted in this way was to
+		reduce the volatility of testing code.  Many of us found that, unlike
+		advocates of the test-first methodology claim, writing test code first
+		doesn't adequately elucidate implementation design requirements, which
+		often causes tests to be rewritten or overhauled after such requirements
+		are discovered (often by means of writing the implementation code itself).
+		As such, we adopted the more flexible approach of test-inspired
+		development over test-first development to eliminate the amount of time
+		wasted on this unecessay rehashing, which expedites project development
+		in most cases.
 
 		\subsection{Collaborative Development}
-		TODO
+		Perhaps the most prominent deviation of our process from its Extreme
+		Programming base is its replacement of the centralized code review
+		technique \href{http://www.extremeprogramming.org/rules/pair.html}
+		{pair-programming} with the distributed code review scheme afforded
+		by \href{https://www.atlassian.com/git/workflows#!pull-request}
+		{pull requests} and the \href{https://help.github.com/articles/using-pull-requests#shared-repository-model}
+		{shared-repository model}.  This change shifts collaborative
+		development to become asynchronous and spatially independent, supporting
+		code reviews in a much more flexible and accessible way.
+
+		While retaining the pair programming requirement in our process would
+		have certainly been possible, it would have introduced a lot of
+		scheduling overhead.  Since the pair programming technique assumes that 
+		the members of each development pair have similar schedules, it's far
+		too cumbersome to be useful in an academic project involving multiple,
+		diverse student members (e.g. the \projectname project).  Hosting the
+		reviews through a distributed version control system (i.e. GitHub) 
+		eliminates this need for scheduling while retaining all the benefits 
+		of code reviews, providing the optimal collaboration management solution.
+
 
 	\section[Requirements]{\projectname Project Requirements}
-	TODO
+	The requirements for the \projectname project can be found on 
+	\href{https://github.com/NintenJoe/zol/wiki}{the project's main wiki page}.
+	It's important to note that these requirements are directed towards a game
+	designer client as opposed to a game player client.  As such, these
+	requirements detail the required capabilities of general game engine that
+	a designer may use to create a game (and not any particular game created
+	through this means).  In contrast, the given use case document outlines 
+	the potential user actions for the given \projectname example game.  This
+	choice was made in order to cut down on the amount of abstraction and to
+	present a more cohesive use case to potential designer users.
+
+	The following is a listing of important requirement specification documents
+	found on the main project wiki:
+
+	\begin{itemize}
+		\item \href{https://github.com/NintenJoe/zol/wiki#project-requirements-user-stories}{User Stories}
+		\item \href{https://wiki.engr.illinois.edu/download/attachments/233410967/use-cases.pdf}{Use Cases}
+	\end{itemize}
+
 
 	\section[Architecture and Design]{Implementation Design and Architecture}
-	TODO
+	At a high level, the \projectname game engine is an implementation of the
+	\hrefmvc{model-view-controller design pattern} with the following components:
+
+	\begin{description}
+		\item[Model:] All the logic and data associated with the implementation
+		of the underlying game world, including the logic for updating entities,
+		loading new worlds, detecting entity collisions, resolving entity 
+		collisions, etc.
+		\item[View:] All the logic and data associated with the rendering and displaying
+		of the contents of the underlying game world, including the logic for
+		displaying world entities, displaying world tiles, and rendering user
+		interface modules and overlays.
+		\item[Controller:] All the logic and data associated with updating the
+		model and view components based on user input.  In constrast to the
+		previous two components, this component is quite sparse, encapsulating
+		only the user key input capture and broadcast logic.
+	\end{description}
+
+	TODO: More description of the overall architecture here.
 
 		\subsection[Primary Components]{Primary Implementation Components}
-		TODO
+		The core of the \projectname project implementation consists of the 
+		higher-level types used to implement the model and view components within
+		the overall architecture.  For each of these primary components, the listing 
+		below describes the major functionality encapsulated by that primary component 
+		and provides a visual aid for its role in the \projectname architecture through a 
+		\href{http://www.csci.csusb.edu/dick/samples/uml0.html}{UML diagram}.
 
-			\subsubsection{TODO}
+			\subsubsection[\classname{Event}]{The \classname{Event} Component}
 			TODO
 
-			\subsubsection{TODO}
+			\subsubsection[\classname{StateMachine}]{The \classname{StateMachine} Component}
+			TODO
+
+			\subsubsection[\classname{PhysicalState}]{The \classname{PhysicalState} Component}
+			TODO
+
+			\subsubsection[\classname{Entity}]{The \classname{Entity} Component}
+			TODO
+
+			\subsubsection[\classname{World}]{The \classname{World} Component}
+			TODO
+
+			\subsubsection[\classname{GameWorld}]{The \classname{GameWorld} Component}
+			TODO
+
+			\subsubsection[\classname{GameView}]{The \classname{GameView} Component}
 			TODO
 
 		\subsection{Framework/Library Integration}
-		TODO
+		For the implementation of our project, we consciously avoided using any
+		existing game development frameworks in order to maintain complete
+		implementation freedom.  One of the primary goals of our project was
+		to implement a generalized game engine, and using an existing game
+		framework would only serve to complicate and limit this task.  Instead, 
+		we decided to implement the entirety of our system without a framework, 
+		only using supplementary libraries such as 
+		\href{http://www.pygame.org/news.html}{pygame} to help with lower-level 
+		operations (e.g. image loading, image rendering, etc.).  Thus, the
+		\projectname project's design is completely independent of any existing 
+		game framework's design/architecture.
+
 
 	\section[Future Plans]{The Future of \projectname}
-	\label{sec:future}
-	TODO
+	During our initial development period, we found that we were not able to
+	fully realize many of the features we wished to incorporate into the
+	\projectname game engine.  The following section details the major additions
+	we wish to integrate into the engine in the future as well as future plans 
+	we have for the project.
 
 		\subsection[Features]{Future Functions and Features}
-		TODO
+		There were many features that we considered during the initial development 
+		period that couldn't be fully implemented due to time constraints.  These
+		features primarily involve improving the generality of the existing game
+		engine, extending the basic functions provided by the game engine (e.g.
+		adding to the list of provided state behaviors), and providing an enhanced
+		user interface for specifying world entity behavior and game world 
+		infrastructure.
+
+		The following is a listing of all the most important features to be added
+		to the \projectname project in the future:
+
+		\begin{itemize}
+			\item Creating a user interface to facilitate the full manipulation 
+			of entity state machines.
+
+			\item Creating a user interface to facilitate more user-friendly
+			creation and manipulation of tile-based game worlds.
+
+			\item Further generalization of the collision detection and collision
+			resolution systems.
+
+			\item Further generalization of the rendering engine to incorporate
+			arbitrary user interface overlays and widgets.
+
+			\item Adding support for arbitrary game state saving and loading.
+
+			\item Adding support for hot-swap game loading to facilitate more
+			rapid prototyping and game parameter adjustment.
+
+			\item Expanding the functionality of the in-game camera utility to
+			allow for behaviors such as zooming.
+
+			\item Expanding of the in-game menu system to support more general
+			menus with a wider variety of options.
+
+			\item Restructuring the existing architecture to facilitate
+			multi-threading (e.g. separate threads for the model-related and
+			the view-related logic).
+		\end{itemize}
 
 		\subsection[Deployment]{Future Deployment Details}
-		TODO
+		At the end of the initial development period, we plan to publish
+		the \projectname project as a stand-alone application to a new
+		GitHub project repository.  Once the project has been republished,
+		the development process for the project will shift to a 
+		\href{http://en.wikipedia.org/wiki/The\_ Cathedral\_ and\_ the\_ Bazaar}
+		{Bazaar-based process} with Joe as the primary project manager
+		and a new phase of development will begin.  During this phase and all
+		future stages of development, the project repository will be made publicly
+		available so that any existing team member or open-source contributor
+		may help to expand the existing implementation into a more robust
+		game engine.
 
 		\subsection[Personal Reflections]{Team Reflections on the Project}
-		TODO
+		The following section contains a brief overview of each team member's
+		personal experience with the project, including their personal reflections
+		on both the project's development (especially in terms of the development
+		process) and on the final product.
 
 		\begin{description}
 			\item[Josh's Reflection] \hfill \\
@@ -166,7 +361,20 @@
 			TODO
 
 			\item[Joe's Reflection] \hfill \\
-			TODO
-		\end{description}
+			Overall, I'd say that I'm quite pleased with the outcome of this
+			project.  While there were certainly a few high points and low points
+			during development, I'm happy with the experience overall because it
+			taught me a lot about collaborative software development and game 
+			development technologies.  
+			
+			In particular, I learned that the shared repository model is extremely 
+			effective in facilitating distributed collaborative development and 
+			that test-inspired development serves as a great testing technique 
+			alternative to test-driven development when dealing with unfamiliar 
+			designs and technologies.  Additionally, I thought that the adapted 
+			development process that our group used for this project worked really 
+			well, and I hope that I can utilize similar processes effectively 
+			in my future projects.  		
+	\end{description}
 
 \end{document}

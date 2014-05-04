@@ -141,8 +141,6 @@ class Segment():
         for x in range(0, self.width):
             self.tiles.append([])
             for y in range(0, self.height):
-                print self.id + '.gif'
-                print str(x)+", "+str(y)
                 color = surface.get_at((x,y))
                 self.tiles[x].append(tiles[tuple(color)])
 
