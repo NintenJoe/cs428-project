@@ -232,7 +232,19 @@
 		only the user key input capture and broadcast logic.
 	\end{description}
 
-	TODO: More description of the overall architecture here.
+	The most interesting and complex of these components is the model component, 
+	which contains all the logic for game behaviors.  The main class within this
+	component is the \classname{GameWorld} type, which represents a singular and
+	whole instance of a simulated world in which a game may take place.  Each
+	of these world instances consists of four primary sub-components: a list of
+	\classname{Entity} objects that live and interact within the world (each of
+	which is represented as a \hreffsm{finite automaton}), a \classname{World}
+	object to serve as the tile-based backdrop for the space, a \classname{Camera}
+	to keep track of the observer's view into the world, and a
+	\classname{CollisionDetector} to detect and resolve collisions that occur
+	between entities.  These components work in tandem to simulate interactions
+	between \classname{Entity} instances within the world, which serves as the
+	basis for game behavior.
 
 		\subsection[Primary Components]{Primary Implementation Components}
 		The core of the \projectname project implementation consists of the 
