@@ -89,3 +89,17 @@ class GameWorldTests(unittest.TestCase):
         #TODO
         pass
 
+    def test_get_viewport(self):
+        pass
+
+    def test_entity_death(self):
+        entities = self._world.get_entities()
+        entity = entities[0]
+        phys_state = entity.get_physical_state()
+
+        phys_state._curr_health = 0
+        self._world.update(0.1)
+
+        self.assertTrue(entity not in entities,
+                "Game world did not delete entity.")
+
