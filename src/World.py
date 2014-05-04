@@ -19,7 +19,7 @@ from Segment import Segment
 class World():
     ### Constructors ###
 
-    ##  
+    ##  Contructs the world by loading segments and grouping them into levels
     #   
     def __init__(self):
         # This holds all of the levels and has the following form:
