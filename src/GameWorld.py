@@ -211,9 +211,11 @@ class GameWorld():
 
                 if (entity == self._player_entity): # check for transition
                     transition = self._segment.get_tile_transition(idx_x,idx_y)
+                    print "transition", transition
                     if (transition != None):
                         new_segment = transition[0]
                         new_pos = (transition[1][0] + 2, transition[1][1] + 1)
+                        print "transition coll",str(new_segment), str(new_pos)
                         return (new_segment, new_pos)
 
         x_list = [h.x for h in tile_hitbox_list if h.htype != HitboxType.INTANGIBLE]

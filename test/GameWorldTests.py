@@ -89,3 +89,35 @@ class GameWorldTests(unittest.TestCase):
         #TODO
         pass
 
+#    def test_segment_transition(self):
+#        pass
+
+#        entities = self._world.get_entities()
+#        player = None
+
+#        for entity in entities:
+#            if entity.get_name() == "player":
+#                player = entity
+#        self.assertTrue(player, "Player not found.")
+
+#        transitions = self._world._segment.transitions
+#        print "orig_seg", self._world._segment
+#        print "transitions", transitions
+#        self.assertTrue(transitions, "Transitions not found.")
+
+#        coords,new_seg = transitions.popitem()
+#        print "coords",coords
+#        print "new_seg",new_seg[0]
+#        player_chitbox = player.get_physical_state().get_volume()
+
+#        print "player before",str(player.get_physical_state().get_volume()._container_box)
+#        coords = (Globals.TILE_DIMS[0] * coords[0], Globals.TILE_DIMS[1] * coords[1])
+#        print "coords_x",coords[0]
+#        print "coords_y",coords[1]
+#        player_chitbox.place_at(coords[0], coords[1])
+
+#        print "player after",str(player.get_physical_state().get_volume()._container_box)
+#        self._world.update(0.1)
+#        print "curr_seg",self._world._segment
+#        self.assertTrue (new_seg[0] == self._world._segment,
+#                "Game world didn't transition to new segment.")
