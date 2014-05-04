@@ -9,5 +9,4 @@
 *.out
 
 htmlcov/*
-classes_Zol.*
-packages_Zol.*
+doc/html

@@ -14,7 +14,7 @@ MAIN_SCRIPT = $(SRC_DIR)/main.py
 
 UML_OUTPUT = dot
 
-.PHONY : clean main tests coverage
+.PHONY : clean main tests coverage docs
 
 all : tests
 
@@ -30,6 +30,8 @@ coverage :
 %Tests : $(TEST_DIR)/%Tests.py $(SRC_DIR)/%.py
 	$(INTERPRETER) $(TEST_FLAGS) discover -s $(TEST_DIR) -p '$@.py'
 
+docs:
+	doxygen $(DOC_DIR)/doxygen.conf
 # Default output is `dot` file, which is automatically converted to a `graphml`
 # file.
 #
