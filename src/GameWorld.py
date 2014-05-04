@@ -185,48 +185,42 @@ class GameWorld():
     #   with which it intersects.
     #
     #   @param entity The `Entity` object that will have its tile collisions resolved.
+    #
+    #   @return A tuple of the form (segment, starting_position) if the player is colliding
+    #           with a transition tile, else None
     def _resolve_tile_collisions( self, entity ):
         entity_hitbox = entity.get_bbox()
-        tile_hitbox = Hitbox( 0, 0, Globals.TILE_DIMS[0], Globals.TILE_DIMS[1] )
         seg_dims = self._segment.get_dims()
 
+        # Get bounds for tiles surrounding the entity
         start_idx_x = int( entity_hitbox.left / Globals.TILE_DIMS[0] )
         start_idx_y = int( entity_hitbox.top / Globals.TILE_DIMS[1] )
         final_idx_x = int( entity_hitbox.right / Globals.TILE_DIMS[0] ) + 1
         final_idx_y = int( entity_hitbox.bottom / Globals.TILE_DIMS[1] ) + 1
 
+        # Get hitboxes for tiles that the entity is on top of
         tile_hitbox_list = []
         for idx_x in range( max(0, start_idx_x), min(final_idx_x, seg_dims[0]) ):
             for idx_y in range( max(0, start_idx_y), min(final_idx_y, seg_dims[1]) ):
-                tile_is_tangible = self._tilemap[ idx_x ][ idx_y ][ 1 ]
-                tile_hitbox = Hitbox(
-                    idx_x * Globals.TILE_DIMS[0],
-                    idx_y * Globals.TILE_DIMS[1],
-                    Globals.TILE_DIMS[0],
-                    Globals.TILE_DIMS[1],
-                    HitboxType.DEFAULT if tile_is_tangible else HitboxType.INTANGIBLE
-                )
-
+                tile_hitbox = self._get_hitbox_from_tile(idx_x,idx_y)
                 tile_hitbox_list.append( tile_hitbox )
 
-                if (entity == self._player_entity): # check for transition
+                # Check for transitions to other segments
+                if (entity == self._player_entity):
                     transition = self._segment.get_tile_transition(idx_x,idx_y)
                     if (transition != None):
                         new_segment = transition[0]
                         new_pos = (transition[1][0] + 2, transition[1][1] + 1)
+                        # return the transition information so the new segment can be loaded
                         return (new_segment, new_pos)
 
-        x_list = [h.x for h in tile_hitbox_list if h.htype != HitboxType.INTANGIBLE]
-        y_list = [h.y for h in tile_hitbox_list if h.htype != HitboxType.INTANGIBLE]
-        min_x = min( x_list if x_list else [start_idx_x * Globals.TILE_DIMS[0]] )
-        min_y = min( y_list if y_list else [start_idx_y * Globals.TILE_DIMS[1]] )
-        for hitbox in tile_hitbox_list:
-            hitbox.x -= min_x
-            hitbox.y -= min_y
+        # Create composite hitbox of tangible tiles
+        tile_collection_chitbox = self._get_composite_hitbox_from_hitboxes(tile_hitbox_list)
 
-        tile_collection_chitbox = CompositeHitbox( min_x, min_y, tile_hitbox_list )
+        # Resolve collision with the composite hitbox
         self._resolve_collision( entity.get_chitbox(), tile_collection_chitbox )
 
+        # No transitions were found so we return None
         return None
 
     ##  Resolves a collision between two hitboxes, adjusting the them as
@@ -264,13 +258,10 @@ class GameWorld():
     def _load_new_segment(self, segment, player_pos=None):
         self._segment = segment
         segment_dims = segment.get_pixel_dims()
-
         self._tilemap = segment.get_tiles()
-
         self._entities = []
-        # TODO: Update this logic to more elegantly designate the entity that
-        # will be followed by the camera.
 
+        # Create entities
         for ( (idx_x, idx_y), entity_class ) in segment.get_entities():
             entity_pos = ( TILE_DIMS[0] * idx_x, TILE_DIMS[1] * idx_y )
 
@@ -285,9 +276,45 @@ class GameWorld():
                 if entity_class == "player":
                     self._player_entity = entity
 
+        # Initialize camera and collision detector
         self._camera = Camera( target=self._player_entity.get_bbox(),
             new_border=PG.Rect(0, 0, segment_dims[0], segment_dims[1]) )
         self._collision_detector = SpatialDictionary( segment_dims[0] / 16,
             segment_dims[0], segment_dims[1] )
 
         self._setup_collision_detector()
+
+    ## Creates a hitbox for a tile specified by x and y coordinates.
+    #
+    #   @param x The x coordinate for the tile.
+    #   @param y The y coordinate for the tile.
+    #
+    #   @return A hitbox that covers the tile.
+    def _get_hitbox_from_tile(self, x, y):
+        tile_is_tangible = self._tilemap[ x ][ y ][ 1 ]
+        return Hitbox(
+            x * Globals.TILE_DIMS[0],
+            y * Globals.TILE_DIMS[1],
+            Globals.TILE_DIMS[0],
+            Globals.TILE_DIMS[1],
+            HitboxType.DEFAULT if tile_is_tangible else HitboxType.INTANGIBLE
+        )
+
+    ## Creates a composite hitbox out of a list of individual hitboxes.
+    #
+    #   @param hitbox_list A list containing Hitboxes
+    #
+    #   @return A CompositeHitbox
+    def _get_composite_hitbox_from_hitboxes(self, hitbox_list):
+        x_list = [h.x for h in hitbox_list if h.htype != HitboxType.INTANGIBLE]
+        y_list = [h.y for h in hitbox_list if h.htype != HitboxType.INTANGIBLE]
+
+        if (len(x_list) == 0):
+            return CompositeHitbox(0,0)
+        else:
+            min_x = min(x_list)
+            min_y = min(y_list)
+            for hitbox in hitbox_list:
+                hitbox.x -= min_x
+                hitbox.y -= min_y
+            return CompositeHitbox( min_x, min_y, hitbox_list )
