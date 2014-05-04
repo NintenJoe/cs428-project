@@ -51,11 +51,10 @@ class GameView():
         # video mode is instantiated.
         self._player_health_widget = HealthWidget.HealthWidget()
         # Title Screen, Pause Screen, and Game Over Screen
-        self.TITLE_IMAGE = load_image( os.path.join('screens', 'title_screen.png') )
+        self.TITLE_IMAGE = PG.image.load( os.path.join('assets', 'graphics','screens', 'title_screen.png') )
+        self.GAMEOVER_IMAGE = PG.image.load( os.path.join('assets', 'graphics' ,'screens', 'gameover_screen.png') )
+        self.PAUSE_IMAGE = PG.image.load( os.path.join('assets', 'graphics' ,'screens', 'pause_screen.png') )
         self.IMAGE_RECT = self.TITLE_IMAGE.get_rect()
-        self.GAMEOVER_IMAGE = load_image( os.path.join('screens', 'gameover_screen.png') )
-        self.PAUSE_IMAGE = load_image( os.path.join('screens', 'pause_screen.png') )
-
     ### Methods ###
 
     ##  Draws the Game World within the camera's viewport.
