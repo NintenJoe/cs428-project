@@ -135,6 +135,29 @@ class GameWorld():
     def _get_entity_from_collision_detector( self, cd_repr ):
         return self._cdrepr2entity_dict[ cd_repr ]
 
+    ##  Given a collision between `Entity` objects given their representations
+    #   in the collision detector as a two-tuple, this function returns an
+    #   `Event` instance describing this collision event.
+    #
+    #   @param collision The two-tuple (Rect, Rect) given by the collision system.
+    #   @return An `Event` representating the contents of the given collision.
+    def _generate_collision_event( self, collision ):
+        ( entity1, entity2 ) = (
+            self._get_entity_from_collision_detector( collision[0] ),
+            self._get_entity_from_collision_detector( collision[1] ),
+        )
+        event_args = {
+            "objects": ( entity1, entity2 ),
+            "volumes": ( collision[0], collision[1] )
+        }
+
+        if collision[0].htype == HitboxType.VULNERABLE and collision[1].htype == HitboxType.HURT:
+            event_args.update( { "attacker": entity2, "victim": entity1 } )
+        elif collision[1].htype == HitboxType.VULNERABLE and collision[0].htype == HitboxType.HURT:
+            event_args.update( { "attacker": entity1, "victim": entity2 } )
+
+        return Event( EventType.COLLISION, event_args )
+
     ##  Resolves a given collision between `Entity` objects given their
     #   representations in the collision detector as a two-tuple.
     #
@@ -145,35 +168,7 @@ class GameWorld():
             self._get_entity_from_collision_detector( collision[1] ),
         )
 
-        collision_event = None
-        if collision[0].htype == HitboxType.VULNERABLE and collision[1].htype == HitboxType.HURT:
-            collision_event = Event(
-                EventType.COLLISION,
-                {
-                    "objects": ( entity1, entity2 ),
-                    "volumes": ( collision[0], collision[1] ),
-                    "attacker": entity2,
-                    "victim": entity1
-                }
-            )
-        elif collision[1].htype == HitboxType.VULNERABLE and collision[0].htype == HitboxType.HURT:
-            collision_event = Event(
-                EventType.COLLISION,
-                {
-                    "objects": ( entity1, entity2 ),
-                    "volumes": ( collision[0], collision[1] ),
-                    "attacker": entity1,
-                    "victim": entity2
-                }
-            )
-        else:
-            collision_event = Event(
-                EventType.COLLISION,
-                {
-                    "objects": ( entity1, entity2 ),
-                    "volumes": ( collision[0], collision[1] )
-                }
-            )
+        collision_event = self._generate_collision_event( collision )
 
         if entity1 != entity2:
             entity1.notify_of( collision_event )
