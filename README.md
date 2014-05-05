@@ -10,17 +10,17 @@
 - [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Final-Iteration)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
 
 ## Installation Instructions ##
-* Verify that the required software (e.g. `python` and `pygame`) is installed
+* Verify that the required software (e.g. `python` and `pygame`) is installed.
 * Checkout the repository from GitHub.
-    * `git clone https://github.com/NintenJoe/zol.git`
-* Navigate to the `zol` directory.
-* Run `./zol` from the terminal.
+    * `git clone -b Final-Iteration https://github.com/NintenJoe/zol.git`
+* Run `./zol` from the top-level `zol` directory.
 
-## Documentation Generation ##
-* Verify that the required software (e.g. `doxygen`) is installed.
-* Navigate to the `zol` directory.
-* Run `make docs`.
-* Documentation is stored in `zol/doc/html`
+## Documentation ##
+* View online at [http://jhalstead85.github.io/zol/](http://jhalstead85.github.io/zol/)
+* Or generate it locally with the following instructions:
+   * Verify that the required software (e.g. `doxygen`) is installed.
+   * Run `make docs` from the top-level `zol` directory.
+   * Open `zol/doc/htmlindex.html` with your favortie web browser.
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
