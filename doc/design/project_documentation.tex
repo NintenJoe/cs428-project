@@ -344,15 +344,15 @@
 			\end{itemize}
 
 			\subsubsection[\classname{World}]{The \classname{World} Component}
-			The World class is responsible for loading all of the levels (we call the segments). 
+			The \classname{World} class is responsible for loading all of the levels (we call the segments). 
 			A level in our game engine is a collection of segments. Segments are areas that the 
 			player can explore and they contain obstacles and enemies. Players can transition between 
 			segments by walking over transition tiles. To make segment creation easy we save them as 
 			.gif files. Each pixel represents a tile, and we also define which tiles are tangible 
 			(the player collides with them). Additionally we define where entities such as the player 
-			and enemies spawn. The Segment class loads these image files and provides and interface 
-			for retrieving this information. The Level class is a container for the segments. It matches 
-			up the transition tiles between segments in the same level. The World class searches the 
+			and enemies spawn. The \classname{Segment} class loads these image files and provides and interface 
+			for retrieving this information. The \classname{Level} class is a container for the segments. It matches 
+			up the transition tiles between segments in the same level. The \classname{World} class searches the 
 			directory where we save segments, and creates levels out of them.
 
 			\insertdiagram{World}{2.0in}
