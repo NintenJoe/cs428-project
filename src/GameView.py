@@ -27,6 +27,7 @@ import pygame as PG
 from pygame.locals import *
 
 import Globals
+from Globals import load_image
 import HealthWidget
 from GameWorld import GameWorld
 from Animation import Animation
@@ -49,7 +50,11 @@ class GameView():
         # NOTE: Module is initialized here so that it's constructed after the
         # video mode is instantiated.
         self._player_health_widget = HealthWidget.HealthWidget()
-
+        # Title Screen, Pause Screen, and Game Over Screen
+        self.TITLE_IMAGE = PG.image.load( os.path.join('assets', 'graphics','screens', 'title_screen.png') )
+        self.GAMEOVER_IMAGE = PG.image.load( os.path.join('assets', 'graphics' ,'screens', 'gameover_screen.png') )
+        self.PAUSE_IMAGE = PG.image.load( os.path.join('assets', 'graphics' ,'screens', 'pause_screen.png') )
+        self.IMAGE_RECT = self.TITLE_IMAGE.get_rect()
     ### Methods ###
 
     ##  Draws the Game World within the camera's viewport.
