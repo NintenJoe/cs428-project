@@ -85,13 +85,12 @@ def main():
                 if pause_screen == False:
                     game_world.notify_of( key_event )
 
+        # Update Game Time #
+        prev_game_time = game_time
+        game_time = PG.time.get_ticks()
         if game_world._player_entity not in game_world._entities:
             gameover_screen = True
         else:
-            # Update Game World #
-            prev_game_time = game_time
-            game_time = PG.time.get_ticks()
-
             if title_screen == False and gameover_screen == False and pause_screen == False:
                 # TODO: Adjust the frame time here in a more elegant fashion.
                 game_world.update( (game_time - prev_game_time) / 10 )
