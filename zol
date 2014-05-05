@@ -30,13 +30,14 @@ do
         echo "Required dependency not found: $pip_req_name"
         echo "Attempting to install: $pip_req_name"
         sudo pip install "$requirement"
+
+        if ! pip list | grep "$pip_req_name" 1>/dev/null; then
+            echo "Failed to install: $pip_req_name"
+            echo "Aborting..."
+            exit 1
+        fi
     fi
 
-    if ! pip list | grep "$pip_req_name" 1>/dev/null; then
-        echo "Failed to install: $pip_req_name"
-        echo "Aborting..."
-        exit 1
-    fi
 done
 
 echo "All dependencies found."

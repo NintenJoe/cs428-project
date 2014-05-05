@@ -7,18 +7,20 @@
 
 ## Software Resources ##
 - [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
-- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Iteration-6)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
+- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Final-Iteration)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
 
 ## Installation Instructions ##
 * Verify that the required software (e.g. `python` and `pygame`) is installed
-* Checkout the `git` repository.
-    `git clone https://github.com/NintenJoe/zol.git`
-* In the `zol` directory, run `./zol` from the terminal.
+* Checkout the repository from GitHub.
+    * `git clone https://github.com/NintenJoe/zol.git`
+* Navigate to the `zol` directory.
+* Run `./zol` from the terminal.
 
 ## Documentation Generation ##
-* Verify that the required software (e.g. `doxygen`) is installed
-* Navigate to the `zol` directory and run `make docs`.
-* The documentation is stored in `zol/doc/html`
+* Verify that the required software (e.g. `doxygen`) is installed.
+* Navigate to the `zol` directory.
+* Run `make docs`.
+* Documentation is stored in `zol/doc/html`
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
