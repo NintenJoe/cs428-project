@@ -344,7 +344,16 @@
 			\end{itemize}
 
 			\subsubsection[\classname{World}]{The \classname{World} Component}
-			TODO
+			The \classname{World} class is responsible for loading all of the levels (we call the segments). 
+			A level in our game engine is a collection of segments. Segments are areas that the 
+			player can explore and they contain obstacles and enemies. Players can transition between 
+			segments by walking over transition tiles. To make segment creation easy we save them as 
+			.gif files. Each pixel represents a tile, and we also define which tiles are tangible 
+			(the player collides with them). Additionally we define where entities such as the player 
+			and enemies spawn. The \classname{Segment} class loads these image files and provides and interface 
+			for retrieving this information. The \classname{Level} class is a container for the segments. It matches 
+			up the transition tiles between segments in the same level. The \classname{World} class searches the 
+			directory where we save segments, and creates levels out of them.
 
 			\insertdiagram{World}{2.0in}
 
@@ -505,7 +514,27 @@
 			from there.
 
 			\item[Andrew's Reflection] \hfill \\
-			TODO
+			I enjoyed working on this project, and I was surprised by how effectively 
+			we were able to work together as a team. The elements of our process that 
+			I found to be the most beneficial were the pull-request/code review 
+			contribution method and coveralls. Github's pull-request feature made it 
+			really simple to review the work that each member did. We could give feedback 
+			to each other, and it also provides a form of documentation of our process. 
+			Coveralls provided us with code coverage information. This made it easy to 
+			see which areas of our code our tests were missing. Even though we allowed 
+			tests to be written after code, we ended up with 95 percent code coverage.
+
+			Now that we're done, I'm satisfied with what we created. It's not exactly a 
+			game, but it is a robust game engine. Creating new levels, animations, or 
+			even character behaviour is incredibly easy. All of these things can be 
+			added without touching the code. 
+
+			Overall I feel like I have learned a lot about being part of a development 
+			team. I tend to work alone even when given the option to work with others, 
+			so this was a very valuable experience for me. Now I feel much more comfortable 
+			contributing to a shared repository using a version control system. In the future 
+			I will use this experience to more effectively and more confidently contribute to 
+			open source projects.
 
 			\item[Nick's Reflection] \hfill \\
 			I think that the development process we used for this project was
