@@ -7,7 +7,7 @@
 
 ## Software Resources ##
 - [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
-- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Iteration-6)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
+- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Final-Iteration)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
 
 ## Installation Instructions ##
 * Verify that the required software (e.g. `python` and `pygame`) is installed
