@@ -2,17 +2,18 @@
 %
 %	@author Josh Halstead, Joe Ciurej
 %	@date Spring 2014
-%	
-%   LaTeX source file for the design document for the CS428 project.  More 
+%
+%   LaTeX source file for the design document for the CS428 project.  More
 %   information about the requirements for this documentation file can be found
 %   here: "https://wiki.engr.illinois.edu/display/cs428sp14/Final+Documentation"
 
 \documentclass{article}
 \usepackage[parfill]{parskip}		% Package that improves paragraph formatting
-\usepackage[pdftex]{graphicx}		% Package that faciliates figure insertion
+\usepackage[pdftex]{graphicx}		% Package that facilitates figure insertion
 \usepackage{float}					% Package that allows for arbitrary figure insertion
 \usepackage{hyperref}				% Package that allows for text hyperlinking
 \usepackage{tikz}					% Package that facilitates box rendering
+\usepackage{color}
 
 % The following code block changes a few parameters of the page to make the
 % text fill up more space on any given page.  For our liking, the default 'article'
@@ -28,11 +29,11 @@
 \newcommand{\methodname}[1] {\texttt{#1}}
 \newcommand{\projectname}[0] {\texttt{Zol} }
 
-\newcommand{\hreffsm}[1] {\href{http://en.wikipedia.org/wiki/Finite-state\_ machine}{#1}}
-\newcommand{\hreftemplate}[1] {\href{http://en.wikipedia.org/wiki/Template\_ method\_ pattern}{#1}}
-\newcommand{\hrefmvc}[1] {\href{http://en.wikipedia.org/wiki/Model\%E2\%80\%93view\%E2\%80\%93controller}{#1}}
-\newcommand{\hrefloz}[0] {\href{http://en.wikipedia.org/wiki/The\_ Legend\_ of\_ Zelda\_ (video\_ game)}{The Legend of Zelda}}
-\newcommand{\hrefxp}[0] {\href{http://www.extremeprogramming.org/}{Extreme Programming} }
+\newcommand{\hreffsm}[1] {\href{http://en.wikipedia.org/wiki/Finite-state\_machine}{{\color{blue}\underline{#1}}}}
+\newcommand{\hreftemplate}[1] {\href{http://en.wikipedia.org/wiki/Template\_method\_pattern}{{\color{blue}\underline{#1}}}}
+\newcommand{\hrefmvc}[1] {\href{http://en.wikipedia.org/wiki/Model\%E2\%80\%93view\%E2\%80\%93controller}{{\color{blue}\underline{#1}}}}
+        \newcommand{\hrefloz}[0] {\href{http://en.wikipedia.org/wiki/The\_Legend\_of\_Zelda\_(video\_game)}{{\color{blue}\underline{The Legend of Zelda}}}}
+        \newcommand{\hrefxp}[0] {\href{http://www.extremeprogramming.org/}{{\color{blue}\underline{Extreme Programming}}} }
 
 \newcommand{\insertdiagram}[2]
 {
@@ -47,7 +48,7 @@
 
 	% Title Page %
 	\title{Zol: Design Document}
-	\author{Joshua Halstead and Joseph Ciurej \\
+	\author{J. Halstead, J. Ciurej, A. Exo, N. Jeffrey, E. Christianson, E. Chan \\
 		University of Illinois: Urbana-Champaign (CS428)}
 	\date{\today}
 	\maketitle
@@ -60,41 +61,41 @@
 	\section[Overview]{Brief Overview of \projectname}
 	The primary motivation behind the initial conception and the continued
 	development of the \projectname project was a desire among the members
-	of the original development team to create a general and extensible game 
+	of the original development team to create a general and extensible game
 	engine that could be used to facilitate rapid game development and game
-	prototyping.  That said, the objective of the \projectname project is 
-	to provide game designers and developers with an intuitive and robust game 
+	prototyping.  That said, the objective of the \projectname project is
+	to provide game designers and developers with an intuitive and robust game
 	engine groundwork upon which they can quickly and easily develop video
 	games with a wide variety of different rules and behaviors.
 
 	While the project implementation has quite a way to go before it can be
-	used to easily generate completely general games\footnote{See the 
-	``Future Work'' section for more details}, the project in its current state 
-	supports a great assortment of tools for creating varied two-dimensional 
-	experiences.  In particular, \projectname provides the following utilities 
+	used to easily generate completely general games\footnote{See the
+	``Future Work'' section for more details}, the project in its current state
+	supports a great assortment of tools for creating varied two-dimensional
+	experiences.  In particular, \projectname provides the following utilities
 	for two-dimensional games:
 
 	\begin{itemize}
-		\item General game entity construction and specification using the 
-		\hreffsm{finite state machine} behavior specification pattern.
+		\item General game entity construction and specification using the
+            \hreffsm{finite state machine} behavior specification pattern.
 
 		\item General and overridable collision detection and collision
 		resolution infrastructures.
 
-		\item Composite hitbox support with abstracted SVG specification and 
+		\item Composite hitbox support with abstracted SVG specification and
 		arbitrary collision resolution behavior per hitbox.
 
 		\item Animation support with specification via the commonly used
-		\href{http://en.wikipedia.org/wiki/Sprite\_ (computer\_ graphics)#Sprites\_ by\_ CSS}
-		{sprite sheet technique}.
+		\href{http://en.wikipedia.org/wiki/Sprite\_(computer\_graphics)#Sprites\_by\_CSS}
+        {{\color{blue}\underline{sprite sheet technique}}}.
 
-		\item Tile-based game world construction and generation using adjustable 
+		\item Tile-based game world construction and generation using adjustable
 		input image maps.
 
 		\item Integrated support for in-game cameras with panning and easing
 		functionality.
 
-		\item Basic infrastructure for generalized game world rendering with 
+		\item Basic infrastructure for generalized game world rendering with
 		support for user interface widgets and overlays.
 	\end{itemize}
 
@@ -108,32 +109,31 @@
 	\section[Development]{\projectname Development Process}
 	The development process followed by the development team while developing
 	\projectname was a variant of the \hrefxp process (as it was presented in
-	CS427: Software Engineering I) adapted for use in an academic setting.  
-	The adaptions made (which are expounded upon in more explicit detail below) 
-	were made primarily in order to better suit the development process to a group 
-	developers with highly variate schedules and (consequently) limited availability 
-	to meet.
+	CS427: Software Engineering I) adapted for use in an academic setting.
+	The adaptations (which are expounded upon in more explicit detail below)
+	were made to better suit the development process to a group developers with
+    highly variate schedules and (consequently) limited availability to meet.
 
 		\subsection{Iterative Development}
 		As far as iterative development is concerned, our process doesn't deviate
 		much from its base Extreme Programming model.  Each development iteration
-		spans two weeks, beginning with a planning game (involving the resolution 
+		spans two weeks, beginning with a planning game (involving the resolution
 		and refinement of user stories) and ending with an iteration product.
 
 		In order to stress Extreme Programming's core principle of communication,
 		our process also requires that each iteration contain four group meetings:
 		two group requirement/review meetings (one at the beginning of each week
-		to iron out requirements and design), one preparation meeting (the day 
+		to iron out requirements and design), one preparation meeting (the day
 		before the end of the iteration to polish the iteration product), and
 		one presentation meeting (the final day of the iteration to demonstrate
 		the product).
 
 		\subsection{Refactoring}
 		The process we used for the \projectname project is identical to Extreme
-		Programming process with respect to its approach to refactoring, requiring 
-		that development follow a test-code-refactor cycle and that code be 
+		Programming process with respect to its approach to refactoring, requiring
+		that development follow a test-code-refactor cycle and that code be
 		refactored whenever and wherever necessary.  This requirement led the
-		development cycle of each team member during each iteration to adhere 
+		development cycle of each team member during each iteration to adhere
 		to a schedule similar to the following:
 
 		\begin{itemize}
@@ -148,17 +148,17 @@
 		\end{itemize}
 
 		\subsection{Testing}
-		While our process for \projectname values and upholds the core Extreme 
+		While our process for \projectname values and upholds the core Extreme
 		Programming rules related to software testing, it includes one slight
-		modification: \href{http://en.wikipedia.org/wiki/Test-driven\_ development}
-		{test-driven development} practices are replaced with
+		modification: \href{http://en.wikipedia.org/wiki/Test-driven\_development}
+        {{\color{blue}\underline{test-driven development}}} practices are replaced with
 		\href{http://treyhunner.com/2013/07/test-inspired-development/}
-		{test-inspired development} practices.  Put another way, our process
+        {{\color{blue}\underline{test-inspired development}}} practices.  Put another way, our process
 		removes the requirement imposed by Extreme Programming for tests to be
 		written before implementation code and instead allows developers to
 		choose on a case-by-case basis on which segment of code should be
 		written first.
-		
+
 		The primary reason that our process was adapted in this way was to
 		reduce the volatility of testing code.  Many of us found that, unlike
 		advocates of the test-first methodology claim, writing test code first
@@ -167,39 +167,39 @@
 		are discovered (often by means of writing the implementation code itself).
 		As such, we adopted the more flexible approach of test-inspired
 		development over test-first development to eliminate the amount of time
-		wasted on this unecessay rehashing, which expedites project development
+		wasted on this unnecessary rehashing, which expedites project development
 		in most cases.
 
 		\subsection{Collaborative Development}
 		Perhaps the most prominent deviation of our process from its Extreme
 		Programming base is its replacement of the centralized code review
-		technique \href{http://www.extremeprogramming.org/rules/pair.html}
-		{pair-programming} with the distributed code review scheme afforded
+		technique called \href{http://www.extremeprogramming.org/rules/pair.html}
+        {{\color{blue}\underline{pair-programming}}} with the distributed code review scheme afforded
 		by \href{https://www.atlassian.com/git/workflows#!pull-request}
-		{pull requests} and the \href{https://help.github.com/articles/using-pull-requests#shared-repository-model}
-		{shared-repository model}.  This change shifts collaborative
+        {{\color{blue}\underline{pull requests}}} and the \href{https://help.github.com/articles/using-pull-requests#shared-repository-model}
+        {{\color{blue}\underline{shared-repository model}}}.  This change shifts collaborative
 		development to become asynchronous and spatially independent, supporting
 		code reviews in a much more flexible and accessible way.
 
 		While retaining the pair programming requirement in our process would
 		have certainly been possible, it would have introduced a lot of
-		scheduling overhead.  Since the pair programming technique assumes that 
+		scheduling overhead.  Since the pair programming technique assumes that
 		the members of each development pair have similar schedules, it's far
 		too cumbersome to be useful in an academic project involving multiple,
 		diverse student members (e.g. the \projectname project).  Hosting the
-		reviews through a distributed version control system (i.e. GitHub) 
-		eliminates this need for scheduling while retaining all the benefits 
+		reviews through a distributed version control system (i.e. GitHub)
+		eliminates this need for scheduling while retaining all the benefits
 		of code reviews, providing the optimal collaboration management solution.
 
 
 	\section[Requirements]{\projectname Project Requirements}
-	The requirements for the \projectname project can be found on 
-	\href{https://github.com/NintenJoe/zol/wiki}{the project's main wiki page}.
+	The requirements for the \projectname project can be found on
+    \href{https://github.com/NintenJoe/zol/wiki}{{\color{blue}\underline{the project's main wiki page}}}.
 	It's important to note that these requirements are directed towards a game
 	designer client as opposed to a game player client.  As such, these
-	requirements detail the required capabilities of general game engine that
+	requirements detail the required capabilities of a general game engine that
 	a designer may use to create a game (and not any particular game created
-	through this means).  In contrast, the given use case document outlines 
+	through this means).  In contrast, the given use case document outlines
 	the potential user actions for the given \projectname example game.  This
 	choice was made in order to cut down on the amount of abstraction and to
 	present a more cohesive use case to potential designer users.
@@ -208,8 +208,8 @@
 	found on the main project wiki:
 
 	\begin{itemize}
-		\item \href{https://github.com/NintenJoe/zol/wiki#project-requirements-user-stories}{User Stories}
-		\item \href{https://wiki.engr.illinois.edu/download/attachments/233410967/use-cases.pdf}{Use Cases}
+        \item \href{https://github.com/NintenJoe/zol/wiki#project-requirements-user-stories}{{\color{blue}\underline{User Stories}}}
+        \item \href{https://wiki.engr.illinois.edu/download/attachments/233410967/use-cases.pdf}{{\color{blue}\underline{Use Cases}}}
 	\end{itemize}
 
 
@@ -218,24 +218,24 @@
 	\insertdiagram{Zol}{3.0in}
 
 	At a high level, the \projectname game engine is an implementation of the
-	\hrefmvc{model-view-controller design pattern} with the following components:
+    \hrefmvc{model-view-controller} design pattern with the following components:
 
 	\begin{description}
 		\item[Model:] All the logic and data associated with the implementation
 		of the underlying game world, including the logic for updating entities,
-		loading new worlds, detecting entity collisions, resolving entity 
+		loading new worlds, detecting entity collisions, resolving entity
 		collisions, etc.
 		\item[View:] All the logic and data associated with the rendering and displaying
 		of the contents of the underlying game world, including the logic for
 		displaying world entities, displaying world tiles, and rendering user
 		interface modules and overlays.
 		\item[Controller:] All the logic and data associated with updating the
-		model and view components based on user input.  In constrast to the
+		model and view components based on user input.  In contrast to the
 		previous two components, this component is quite sparse, encapsulating
 		only the user key input capture and broadcast logic.
 	\end{description}
 
-	The most interesting and complex of these components is the model component, 
+	The most interesting and complex of these components is the model component,
 	which contains all the logic for game behaviors.  The main class within this
 	component is the \classname{GameWorld} type, which represents a singular and
 	whole instance of a simulated world in which a game may take place.  Each
@@ -250,40 +250,40 @@
 	basis for game behavior.
 
 		\subsection[Primary Components]{Primary Implementation Components}
-		The core of the \projectname project implementation consists of the 
+		The core of the \projectname project consists of the
 		higher-level types used to implement the model and view components within
-		the overall architecture.  For each of these primary components, the listing 
-		below describes the major functionality encapsulated by that primary component 
-		and provides a visual aid for its role in the \projectname architecture through a 
-		\href{http://www.csci.csusb.edu/dick/samples/uml0.html}{UML diagram}.
+		the overall architecture.  For each of these primary components, the listing
+		below describes the major functionality encapsulated by that primary component
+		and provides a visual aid for its role in the \projectname architecture through a
+        \href{http://en.wikipedia.org/wiki/Unified\_Modeling\_Language}{{\color{blue}\underline{UML diagram}}}.
 
 			\subsubsection[\classname{Event}]{The \classname{Event} Component}
-			The \classname{Event} class is a representation of an event that occurs 
-			within the context of a \classname{GameWorld}.  An \classname{Event} 
-			instance is generated whenever an event of interest occurs (e.g. a 
-			collision, a user input, etc.) with an appropriate type (as specified 
-			by its \classname{EventType}) and propogated through the world to the 
-			relevant (i.e. affected) \classname{Entity} objects.  Instances of this 
-			type drive the state changes and (consequently) behaviors of the 
-			\classname{Entity} objects to which they're propogated.
+			The \classname{Event} class is a representation of an event that occurs
+			within the context of a \classname{GameWorld}.  An \classname{Event}
+			instance is generated whenever an event of interest occurs (e.g. a
+			collision, a user input, etc.) with an appropriate type (as specified
+			by its \classname{EventType}) and propagated through the world to the
+			relevant (i.e. affected) \classname{Entity} objects.  Instances of this
+			type drive the state changes and (consequently) behaviors of the
+			\classname{Entity} objects to which they're propagated.
 
 			\insertdiagram{Event}{2.0in}
 
 			The primary function of the \classname{Event} class is to serve as
-			a form of message that encapsulates information about an unordinary
-			occurence within the simulation that's likely to cause change.
-			Instances of this type are passed back and fourth between the
-			\classname{GameWorld} and its contained \classname{Entity} objects 
-			to facilitate communication without coupling the two types.  
+			a form of message that encapsulates information about an unusual
+			occurrence within the simulation that's likely to cause change.
+			Instances of this type are passed back and forth between the
+			\classname{GameWorld} and its contained \classname{Entity} objects
+			to facilitate communication without coupling the two types.
 
 			\subsubsection[\classname{PhysicalState}]{The \classname{PhysicalState} Component}
-			The \classname{PhysicalState} class represents the physical components 
+			The \classname{PhysicalState} class represents the physical components
 			of any object within the context of the \classname{GameWorld}, such as
 			their position, velocity, mass, and collision volume (or hitbox).
-			The properties for any \classname{PhysicalState} can be modified by 
-			applying state deltas, which are encoded instances of the 
+			The properties for any \classname{PhysicalState} can be modified by
+			applying state deltas, which are encoded instances of the
 			\classname{PhysicalState} containing delta values for each property.
-			This functionlity of the type is often exercised when incremental
+			This functionality of the type is often exercised when incremental
 			changes are being applied to a persistent instance (which is often
 			the case for \classname{Entity} updates).
 
@@ -292,7 +292,7 @@
 			The \classname{PhysicalState} type is used primarily by the
 			\classname{Entity} class to represent the physical properties of
 			each individual \classname{Entity} instance.  This type is also
-			utilized by the \classname{StateMachine} class in order to 
+			utilized by the \classname{StateMachine} class in order to
 			indicate physical changes generated by the behaviors of contained
 			\classname{State} instances.
 
@@ -300,8 +300,8 @@
 			The \classname{StateMachine} class serves as an implementation of
 			the \hreffsm{finite state machine} behavior specification pattern for
 			the \projectname project.
-			In this particular implementation of the pattern, each \classname{State} 
-			represents a particular behavior codified by a change in 
+			In this particular implementation of the pattern, each \classname{State}
+			represents a particular behavior codified by a change in
 			\classname{PhysicalState} (e.g. standing still, moving, etc.)
 			and each \classname{Transition} represents a change of state invoked
 			by a particular \classname{Event} or class of \classname{Event} instances.
@@ -310,18 +310,18 @@
 
 			The main purpose of the \classname{StateMachine} type is to structure
 			and specify the behavioral patterns of \classname{Entity} class
-			instances in a completely general way.  Essentially, the 
+			instances in a completely general way.  Essentially, the
 			\classname{StateMachine} type serves as the `brains' for the
 			\classname{Entity} instances in the world, dictating how these
 			objects should behave and react under certain circumstances.
 
 			\subsubsection[\classname{Entity}]{The \classname{Entity} Component}
-			The \classname{Entity} class represents any dyanmic object that
+			The \classname{Entity} class represents any dynamic object that
 			exists within the game world and interacts with other similar
-			objects.  Each instance of this type contains two distinct 
+			objects.  Each instance of this type contains two distinct
 			sub-components: a \classname{PhysicalState} (which represents the
 			object's current physical properties) and a \classname{StateMachine}
-			(which represents the object's current behavorial properties).
+			(which represents the object's current behavioral properties).
 			The \classname{StateMachine} is primarily responsible for governing
 			how the \classname{Entity} behaves and changes as it interacts with
 			other objects within the same \classname{GameWorld} and responds to
@@ -330,10 +330,10 @@
 			\insertdiagram{Entity}{2.0in}
 
 			All \classname{Entity} objects have static asset binding support
-			by default based on their classification, which is used to specify 
-			an instance's \classname{StateMachine} infrastructure and animation/hitbox 
-			bindings to inner \classname{State} instances.  This feature can 
-			be used to easily generate new \classname{Entity} types on the fly 
+			by default based on their classification, which is used to specify
+			an instance's \classname{StateMachine} infrastructure and animation/hitbox
+			bindings to inner \classname{State} instances.  This feature can
+			be used to easily generate new \classname{Entity} types on the fly
 			with unique behaviors and visual elements.  The following list
 			describes the paths and formats for these static bindings:
 
@@ -351,19 +351,19 @@
 			TODO
 
 			\subsubsection[\classname{GameWorld}]{The \classname{GameWorld} Component}
-			The \classname{GameWorld} type is the core type within the model 
-			component of the overall project architecture, encapsulating all 
+			The \classname{GameWorld} type is the core type within the model
+			component of the overall project architecture, encapsulating all
 			the functionality associated with simulating game logic.  Each
 			\classname{GameWorld} is comprised of a collection of distinct
 			\classname{Entity} instances, which represent the dynamic contents
 			of the environment, and a single \classname{World}, which represents
 			the static, tile-based backdrop for the environment.  Each \classname{GameWorld} instance
-			is responsible for detecting and resolving the iteractions between
-			its contained objects, which involves generating and propogating 
+			is responsible for detecting and resolving the interactions between
+			its contained objects, which involves generating and propagating
 			\classname{Event} instances when extraordinary events occur (e.g.
-			collisions, user inputs, etc.), intercepting and interpreting 
-			\classname{Event} instances generated by contained \classname{Entity} 
-			objects, and detecting/resolving collisions between \classname{Entity} 
+			collisions, user inputs, etc.), intercepting and interpreting
+			\classname{Event} instances generated by contained \classname{Entity}
+			objects, and detecting/resolving collisions between \classname{Entity}
 			objects and the background environment.
 
 			\insertdiagram{GameWorld}{3.0in}
@@ -376,22 +376,22 @@
 			as needed.
 
 			\subsubsection[\classname{GameView}]{The \classname{GameView} Component}
-			The \classname{GameView} type serves as the the core type of the 
+			The \classname{GameView} type serves as the the core type of the
 			view component of the overall project architecture, containing all
 			the logic associated with rendering model information and user
 			interface elements.  Given an instance of the \classname{GameWorld}
 			type, the \classname{GameView} type is capable of rendering all
 			the \classname{Entity} and \classname{World} contents of this
 			instance relative to the world's current viewport.  This type
-			is also capable of rendering arbitrary model-dependent user 
+			is also capable of rendering arbitrary model-dependent user
 			interface overlays to provide the player with more precise
 			information about the game's current state.
 
 			\insertdiagram{GameView}{2.0in}
 
 			Much like the \classname{GameWorld} type for the architecture's
-			model components, the primary purpose of the \classname{GameView} 
-			type is to combine all the view components of the \projectname architecture 
+			model components, the primary purpose of the \classname{GameView}
+			type is to combine all the view components of the \projectname architecture
 			into a single, cohesive type.  This type is used solely by the controller
 			to render the contents of the \classname{GameWorld} after these
 			contents have been updated each frame.
@@ -401,12 +401,12 @@
 		existing game development frameworks in order to maintain complete
 		implementation freedom.  One of the primary goals of our project was
 		to implement a generalized game engine, and using an existing game
-		framework would only serve to complicate and limit this task.  Instead, 
-		we decided to implement the entirety of our system without a framework, 
-		only using supplementary libraries such as 
-		\href{http://www.pygame.org/news.html}{pygame} to help with lower-level 
+		framework would only serve to complicate and limit this task.  Instead,
+		we decided to implement the entirety of our system without a framework,
+		only using supplementary libraries such as
+        \href{http://www.pygame.org/news.html}{{\color{blue}\underline{pygame}}} to help with lower-level
 		operations (e.g. image loading, image rendering, etc.).  Thus, the
-		\projectname project's design is completely independent of any existing 
+		\projectname project's design is completely independent of any existing
 		game framework's design/architecture.
 
 
@@ -414,23 +414,23 @@
 	During our initial development period, we found that we were not able to
 	fully realize many of the features we wished to incorporate into the
 	\projectname game engine.  The following section details the major additions
-	we wish to integrate into the engine in the future as well as future plans 
+	we wish to integrate into the engine in the future as well as future plans
 	we have for the project.
 
 		\subsection[Features]{Future Functions and Features}
-		There were many features that we considered during the initial development 
+		There were many features that we considered during the initial development
 		period that couldn't be fully implemented due to time constraints.  These
 		features primarily involve improving the generality of the existing game
 		engine, extending the basic functions provided by the game engine (e.g.
 		adding to the list of provided state behaviors), and providing an enhanced
-		user interface for specifying world entity behavior and game world 
+		user interface for specifying world entity behavior and game world
 		infrastructure.
 
 		The following is a listing of all the most important features to be added
 		to the \projectname project in the future:
 
 		\begin{itemize}
-			\item Creating a user interface to facilitate the full manipulation 
+			\item Creating a user interface to facilitate the full manipulation
 			of entity state machines.
 
 			\item Creating a user interface to facilitate more user-friendly
@@ -462,9 +462,9 @@
 		At the end of the initial development period, we plan to publish
 		the \projectname project as a stand-alone application to a new
 		GitHub project repository.  Once the project has been republished,
-		the development process for the project will shift to a 
-		\href{http://en.wikipedia.org/wiki/The\_ Cathedral\_ and\_ the\_ Bazaar}
-		{Bazaar-based process} with Joe as the primary project manager
+		the development process for the project will shift to a
+		\href{http://en.wikipedia.org/wiki/The\_Cathedral\_and\_the\_Bazaar}
+        {{\color{blue}\underline{Bazaar-based process}}} with Joe as the primary project manager
 		and a new phase of development will begin.  During this phase and all
 		future stages of development, the project repository will be made publicly
 		available so that any existing team member or open-source contributor
@@ -482,12 +482,12 @@
 			When Joe and I wrote the proposal for Zol we knew we wanted to
 			use a development process that was similar to XP but offered more
 			flexibility in terms of TDD and pair programming. Our compromise
-			was to use Git, adopt code reviews via Github's pull requests,
+			was to use Git, adopt code reviews via GitHub's pull requests,
 			and adhere to ``test-inspired development''.
 
-			What (pleastantly) surprised me about those small adaptations of
+			What (pleasantly) surprised me about those small adaptations of
 			XP was how much more connected to the entire team and project I
-			felt. The code review process esepcially was transparent and
+			felt. The code review process especially was transparent and
 			open to the entire team. It offered me the chance to see and
 			comment on changes that would have been masked by Subversion and
 			pair programming. This alone left me with a far greater
@@ -511,7 +511,7 @@
 			I think that the development process we used for this project was
 			really swell. We made excellent use of branches in Git to work through
 			our assigned tasks without breaking things for other people working on
-			their tasks, but while still being able to push things to Github for
+			their tasks, but while still being able to push things to Gitub for
 			version control. We also had Travis for continuous integration, which
 			helped avoid pushing broken code to master, and coveralls to help us
 			know which classes needed better test coverage. Coveralls is by no means
@@ -522,39 +522,39 @@
 			and well tested.
 
 			\item[Edwin's Reflection] \hfill \\
-			I've been very passionate about video games for a long time and this 
+			I've been very passionate about video games for a long time and this
 			is the first time I've taken part in the creating side of it with a group of
 			others. Overall I thoroughly enjoyed the entire experience and learned a lot
 			about software development process. I also learned a lot about the the fun
 			and pain of game development. The development process was very good
 			and orderly in that I learned a lot about using a shared repository and all the
 			goods it can bring as well as the headaches. The final product is something
-			I am really proud of, if we had more time I wish we could have added 
+			I am really proud of, if we had more time I wish we could have added
 			sound effects but other than that, it is something I am satisfied with.
 
 			\item[Eric's Reflection] \hfill \\
 			I like the development process that we used worked out pretty well,
 			and it was a very good decision to switch to Git for version control. I
-			am pretty satisfied with how our end result came out, because its 
+			am pretty satisfied with how our end result came out, because its
 			a very well structured game engine that can be repurposed for multiple
-			games. It took more time to have a game to show for it, but it was a 
+			games. It took more time to have a game to show for it, but it was a
 			good decision overall.
 
 			\item[Joe's Reflection] \hfill \\
 			Overall, I'd say that I'm quite pleased with the outcome of this
 			project.  While there were certainly a few high points and low points
 			during development, I'm happy with the experience overall because it
-			taught me a lot about collaborative software development and game 
-			development technologies.  
-			
-			In particular, I learned that the shared repository model is extremely 
-			effective in facilitating distributed collaborative development and 
-			that test-inspired development serves as a great testing technique 
-			alternative to test-driven development when dealing with unfamiliar 
-			designs and technologies.  Additionally, I thought that the adapted 
-			development process that our group used for this project worked really 
-			well, and I hope that I can utilize similar processes effectively 
-			in my future projects.  		
+			taught me a lot about collaborative software development and game
+			development technologies.
+
+			In particular, I learned that the shared repository model is extremely
+			effective in facilitating distributed collaborative development and
+			that test-inspired development serves as a great testing technique
+			alternative to test-driven development when dealing with unfamiliar
+			designs and technologies.  Additionally, I thought that the adapted
+			development process that our group used for this project worked really
+			well, and I hope that I can utilize similar processes effectively
+			in my future projects.
 	\end{description}
 
 \end{document}
