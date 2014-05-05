@@ -20,7 +20,7 @@
 * Or generate it locally with the following instructions:
    * Verify that the required software (e.g. `doxygen`) is installed.
    * Run `make docs` from the top-level `zol` directory.
-   * Open `index.html` in `zol/doc/html` with your favortie web browser.
+   * Open `zol/doc/htmlindex.html` with your favortie web browser.
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
