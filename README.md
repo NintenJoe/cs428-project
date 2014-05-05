@@ -1,5 +1,15 @@
 # Zol: An Experimental 2D Game Engine #
 
+## Description ##
+   The objective of the *Zol* project is to provide game designers and developers
+   with an intuitive and robust game engine groundwork upon which they can quickly
+   and easily develop video games with a wide variety of different rules and behaviors.
+   As such, *Zol* is a general and extensible 2D game engine that can be used to
+   facilitate rapid game development and game prototyping. To demonstrate these capabilities,
+   please see the [https://github.com/NintenJoe/zol#installation-instructions](Installation
+   Instructions) and the [https://github.com/NintenJoe/zol#running-instructions](Running
+   Instructions) below.
+
 ## Required Software ##
 - [Python v2.7.6][py]
 - [PyGame v1.9.1][pygame]
