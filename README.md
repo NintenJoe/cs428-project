@@ -12,15 +12,21 @@
 ## Installation Instructions ##
 * Verify that the required software (e.g. `python` and `pygame`) is installed.
 * Checkout the repository from GitHub.
-    * `git clone -b Final-Iteration https://github.com/NintenJoe/zol.git`
+    * `git clone https://github.com/NintenJoe/zol.git`
 * Run `./zol` from the top-level `zol` directory.
 
-## Documentation ##
+## Documentation Instructions ##
 * View online at [http://jhalstead85.github.io/zol/](http://jhalstead85.github.io/zol/)
 * Or generate it locally with the following instructions:
    * Verify that the required software (e.g. `doxygen`) is installed.
    * Run `make docs` from the top-level `zol` directory.
    * Open `zol/doc/htmlindex.html` with your favortie web browser.
+
+## Running Instructions ##
+* To run the example game demo, either run the command `./zol` or the command `make main`
+  while in the top level project directory.
+* To run the tests for the game engine infrastructure code, run the command `make tests`
+  while in the top level project directory.
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
