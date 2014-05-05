@@ -11,14 +11,16 @@
 
 ## Installation Instructions ##
 * Verify that the required software (e.g. `python` and `pygame`) is installed
-* Checkout the `git` repository.
-    `git clone https://github.com/NintenJoe/zol.git`
-* In the `zol` directory, run `./zol` from the terminal.
+* Checkout the repository from GitHub.
+    * `git clone https://github.com/NintenJoe/zol.git`
+* Navigate to the `zol` directory.
+* Run `./zol` from the terminal.
 
 ## Documentation Generation ##
-* Verify that the required software (e.g. `doxygen`) is installed
-* Navigate to the `zol` directory and run `make docs`.
-* The documentation is stored in `zol/doc/html`
+* Verify that the required software (e.g. `doxygen`) is installed.
+* Navigate to the `zol` directory.
+* Run `make docs`.
+* Documentation is stored in `zol/doc/html`
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
