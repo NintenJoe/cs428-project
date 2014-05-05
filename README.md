@@ -6,9 +6,8 @@
    and easily develop video games with a wide variety of different rules and behaviors.
    As such, *Zol* is a general and extensible 2D game engine that can be used to
    facilitate rapid game development and game prototyping. To demonstrate these capabilities,
-   please see the [https://github.com/NintenJoe/zol#installation-instructions](Installation
-   Instructions) and the [https://github.com/NintenJoe/zol#running-instructions](Running
-   Instructions) below.
+   please see the [Installation Instructions](https://github.com/NintenJoe/zol#installation-instructions)
+   and the [Running Instructions](https://github.com/NintenJoe/zol#running-instructions) below.
 
 ## Required Software ##
 - [Python v2.7.6][py]
