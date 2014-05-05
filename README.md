@@ -1,4 +1,4 @@
-# Zol: An Experimental Game About Exploration and Discovery #
+# Zol: An Experimental 2D Game Engine #
 
 ## Required Software ##
 - [Python v2.7.6][py]
@@ -7,14 +7,20 @@
 
 ## Software Resources ##
 - [Continuous Integration][travis] [![Build Status](https://travis-ci.org/NintenJoe/zol.png?branch=master)](https://travis-ci.org/NintenJoe/zol)
-- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Iteration-6)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
+- [Code Coverage][coveralls] [![Coverage Status](https://coveralls.io/repos/NintenJoe/zol/badge.png?branch=Final-Iteration)](https://coveralls.io/r/NintenJoe/zol?branch=Iteration-6)
 
 ## Installation Instructions ##
-In order to run the current running version of the game, run the command `make main`
-while in the top level project directory.
+* Verify that the required software (e.g. `python` and `pygame`) is installed.
+* Checkout the repository from GitHub.
+    * `git clone -b Final-Iteration https://github.com/NintenJoe/zol.git`
+* Run `./zol` from the top-level `zol` directory.
 
-In order to run all the tests for the game engine infrastructure code, run the
-command `make tests` while in the top level project directory.
+## Documentation ##
+* View online at [http://jhalstead85.github.io/zol/](http://jhalstead85.github.io/zol/)
+* Or generate it locally with the following instructions:
+   * Verify that the required software (e.g. `doxygen`) is installed.
+   * Run `make docs` from the top-level `zol` directory.
+   * Open `zol/doc/htmlindex.html` with your favortie web browser.
 
 ## Credits ##
 Project originally developed as a course project for CS428 (Software Engineering II) at
