@@ -1,4 +1,4 @@
-# Zol: An Experimental Game About Exploration and Discovery #
+# Zol: An Experimental 2D Game Engine #
 
 ## Required Software ##
 - [Python v2.7.6][py]
